@@ -420,7 +420,7 @@ function UILibrary:AddButton(config)
 	button.Text = config.Text
 	button.TextColor3 = self.Colors.TitleColor
 	button.Font = self.Config.Font
-	button.TextSize = self.Config.TextSize
+	button.TextSize = tonumber(config.TextSize) or self.Config.TextSize
 	button.LayoutOrder = #self.Elements + 1
 	button.AutoButtonColor = false
 	button.Parent = self.ScrollingFrame
