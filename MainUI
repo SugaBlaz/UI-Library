@@ -18,7 +18,8 @@ UILibrary.DefaultColors = {
 	LabelColor = Color3.fromRGB(200, 200, 200),
 	SliderColor = Color3.fromRGB(70, 70, 70),
 	SliderHandleColor = Color3.fromRGB(100, 100, 100),
-	UIStrokeColor = Color3.fromRGB(60, 60, 60)
+	UIStrokeColor = Color3.fromRGB(60, 60, 60),
+	LoadingBarColor = Color3.fromRGB(0, 155, 255),
 }
 
 -- Config stuff
@@ -283,7 +284,6 @@ function UILibrary:CreateKeyUI()
 	self.enterButton.MouseButton1Click:Connect(function()
 		local enteredKey = self.KeyBox.Text
 		if enteredKey == tostring(self.Config.Key) then
-			self:CreateUI()
 			self.KeyBox.Text = "Correct key"
 			
 			local t = TS:Create(self.KeyFrame, TweenInfo.new(.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
@@ -312,7 +312,6 @@ function UILibrary:CreateKeyUI()
 	self.KeyFrame.KeyBox.FocusLost:Connect(function()
 		local enteredKey = self.KeyBox.Text
 		if enteredKey == tostring(self.Config.Key) then
-			self:CreateUI()
 			self.KeyBox.Text = "Correct key"
 			
 			local t = TS:Create(self.KeyFrame, TweenInfo.new(.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
@@ -342,6 +341,135 @@ function UILibrary:CreateKeyUI()
 		EndPosition = UDim2.new(0.724, 0, 0.776, 0),
 		TweenTime = 0.5
 	})
+end
+
+function UILibrary:CreateFakeLoading(config)
+	self.LoadFrame = Instance.new("Frame")
+	self.LoadFrame.Name = "LoadFrame"
+	self.LoadFrame.Size = config.Size
+	self.LoadFrame.Position = config.Position
+	self.LoadFrame.BackgroundColor3 = self.Colors.MainFrameColor
+	self.LoadFrame.BorderSizePixel = 0
+	self.LoadFrame.Active = true
+	self.LoadFrame.Draggable = true
+	self.LoadFrame.ClipsDescendants = true
+	self.LoadFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+	self.LoadFrame.Parent = self.ScreenGui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
+	corner.Parent = self.LoadFrame
+
+	if self.Config.UIStrokeEnabled then
+		local uiStroke = Instance.new("UIStroke")
+		uiStroke.Thickness = self.Config.UIStrokeThickness
+		uiStroke.Color = self.Colors.UIStrokeColor
+		uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		uiStroke.Parent = self.LoadFrame
+	end
+
+	self.LoadTitleBar = Instance.new("Frame")
+	self.LoadTitleBar.Name = "LoadTitleBar"
+	self.LoadTitleBar.Size = UDim2.new(1, 0, 0, 30)
+	self.LoadTitleBar.Position = UDim2.new(0, 0, 0, 0)
+	self.LoadTitleBar.BackgroundColor3 = self.Colors.CollapseBtnColor
+	self.LoadTitleBar.BorderSizePixel = 0
+	self.LoadTitleBar.ZIndex = 2
+	self.LoadTitleBar.Parent = self.LoadFrame
+
+	local keytitleCorner = Instance.new("UICorner")
+	keytitleCorner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
+	keytitleCorner.Parent = self.KeyTitleBar
+
+	self.LoadTitleText = Instance.new("TextLabel")
+	self.LoadTitleText.Name = "LoadTitleText"
+	self.LoadTitleText.Size = UDim2.new(1, 0, 1, 0)
+	self.LoadTitleText.Position = UDim2.new(0, 0, 0, 0)
+	self.LoadTitleText.BackgroundTransparency = 1
+	self.LoadTitleText.Text = config.Title
+	self.LoadTitleText.TextColor3 = self.Colors.TitleColor
+	self.LoadTitleText.TextXAlignment = Enum.TextXAlignment.Center
+	self.LoadTitleText.Font = Enum.Font.GothamBold
+	self.LoadTitleText.TextSize = 14
+	self.LoadTitleText.ZIndex = 3
+	self.LoadTitleText.Parent = self.LoadTitleBar
+	
+	self.DescriptionText = Instance.new("TextLabel")
+	self.DescriptionText.Name = "DescriptionText"
+	self.DescriptionText.Size = UDim2.new(0, 154, 0, 21)
+	self.DescriptionText.Position = UDim2.new(0.09, 0, 0.746, 0)
+	self.DescriptionText.BackgroundTransparency = 1
+	self.DescriptionText.Text = config.Description
+	self.DescriptionText.TextColor3 = self.Colors.TitleColor
+	self.DescriptionText.TextXAlignment = Enum.TextXAlignment.Center
+	self.DescriptionText.Font = Enum.Font.GothamBold
+	self.DescriptionText.TextScaled = true
+	self.DescriptionText.ZIndex = 3
+	self.DescriptionText.Parent = self.LoadFrame
+	
+	self.LoadingBarFrame = Instance.new("CanvasGroup")
+	self.LoadingBarFrame.Name = "LoadingBar"
+	self.LoadingBarFrame.Size = UDim2.new(0, 163, 0, 27)
+	self.LoadingBarFrame.Position = UDim2.new(0.063, 0, 0.429, 0)
+	self.LoadingBarFrame.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
+	self.LoadingBarFrame.Parent = self.LoadFrame
+	
+	if config.UIStrokeEnabled then
+		local uiStroke = Instance.new("UIStroke")
+		uiStroke.Thickness = config.UIStrokeThickness
+		uiStroke.Color = self.Colors.UIStrokeColor
+		uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		uiStroke.Parent = self.LoadingBarFrame
+	end
+	
+	self.LoadingBarCorner = Instance.new("UICorner")
+	self.LoadingBarCorner.CornerRadius = UDim.new(0, 8)
+	self.LoadingBarCorner.Parent = self.LoadingBarFrame
+	
+	self.LoadingBar = Instance.new("Frame")
+	self.LoadingBar.Name = "LoadingBar"
+	self.LoadingBar.Size = UDim2.new(0, 0, 1, 0)
+	self.LoadingBar.Position = UDim2.new(0, 0, 0, 0)
+	self.LoadingBar.BackgroundColor3 = self.Colors.LoadingBarColor
+	self.LoadingBar.Parent = self.LoadingBarFrame
+	
+	task.spawn(function()
+		local currentPercent = 0
+		local random = Random.new()
+
+		while currentPercent < 1 do
+			local increment = random:NextNumber(0.05, 0.2)
+			currentPercent = math.min(currentPercent + increment, 1)
+
+			local moveDuration = random:NextNumber(config.WaitTime[1], config.WaitTime[2])
+
+			local tween = TS:Create(self.LoadingBar, TweenInfo.new(moveDuration, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {
+				Size = UDim2.new(currentPercent, 0, 1, 0)
+			})
+
+			tween:Play()
+			tween.Completed:Wait()
+
+			if currentPercent < 1 then
+				task.wait(random:NextNumber(config.WaitTime2[1], config.WaitTime2[2]))
+			end
+			
+			task.wait()
+		end
+
+		task.wait(0.5)
+		
+		TS:Create(self.LoadFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
+			Size = UDim2.new(0, 0, 0, 0),
+			BackgroundTransparency = 1
+		}):Play()
+
+		task.wait(1)
+		
+		config.CallBack()
+		self:CreateUI()
+		self.LoadFrame:Destroy()
+	end)
 end
 
 function UILibrary:ToggleMinimize()
@@ -794,6 +922,9 @@ function UILibrary:Notify(config)
 	end)
 end
 
+function UILibrary:GetVersion()
+	return "SBEUILib 0.7 BETA"
+end
 
 function UILibrary:Destroy()
 	if self.ScreenGui then
