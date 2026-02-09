@@ -103,14 +103,14 @@ function UILibrary:Intro()
 	self.Image.AnchorPoint = Vector2.new(0.5, 0.5)
 	self.Image.Image = self:LoadImage("SBEUILib", "https://i.ibb.co/xK20Pwph/SBEUILib.png")
 	self.Image.BackgroundTransparency = 1
-	self.Image.ImageTransparency = 0 -- Start fully visible
+	self.Image.ImageTransparency = 0
 	self.Image.Parent = self.ScreenGui
 	
 	task.wait(2)
 	
 	local fadeInfo = TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-	local fadeTween = TweenService:Create(self.Image, fadeInfo, {
-		ImageTransparency = 1 -- Fade to invisible
+	local fadeTween = TS:Create(self.Image, fadeInfo, {
+		ImageTransparency = 1
 	})
 	
 	fadeTween:Play()
