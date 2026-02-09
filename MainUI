@@ -81,7 +81,12 @@ end
 function UILibrary:CreateScreenGui()
 	self.ScreenGui = Instance.new("ScreenGui")
 	self.ScreenGui.Name = "SBEUILibrary"
-	self.ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+	self.ScreenGui.DisplayOrder = 999999999 
+    self.ScreenGui.IgnoreGuiInset = true 
+    local success, coreGui = pcall(function() return game:GetService("CoreGui") end)
+	if not success then
+		self.ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+	end
 	self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
 end
