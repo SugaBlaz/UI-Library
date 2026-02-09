@@ -67,7 +67,7 @@ function UILibrary.new(config)
 	
 	self:Intro()
 	
-	task.wait(1)
+	task.wait(4)
 	
 	if not (self.Key == "" or self.Key == nil) then
 		self:CreateUI()
@@ -99,11 +99,23 @@ end
 function UILibrary:Intro()
 	self.Image = Instance.new("ImageLabel")
 	self.Image.Size = UDim2.new(0, 500, 0, 500)
-	self.Image.Image = self:LoadImage("SBEUILib", "https://i.ibb.co.com/xK20Pwph/SBEUILib.png")
+	self.Image.Position = UDim2.new(0.5, -250, 0.5, -250)
+	self.Image.AnchorPoint = Vector2.new(0.5, 0.5)
+	self.Image.Image = self:LoadImage("SBEUILib", "https://i.ibb.co/xK20Pwph/SBEUILib.png")
 	self.Image.BackgroundTransparency = 1
+	self.Image.ImageTransparency = 0 -- Start fully visible
 	self.Image.Parent = self.ScreenGui
 	
-	task.delay(2, function()
+	task.wait(2)
+	
+	local fadeInfo = TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+	local fadeTween = TweenService:Create(self.Image, fadeInfo, {
+		ImageTransparency = 1 -- Fade to invisible
+	})
+	
+	fadeTween:Play()
+	
+	fadeTween.Completed:Connect(function()
 		self.Image:Destroy()
 	end)
 end
@@ -1026,7 +1038,7 @@ function UILibrary:GetVersion()
 	return "SBEUILib 0.8"
 end
 
-function UILibrary:Destroy()
+function UILibrary:Destroy(cb)
 	if self.ScreenGui then
 		self.ScreenGui:Destroy()
 	end
