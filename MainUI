@@ -105,6 +105,7 @@ function UILibrary:Intro()
 	self.Image.BackgroundTransparency = 1
 	self.Image.ImageTransparency = 0
 	self.Image.Parent = self.ScreenGui
+	self.Image.ZIndex = 999
 	
 	task.wait(2)
 	
