@@ -20,6 +20,7 @@ UILibrary.DefaultColors = {
 	SliderHandleColor = Color3.fromRGB(100, 100, 100),
 	UIStrokeColor = Color3.fromRGB(60, 60, 60),
 	LoadingBarColor = Color3.fromRGB(0, 155, 255),
+	TabColor = Color3.fromRGB(55,55,55),
 }
 
 -- Config stuff
@@ -39,6 +40,7 @@ UILibrary.DefaultConfig = {
 	NotifcationSound = "rbxassetid://80833448337193",
 	ResetOnSpawn = false,
 	Key = "Testing1",
+	TabPadding = 10,
 	keyCallBack = function()
 		
 	end,
@@ -60,10 +62,51 @@ function UILibrary.new(config)
 	self.Elements = {}
 	self.Visible = true
 	self.Minimized = false
-
-	self:CreateKeyUI()
+	
+	self:CreateScreenGui()
+	
+	self:Intro()
+	
+	task.wait(1)
+	
+	if not (self.Key == "" or self.Key == nil) then
+		self:CreateUI()
+	else
+		self:CreateKeyUI()
+	end
 
 	return self
+end
+
+function UILibrary:CreateScreenGui()
+	self.ScreenGui = Instance.new("ScreenGui")
+	self.ScreenGui.Name = "SBEUILibrary"
+	self.ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+	self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
+end
+
+function UILibrary:LoadImage(name, url)
+	local path = name .. ".png"
+	
+	if not isfile(path) then
+		writefile(path, game:HttpGet(url))
+	end
+	
+	return getcustomasset(path)
+end
+
+function UILibrary:Intro()
+	self.Image = Instance.new("ImageLabel")
+	self.Image.Size = UDim2.new(1, 0, 1, 0)
+	self.Image.Image = self:LoadImage("SBEUILib", "https://i.ibb.co.com/xK20Pwph/SBEUILib.png")
+	self.Image.BackgroundTransparency = 1
+	self.Image.Parent = self.ScreenGui
+	
+	task.delay(2, function()
+		self.Image:Destroy()
+		self:CreateUI()
+	end)
 end
 
 function UILibrary:CreateUI()
@@ -144,10 +187,25 @@ function UILibrary:CreateUI()
 	self.ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 	self.ScrollingFrame.Parent = self.MainFrame
 
+	self.TabScrollingFrame = Instance.new("ScrollingFrame")
+	self.TabScrollingFrame.Name = "TabFrame"
+	self.TabScrollingFrame.Size = UDim2.new(0.18, 0, 1, -self.Config.TitleHeight)
+	self.TabScrollingFrame.Position = UDim2.new(0.82, 0, 0, self.Config.TitleHeight)
+	self.TabScrollingFrame.BackgroundTransparency = 1
+	self.TabScrollingFrame.BorderSizePixel = 0
+	self.TabScrollingFrame.ScrollBarThickness = 4
+	self.TabScrollingFrame.ScrollBarImageColor3 = self.Colors.AccentColor
+	self.TabScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+	self.TabScrollingFrame.Parent = self.MainFrame
+
 	self.UIListLayout = Instance.new("UIListLayout")
 	self.UIListLayout.Padding = UDim.new(0, self.Config.ElementPadding)
 	self.UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	self.UIListLayout.Parent = self.ScrollingFrame
+
+	self.UIListLayout2 = self.UIListLayout:Clone()
+	self.UIListLayout2.Padding = UDim.new(0, self.Config.TabPadding)
+	self.UIListLayout2.Parent = self.TabScrollingFrame
 
 	local padding = Instance.new("UIPadding")
 	padding.PaddingLeft = UDim.new(0, 12)
@@ -156,11 +214,18 @@ function UILibrary:CreateUI()
 	padding.PaddingBottom = UDim.new(0, 10)
 	padding.Parent = self.ScrollingFrame
 
+	local padding2 = padding:Clone()
+	padding2.Parent = self.TabScrollingFrame
+
 	self.OriginalSize = self.MainFrame.Size
 	self.OriginalPosition = self.MainFrame.Position
 
 	self.MinimizeButton.MouseButton1Click:Connect(function()
 		self:ToggleMinimize()
+	end)
+
+	self.UIListLayout2:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+		self.TabScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, self.UIListLayout2.AbsoluteContentSize.Y + 15)
 	end)
 
 	self.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
@@ -181,11 +246,6 @@ function UILibrary:CreateUI()
 end
 
 function UILibrary:CreateKeyUI()
-	self.ScreenGui = Instance.new("ScreenGui")
-	self.ScreenGui.Name = "UILibrary"
-	self.ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
-	self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
 	self.KeyFrame = Instance.new("Frame")
 	self.KeyFrame.Name = "KeyFrame"
 	self.KeyFrame.Size = UDim2.new(0, 362,0, 224)
@@ -517,6 +577,47 @@ function UILibrary:AddSection(text)
 	sectionText.Parent = section
 
 	table.insert(self.Elements, section)
+	
+	local tab = Instance.new("CanvasGroup")
+	tab.Name = "Tab_" .. text
+	tab.Size = UDim2.new(0, 13, 0, 54)
+	tab.BackgroundColor3 = self.Colors.TabColor
+	tab.Parent = self.TabScrollingFrame
+	
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
+	corner.Parent = tab
+	
+	local btn = Instance.new("TextButton")
+	btn.Name = "Button_" .. text
+	btn.Rotation = 90
+	btn.Size = UDim2.new(0, 56, 0, 13)
+	btn.Position = UDim2.new(0.5, 0, 0.5, 0)
+	btn.TextScaled = true
+	btn.AnchorPoint = Vector2.new(0.49, 0.5)
+	btn.BackgroundTransparency = 1
+	btn.Text = text
+	btn.TextColor3 = self.Colors.TitleColor
+	btn.Font = self.Config.Font
+	btn.Parent = tab
+	
+	btn.MouseButton1Click:Connect(function()
+		local relativeOffset = section.AbsolutePosition.Y - self.ScrollingFrame.AbsolutePosition.Y
+		local targetY = self.ScrollingFrame.CanvasPosition.Y + relativeOffset
+
+		local tInfo = TweenInfo.new(
+			0.5,
+			Enum.EasingStyle.Quint,
+			Enum.EasingDirection.Out
+		)
+
+		local tween = TS:Create(self.ScrollingFrame, tInfo, {
+			CanvasPosition = Vector2.new(0, targetY)
+		})
+
+		tween:Play()
+	end)
+	
 	return section
 end
 
@@ -923,7 +1024,7 @@ function UILibrary:Notify(config)
 end
 
 function UILibrary:GetVersion()
-	return "SBEUILib 0.7 BETA"
+	return "SBEUILib 0.8"
 end
 
 function UILibrary:Destroy()
