@@ -41,7 +41,7 @@ UILibrary.DefaultConfig = {
 	NotifcationSound = "rbxassetid://80833448337193",
 	ResetOnSpawn = false,
 	Key = "Testing1",
-	KeyLink = "SomethingNotNil,
+	KeyLink = "SomethingNotNil",
 	KeySystemEnabled = false,
 	TabPadding = 10,
 	KeyCallBack = function()
@@ -58,12 +58,9 @@ function UILibrary.new(config)
         self.Config[k] = (config and config[k] ~= nil) and config[k] or v
     end
 
-    local thalink2 = self.Config.KeyLink
-    if thalink2 then
-        print("Success! KeyLink is: " .. tostring(thalink2))
-    else
-        warn("Warning: KeyLink is still nil in self.Config")
-    end
+	print(config.KeyLink)
+
+    self.Config.KeyLink = config.KeyLink
 
 	self.Colors = {}
 	
