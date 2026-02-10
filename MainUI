@@ -107,26 +107,36 @@ function UILibrary:LoadImage(name, url)
 	return getcustomasset(path)
 end
 
+function UILibrary:LoadImage(name, url)
+	local path = name .. ".png"
+
+	if not isfile(path) then
+		writefile(path, game:HttpGet(url))
+	end
+
+	return getcustomasset(path)
+end
+
 function UILibrary:Intro()
 	self.Image = Instance.new("ImageLabel")
 	self.Image.Size = UDim2.new(0, 500, 0, 500)
-	self.Image.Position = UDim2.new(0.5, -250, 0.5, -250)
+	self.Image.Position = UDim2.new(0.5, 0, 0.5, 0)
 	self.Image.AnchorPoint = Vector2.new(0.5, 0.5)
 	self.Image.Image = self:LoadImage("SBEUILib", "https://i.ibb.co/xK20Pwph/SBEUILib.png")
 	self.Image.BackgroundTransparency = 1
 	self.Image.ImageTransparency = 0
 	self.Image.Parent = self.ScreenGui
 	self.Image.ZIndex = 999
-	
+
 	task.wait(2)
-	
+
 	local fadeInfo = TweenInfo.new(1.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
 	local fadeTween = TS:Create(self.Image, fadeInfo, {
 		ImageTransparency = 1
 	})
-	
+
 	fadeTween:Play()
-	
+
 	fadeTween.Completed:Connect(function()
 		self.Image:Destroy()
 	end)
