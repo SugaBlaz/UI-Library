@@ -53,10 +53,17 @@ function UILibrary.new(config)
 	local self = setmetatable({}, { __index = UILibrary })
 
 	self.Config = {}
-	
-	for k, v in pairs(UILibrary.DefaultConfig) do
-		self.Config[k] = config[k] or v
-	end
+
+    for k, v in pairs(UILibrary.DefaultConfig) do
+        self.Config[k] = (config and config[k] ~= nil) and config[k] or v
+    end
+
+    local thalink2 = self.Config.KeyLink
+    if thalink2 then
+        print("Success! KeyLink is: " .. tostring(thalink2))
+    else
+        warn("Warning: KeyLink is still nil in self.Config")
+    end
 
 	self.Colors = {}
 	
