@@ -95,9 +95,13 @@ function UILibrary.new(config)
 
 	local savedKey = isfile(fileName) and readfile(fileName)
 	if self.Config.KeySystemEnabled then
-		if checkKey(savedKey) then
-			if self.Config.KeyCallBack then
-				self.Config.KeyCallBack() 
+		if savedKey then
+			if checkKey(savedKey) then
+				if self.Config.KeyCallBack then
+					self.Config.KeyCallBack() 
+				end
+			else
+				self:CreateKeyUI()
 			end
 		else
 			self:CreateKeyUI()
