@@ -1,6 +1,7 @@
 local UILibrary = {}
 
 local TS = game:GetService("TweenService")
+local UIS = game:GetService("UserInputService")
 
 UILibrary.DefaultColors = {
 	TitleColor = Color3.fromRGB(255, 255, 255),
@@ -40,9 +41,11 @@ UILibrary.DefaultConfig = {
 	NotifcationSound = "rbxassetid://80833448337193",
 	ResetOnSpawn = false,
 	Key = "Testing1",
+	KeyLink = nil,
+	KeySystemEnabled = false,
 	TabPadding = 10,
-	keyCallBack = function()
-		
+	KeyCallBack = function()
+
 	end,
 }
 
@@ -50,29 +53,57 @@ function UILibrary.new(config)
 	local self = setmetatable({}, { __index = UILibrary })
 
 	self.Config = {}
+	
 	for k, v in pairs(UILibrary.DefaultConfig) do
 		self.Config[k] = config[k] or v
 	end
 
 	self.Colors = {}
+	
 	for colorName, defaultColor in pairs(UILibrary.DefaultColors) do
 		self.Colors[colorName] = config[colorName] or defaultColor
 	end
-
+	
 	self.Elements = {}
-	self.Visible = true
+	
+	self.Tabs = {}
+	
+	self.FVisible = true
+	self.GVisible = true
+	
 	self.Minimized = false
+	
+	local fileName = "SBEUI_Config.txt"
+
+	local function checkKey(key)
+		if key == "" or key == nil then return false end
+		local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+		local url = self.Config.Key .. "?key=" .. key .. "&hwid=" .. hwid
+		local s, res = pcall(function() return game:HttpGet(url) end)
+		if s then
+			local success, data = pcall(function() return game:GetService("HttpService"):JSONDecode(res) end)
+			return success and data and data.success
+		end
+		return false
+	end
 	
 	self:CreateScreenGui()
 	
 	self:Intro()
-	
+
 	task.wait(4)
-	
-	if not (self.Key == "" or self.Key == nil) then
-		self:CreateUI()
+
+	local savedKey = isfile(fileName) and readfile(fileName)
+	if self.Config.KeySystemEnabled then
+		if checkKey(savedKey) then
+			if self.Config.KeyCallBack then
+				self.Config.KeyCallBack() 
+			end
+		else
+			self:CreateKeyUI()
+		end
 	else
-		self:CreateKeyUI()
+		self:CreateUI()
 	end
 
 	return self
@@ -81,30 +112,20 @@ end
 function UILibrary:CreateScreenGui()
 	if not game:IsLoaded() then game.Loaded:Wait() end
 
-    self.ScreenGui = Instance.new("ScreenGui")
-    self.ScreenGui.Name = "SBEUILibrary"
-    self.ScreenGui.DisplayOrder = 999999999 
-    self.ScreenGui.IgnoreGuiInset = true 
-    
-    local success, coreGui = pcall(function() return game:GetService("CoreGui") end)
-    if success and coreGui then
-        self.ScreenGui.Parent = coreGui
-    else
-        self.ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    end
+	self.ScreenGui = Instance.new("ScreenGui")
+	self.ScreenGui.Name = "SBEUILibrary"
+	self.ScreenGui.DisplayOrder = 999999999 
+	self.ScreenGui.IgnoreGuiInset = true 
 
-    self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
-end
-
-function UILibrary:LoadImage(name, url)
-	local path = name .. ".png"
-	
-	if not isfile(path) then
-		writefile(path, game:HttpGet(url))
+	local success, coreGui = pcall(function() return game:GetService("CoreGui") end)
+	if success and coreGui then
+		self.ScreenGui.Parent = coreGui
+	else
+		self.ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 	end
-	
-	return getcustomasset(path)
+
+	self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
 end
 
 function UILibrary:LoadImage(name, url)
@@ -279,161 +300,155 @@ function UILibrary:CreateUI()
 end
 
 function UILibrary:CreateKeyUI()
+	-- Main Key Frame
 	self.KeyFrame = Instance.new("Frame")
 	self.KeyFrame.Name = "KeyFrame"
-	self.KeyFrame.Size = UDim2.new(0, 362,0, 224)
-	self.KeyFrame.Position = UDim2.new(0.5, 0,0.5, 0)
-	self.KeyFrame.BackgroundColor3 = self.Colors.MainFrameColor
-	self.KeyFrame.BorderSizePixel = 0
-	self.KeyFrame.Active = true
-	self.KeyFrame.Draggable = true
-	self.KeyFrame.ClipsDescendants = true
+	self.KeyFrame.Size = UDim2.new(0, 340, 0, 180)
+	self.KeyFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	self.KeyFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+	self.KeyFrame.BackgroundColor3 = self.Colors.MainFrameColor
 	self.KeyFrame.Parent = self.ScreenGui
-	
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
-	corner.Parent = self.KeyFrame
-	
+
+	Instance.new("UICorner", self.KeyFrame).CornerRadius = UDim.new(0, 8)
+
 	if self.Config.UIStrokeEnabled then
-		local uiStroke = Instance.new("UIStroke")
-		uiStroke.Thickness = self.Config.UIStrokeThickness
-		uiStroke.Color = self.Colors.UIStrokeColor
-		uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		uiStroke.Parent = self.KeyFrame
+		local s = Instance.new("UIStroke", self.KeyFrame)
+		s.Color = self.Colors.UIStrokeColor
+		s.Thickness = self.Config.UIStrokeThickness
 	end
-	
-	self.KeyTitleBar = Instance.new("Frame")
-	self.KeyTitleBar.Name = "KeyTitleBar"
-	self.KeyTitleBar.Size = UDim2.new(1, 0, 0.054, 30)
-	self.KeyTitleBar.Position = UDim2.new(0, 0, 0, 0)
-	self.KeyTitleBar.BackgroundColor3 = self.Colors.CollapseBtnColor
-	self.KeyTitleBar.BorderSizePixel = 0
-	self.KeyTitleBar.ZIndex = 2
-	self.KeyTitleBar.Parent = self.KeyFrame
 
-	local keytitleCorner = Instance.new("UICorner")
-	keytitleCorner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
-	keytitleCorner.Parent = self.KeyTitleBar
+	-- Title Bar Container (to hold text and close button)
+	local TitleBar = Instance.new("Frame", self.KeyFrame)
+	TitleBar.Size = UDim2.new(1, 0, 0, 35)
+	TitleBar.BackgroundTransparency = 1
 
-	self.KeyTitleText = Instance.new("TextLabel")
-	self.KeyTitleText.Name = "KeyTitleText"
-	self.KeyTitleText.Size = UDim2.new(0.944, 0, 1, 0)
-	self.KeyTitleText.Position = UDim2.new(0, 12, 0, 0)
-	self.KeyTitleText.BackgroundTransparency = 1
-	self.KeyTitleText.Text = self.Config.TitleText
-	self.KeyTitleText.TextColor3 = self.Colors.TitleColor
-	self.KeyTitleText.TextXAlignment = Enum.TextXAlignment.Left
-	self.KeyTitleText.Font = Enum.Font.GothamBold
-	self.KeyTitleText.TextSize = 14
-	self.KeyTitleText.ZIndex = 3
-	self.KeyTitleText.Parent = self.KeyTitleBar
-	
-	self.enterButton = Instance.new("TextButton")
-	self.enterButton.Name = "enterButton"
-	self.enterButton.Size = UDim2.new(0, 165, 0, 47)
-	self.enterButton.Position = UDim2.new(0.032, 0, 0.725, 0)
-	self.enterButton.BackgroundColor3 = self.Colors.CollapseBtnColor
-	self.enterButton.BorderSizePixel = 0
-	self.enterButton.Text = "Enter"
-	self.enterButton.TextColor3 = UILibrary.DefaultColors.TitleColor
-	self.enterButton.Font = Enum.Font.GothamBold
-	self.enterButton.TextSize = 35
-	self.enterButton.ZIndex = 1
-	self.enterButton.Parent = self.KeyFrame
-	
-	self.closeButton = Instance.new("TextButton")
-	self.closeButton.Name = "closeButton"
-	self.closeButton.Size = UDim2.new(0, 165, 0, 47)
-	self.closeButton.Position = UDim2.new(0.521, 0, 0.725, 0)
-	self.closeButton.BackgroundColor3 = self.Colors.CollapseBtnColor
-	self.closeButton.BorderSizePixel = 0
-	self.closeButton.Text = "Close"
-	self.closeButton.TextColor3 = UILibrary.DefaultColors.TitleColor
-	self.closeButton.Font = Enum.Font.GothamBold
-	self.closeButton.TextSize = 35
-	self.closeButton.ZIndex = 1
-	self.closeButton.Parent = self.KeyFrame
-	
-	self.KeyBox = Instance.new("TextBox")
-	self.KeyBox.Name = "KeyBox"
-	self.KeyBox.Size = UDim2.new(0, 276, 0, 50)
-	self.KeyBox.Position = UDim2.new(0.119, 0, 0.344, 0)
+	local Title = Instance.new("TextLabel", TitleBar)
+	Title.Size = UDim2.new(1, -40, 1, 0)
+	Title.Position = UDim2.new(0, 12, 0, 0)
+	Title.BackgroundTransparency = 1
+	Title.Text = self.Config.TitleText .. " | Key System"
+	Title.TextColor3 = self.Colors.TitleColor
+	Title.Font = Enum.Font.GothamBold
+	Title.TextSize = 14
+	Title.TextXAlignment = Enum.TextXAlignment.Left
+
+	local CloseBtn = Instance.new("TextButton", TitleBar)
+	CloseBtn.Name = "CloseButton"
+	CloseBtn.Size = UDim2.new(0, 35, 0, 35)
+	CloseBtn.Position = UDim2.new(1, -35, 0, 0)
+	CloseBtn.BackgroundTransparency = 1
+	CloseBtn.Text = "×" -- Multiplier sign looks better than 'X'
+	CloseBtn.TextColor3 = Color3.fromRGB(200, 50, 50) -- Subtle red
+	CloseBtn.TextSize = 22
+	CloseBtn.Font = Enum.Font.GothamBold
+
+	CloseBtn.MouseButton1Click:Connect(function()
+		self.ScreenGui:Destroy() -- Removes the whole UI from the game
+	end)
+
+	-- Key Input Box
+	self.KeyBox = Instance.new("TextBox", self.KeyFrame)
+	self.KeyBox.Size = UDim2.new(0.9, 0, 0, 40)
+	self.KeyBox.Position = UDim2.new(0.05, 0, 0.35, 0)
 	self.KeyBox.BackgroundColor3 = self.Colors.CollapseBtnColor
-	self.KeyBox.BorderSizePixel = 0
-	self.KeyBox.PlaceholderText = "Enter key here!"
+	self.KeyBox.PlaceholderText = "Paste Key..."
 	self.KeyBox.Text = ""
-	self.KeyBox.TextColor3 = UILibrary.DefaultColors.TitleColor
-	self.KeyBox.PlaceholderColor3 = Color3.new(178, 178, 178)
-	self.KeyBox.Font = Enum.Font.GothamBold
-	self.KeyBox.TextSize = 25
-	self.KeyBox.ZIndex = 1
-	self.KeyBox.Parent = self.KeyFrame
-	
-	local KeyBoxCorner = Instance.new("UICorner")
-	keytitleCorner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
-	keytitleCorner.Parent = self.KeyBox
-	
-	self.enterButton.MouseButton1Click:Connect(function()
-		local enteredKey = self.KeyBox.Text
-		if enteredKey == tostring(self.Config.Key) then
-			self.KeyBox.Text = "Correct key"
-			
-			local t = TS:Create(self.KeyFrame, TweenInfo.new(.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
+	self.KeyBox.TextColor3 = Color3.new(1, 1, 1)
+	self.KeyBox.Font = Enum.Font.GothamMedium
+	self.KeyBox.TextSize = 16
+	Instance.new("UICorner", self.KeyBox).CornerRadius = UDim.new(0, 6)
+
+	-- Buttons Container
+	local ButtonContainer = Instance.new("Frame", self.KeyFrame)
+	ButtonContainer.Size = UDim2.new(0.9, 0, 0, 35)
+	ButtonContainer.Position = UDim2.new(0.05, 0, 0.7, 0)
+	ButtonContainer.BackgroundTransparency = 1
+
+	local Layout = Instance.new("UIListLayout", ButtonContainer)
+	Layout.FillDirection = Enum.FillDirection.Horizontal
+	Layout.Padding = UDim.new(0, 10)
+	Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+
+	local function doVerify()
+		local entered = self.KeyBox.Text
+		local target = self.Config.Key
+		local isCorrect = false
+
+		if string.find(target, "http") then
+			local hwid = game:GetService("RbxAnalyticsService"):GetClientId()
+			local url = target .. "?key=" .. entered .. "&hwid=" .. hwid
+
+			local s, res = pcall(function() return game:HttpGet(url) end)
+			if s and res then
+				local success, data = pcall(function() 
+					return game:GetService("HttpService"):JSONDecode(res) 
+				end)
+
+				if success and data and data.success then
+					isCorrect = true
+				end
+			end
+		else
+			isCorrect = (entered == tostring(target))
+		end
+
+		if isCorrect then
+			self.KeyBox.Text = "Access Granted!"
+			local t = game:GetService("TweenService"):Create(self.KeyFrame, TweenInfo.new(0.3), {
+				Size = UDim2.new(0,0,0,0), 
+				BackgroundTransparency = 1
+			})
 			t:Play()
-			
-			task.spawn(function()
-				for i, v in pairs(self.KeyFrame:GetChildren()) do
-					v:Destroy()
+			t.Completed:Connect(function()
+				self.KeyFrame:Destroy()
+				
+				writefile("SBEUI_Config.txt", entered)
+
+				if self.Config.KeyCallBack then 
+					self.Config.KeyCallBack() 
 				end
 			end)
-			
-			t.Completed:Connect(function()
-				self.Config.keyCallBack()
-				self.KeyFrame:Destroy()
-			end)
 		else
-			self.KeyBox.Text = "Incorrect key"
+			self.KeyBox.Text = ""
+			self.KeyBox.PlaceholderText = "Invalid Key!"
 			task.wait(1)
+			self.KeyBox.PlaceholderText = "Paste Key..."
 		end
+	end
+
+	-- Submit Button
+	local Submit = Instance.new("TextButton", ButtonContainer)
+	Submit.Size = UDim2.new(0.48, 0, 1, 0)
+	Submit.BackgroundColor3 = Color3.fromRGB(0, 160, 0)
+	Submit.Text = "Verify"
+	Submit.Font = Enum.Font.GothamBold
+	Submit.TextColor3 = Color3.new(1, 1, 1)
+	Submit.TextSize = 14
+	Instance.new("UICorner", Submit).CornerRadius = UDim.new(0, 6)
+	Submit.MouseButton1Click:Connect(doVerify)
+
+	-- Get Key Button
+	local GetKey = Instance.new("TextButton", ButtonContainer)
+	GetKey.Size = UDim2.new(0.48, 0, 1, 0)
+	GetKey.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	GetKey.Text = "Get Key"
+	GetKey.Font = Enum.Font.GothamBold
+	GetKey.TextColor3 = Color3.new(1, 1, 1)
+	GetKey.TextSize = 14
+	Instance.new("UICorner", GetKey).CornerRadius = UDim.new(0, 6)
+
+	GetKey.MouseButton1Click:Connect(function()
+		local link = self.Config.KeyLink or self.Config.Key
+		setclipboard(link)
+		self:Notify({
+			Title = "Link Copied!",
+			Text = "Link successfully copied to clipboard.",
+			Duration = 3,
+			StartPosition = UDim2.new(1, 0, 0.776, 0),
+			EndPosition = UDim2.new(0.724, 0, 0.776, 0),
+			TweenTime = 0.5
+		})
 	end)
-	
-	self.closeButton.MouseButton1Click:Connect(function()
-		self:Destroy()
-	end)
-	
-	self.KeyFrame.KeyBox.FocusLost:Connect(function()
-		local enteredKey = self.KeyBox.Text
-		if enteredKey == tostring(self.Config.Key) then
-			self.KeyBox.Text = "Correct key"
-			
-			local t = TS:Create(self.KeyFrame, TweenInfo.new(.25, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)})
-			t:Play()
-			
-			task.spawn(function()
-				for i, v in pairs(self.KeyFrame:GetChildren()) do
-					v:Destroy()
-				end
-			end)
-			
-			t.Completed:Connect(function()
-				self.Config.keyCallBack()
-				self.KeyFrame:Destroy()
-			end)
-		else
-			self.KeyBox.Text = "Incorrect key"
-			task.wait(1)
-		end
-	end)
-	
-	self:Notify({
-		Title = "Loaded",
-		Text = "Thanks for using this...",
-		Duration = 3,
-		StartPosition = UDim2.new(1, 0, 0.776, 0),
-		EndPosition = UDim2.new(0.724, 0, 0.776, 0),
-		TweenTime = 0.5
-	})
 end
 
 function UILibrary:CreateFakeLoading(config)
@@ -486,7 +501,7 @@ function UILibrary:CreateFakeLoading(config)
 	self.LoadTitleText.TextSize = 14
 	self.LoadTitleText.ZIndex = 3
 	self.LoadTitleText.Parent = self.LoadTitleBar
-	
+
 	self.DescriptionText = Instance.new("TextLabel")
 	self.DescriptionText.Name = "DescriptionText"
 	self.DescriptionText.Size = UDim2.new(0, 154, 0, 21)
@@ -499,14 +514,14 @@ function UILibrary:CreateFakeLoading(config)
 	self.DescriptionText.TextScaled = true
 	self.DescriptionText.ZIndex = 3
 	self.DescriptionText.Parent = self.LoadFrame
-	
+
 	self.LoadingBarFrame = Instance.new("CanvasGroup")
 	self.LoadingBarFrame.Name = "LoadingBar"
 	self.LoadingBarFrame.Size = UDim2.new(0, 163, 0, 27)
 	self.LoadingBarFrame.Position = UDim2.new(0.063, 0, 0.429, 0)
 	self.LoadingBarFrame.BackgroundColor3 = Color3.fromRGB(27, 27, 27)
 	self.LoadingBarFrame.Parent = self.LoadFrame
-	
+
 	if config.UIStrokeEnabled then
 		local uiStroke = Instance.new("UIStroke")
 		uiStroke.Thickness = config.UIStrokeThickness
@@ -514,18 +529,18 @@ function UILibrary:CreateFakeLoading(config)
 		uiStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 		uiStroke.Parent = self.LoadingBarFrame
 	end
-	
+
 	self.LoadingBarCorner = Instance.new("UICorner")
 	self.LoadingBarCorner.CornerRadius = UDim.new(0, 8)
 	self.LoadingBarCorner.Parent = self.LoadingBarFrame
-	
+
 	self.LoadingBar = Instance.new("Frame")
 	self.LoadingBar.Name = "LoadingBar"
 	self.LoadingBar.Size = UDim2.new(0, 0, 1, 0)
 	self.LoadingBar.Position = UDim2.new(0, 0, 0, 0)
 	self.LoadingBar.BackgroundColor3 = self.Colors.LoadingBarColor
 	self.LoadingBar.Parent = self.LoadingBarFrame
-	
+
 	task.spawn(function()
 		local currentPercent = 0
 		local random = Random.new()
@@ -546,19 +561,19 @@ function UILibrary:CreateFakeLoading(config)
 			if currentPercent < 1 then
 				task.wait(random:NextNumber(config.WaitTime2[1], config.WaitTime2[2]))
 			end
-			
+
 			task.wait()
 		end
 
 		task.wait(0.5)
-		
+
 		TS:Create(self.LoadFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
 			Size = UDim2.new(0, 0, 0, 0),
 			BackgroundTransparency = 1
 		}):Play()
 
 		task.wait(1)
-		
+
 		config.CallBack()
 		self:CreateUI()
 		self.LoadFrame:Destroy()
@@ -578,14 +593,91 @@ function UILibrary:ToggleMinimize()
 	end
 end
 
-function UILibrary:ToggleVisibility()
-	self.Visible = not self.Visible
-	self.ScreenGui.Enabled = self.Visible
+function UILibrary:ToggleFrameVisibility()
+	self.FVisible = not self.FVisible
+	self.MainFrame.Visible = self.FVisible
+end
+
+function UILibrary:ToggleGuiVisibility()
+	self.GVisible = not self.GVisible
+	self.ScreenGui.Enabled = self.GVisible
 end
 
 function UILibrary:SetTitle(newTitle)
 	self.Config.TitleText = newTitle
 	self.TitleText.Text = newTitle
+end
+
+function UILibrary:MakeDraggableButton(config)
+	local dragImage = Instance.new("ImageButton")
+	dragImage.Name = "DragImage"
+	dragImage.Size = config.Size
+	dragImage.Position = config.Position
+	dragImage.BackgroundTransparency = 1
+	dragImage.Image = self:LoadImage(config.Name, config.URL)
+	dragImage.ScaleType = Enum.ScaleType.Fit
+	dragImage.ZIndex = 2
+	dragImage.Parent = self.ScreenGui
+	
+	if config.UIStrokeEnabled then
+		local uistroke = Instance.new("UIStroke")
+		uistroke.Thickness = config.UIStrokeThickness
+		uistroke.Color = self.Colors.UIStrokeColor
+		uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		uistroke.Parent = dragImage
+	elseif config.BGColor then
+		dragImage.BackgroundColor3 = config.BGColor
+	elseif config.ScaleType then
+		dragImage.ScaleType = config.ScaleType
+	elseif config.BGTransparency then
+		dragImage.BackgroundTransparency = config.BGTransparency
+	end
+	
+	local dragCorner = Instance.new("UICorner")
+	dragCorner.CornerRadius = config.CornerRadius
+	dragCorner.Parent = dragImage
+	
+	local dragging, dragInput, dragStart, startPos
+
+	local function update(input)
+		local delta = input.Position - dragStart
+		dragImage.Position = UDim2.new(
+			startPos.X.Scale, 
+			startPos.X.Offset + delta.X, 
+			startPos.Y.Scale, 
+			startPos.Y.Offset + delta.Y
+		)
+	end
+
+	dragImage.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = dragImage.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	dragImage.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+
+	UIS.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			update(input)
+		end
+	end)
+	
+	dragImage.MouseButton1Click:Connect(function()
+		config.Callback()
+	end)
 end
 
 function UILibrary:AddSection(text)
@@ -610,17 +702,18 @@ function UILibrary:AddSection(text)
 	sectionText.Parent = section
 
 	table.insert(self.Elements, section)
-	
+
 	local tab = Instance.new("CanvasGroup")
 	tab.Name = "Tab_" .. text
 	tab.Size = UDim2.new(0, 13, 0, 54)
 	tab.BackgroundColor3 = self.Colors.TabColor
+	tab.LayoutOrder = #self.Tabs + 1
 	tab.Parent = self.TabScrollingFrame
-	
+
 	local corner = Instance.new("UICorner")
 	corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
 	corner.Parent = tab
-	
+
 	local btn = Instance.new("TextButton")
 	btn.Name = "Button_" .. text
 	btn.Rotation = 90
@@ -633,7 +726,7 @@ function UILibrary:AddSection(text)
 	btn.TextColor3 = self.Colors.TitleColor
 	btn.Font = self.Config.Font
 	btn.Parent = tab
-	
+
 	btn.MouseButton1Click:Connect(function()
 		local relativeOffset = section.AbsolutePosition.Y - self.ScrollingFrame.AbsolutePosition.Y
 		local targetY = self.ScrollingFrame.CanvasPosition.Y + relativeOffset
@@ -651,7 +744,9 @@ function UILibrary:AddSection(text)
 		tween:Play()
 	end)
 	
-	return section
+	table.insert(self.Tabs, tab)
+
+	return section, tab
 end
 
 function UILibrary:AddLabel(text)
@@ -998,61 +1093,129 @@ function UILibrary:AddSlider(config)
 	return sliderFrame, function() return currentValue end
 end
 
-function UILibrary:Notify(config)	
+function UILibrary:Notify(config)    
+	local TS = game:GetService("TweenService")
+	local accentColor = config.AccentColor or Color3.fromRGB(0, 200, 255)
+
+	-- Sound Setup
 	local sound = Instance.new("Sound")
 	sound.SoundId = self.Config.NotifcationSound
 	sound.Parent = game:GetService("SoundService")
-	sound.Volume = 3
-	
-	local frame = Instance.new("CanvasGroup")
-	frame.Parent = self.ScreenGui
-	frame.Name = "Frame_" .. config.Title
-	frame.Size = UDim2.new(0.25, 0, 0.2, 0)
-	frame.BackgroundColor3 = Color3.fromRGB(34, 34, 34)
-	frame.Position = config.StartPosition
-	
-	local uicorner = Instance.new("UICorner")
-	uicorner.Parent = frame
-	uicorner.CornerRadius = UDim.new(0, 10)
-	
-	local title = Instance.new("TextLabel")
-	title.Text = config.Title
-	title.Name = "Title_" .. config.Text
-	title.Parent = frame
-	title.Size = UDim2.new(1, 0, 0.2, 0)
-	title.TextScaled = true
-	title.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
-	title.TextColor3 = Color3.fromRGB(255, 255, 255)
-	
-	local msg = Instance.new("TextLabel")
-	msg.Text = config.Text
-	msg.Size = UDim2.new(1, 0, 0.8, 0)
-	msg.Position = UDim2.new(0, 0, 0.2, 0)
-	msg.TextScaled = true
-	msg.Parent = frame
-	msg.BackgroundTransparency = 1
-	msg.TextColor3 = Color3.fromRGB(255, 255, 255)
-	
-	local tweenInfo = TweenInfo.new(
-		config.TweenTime,
-		Enum.EasingStyle.Quad, 
-		Enum.EasingDirection.Out
-	)
-
-	local tween = TS:Create(frame, tweenInfo, {
-		Position = config.EndPosition
-	})
-	tween:Play()
-	
+	sound.Volume = 0.4
 	sound:Play()
-	
-	task.delay(config.Duration, function()
-		local tweenOut = TS:Create(frame, tweenInfo, {
-			Position = config.StartPosition
-		})
-		tweenOut:Play()
-		tweenOut.Completed:Wait()
+	game:GetService("Debris"):AddItem(sound, 2)
+
+	-- Main Container (CanvasGroup)
+	local frame = Instance.new("CanvasGroup")
+	frame.Name = "Notification"
+	frame.Parent = self.ScreenGui
+	frame.Size = UDim2.new(0, 200, 0, 80)
+	frame.Position = config.StartPosition
+	frame.BackgroundColor3 = Color3.fromRGB(100, 100, 100) 
+	frame.GroupTransparency = 1
+	frame.BorderSizePixel = 0
+
+	-- Glassmorphism Gradient (High Contrast)
+	local bgGradient = Instance.new("UIGradient")
+	bgGradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 80, 90)), -- Bright top-left
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 40, 45))  -- Darker bottom-right
+	})
+	bgGradient.Rotation = 45
+	bgGradient.Parent = frame
+
+	local uicorner = Instance.new("UICorner")
+	uicorner.CornerRadius = UDim.new(0, 12)
+	uicorner.Parent = frame
+
+	-- Vibrant Border (The "Glow" fix)
+	local uistroke = Instance.new("UIStroke")
+	uistroke.Color = accentColor
+	uistroke.Thickness = 2
+	uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	uistroke.Transparency = 0.2 -- Bold and visible
+	uistroke.Parent = frame
+
+	-- Accent Bar with a Glow
+	local accent = Instance.new("Frame")
+	accent.Size = UDim2.new(0, 5, 1, 0)
+	accent.BackgroundColor3 = accentColor
+	accent.BorderSizePixel = 0
+	accent.Parent = frame
+
+	-- Title (GothamBold + High Visibility)
+	local title = Instance.new("TextLabel")
+	title.Parent = frame
+	title.Size = UDim2.new(1, -70, 0, 35)
+	title.Position = UDim2.new(0, 20, 0, 10)
+	title.BackgroundTransparency = 1
+	title.Text = config.Title
+	title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	title.TextSize = 18 -- Slightly larger
+	title.Font = Enum.Font.GothamBold
+	title.TextXAlignment = Enum.TextXAlignment.Left
+
+	-- Message (GothamBold)
+	local msg = Instance.new("TextLabel")
+	msg.Parent = frame
+	msg.Size = UDim2.new(1, -40, 0, 40)
+	msg.Position = UDim2.new(0, 20, 0, 40)
+	msg.BackgroundTransparency = 1
+	msg.Text = config.Text
+	msg.TextColor3 = Color3.fromRGB(245, 245, 245) -- Near white
+	msg.TextSize = 14
+	msg.Font = Enum.Font.GothamBold
+	msg.TextWrapped = true
+	msg.TextXAlignment = Enum.TextXAlignment.Left
+	msg.TextYAlignment = Enum.TextYAlignment.Top
+
+	-- Close Button
+	local closeBtn = Instance.new("TextButton")
+	closeBtn.Parent = frame
+	closeBtn.Size = UDim2.new(0, 30, 0, 30)
+	closeBtn.Position = UDim2.new(1, -35, 0, 10)
+	closeBtn.BackgroundTransparency = 1
+	closeBtn.Text = "×"
+	closeBtn.TextColor3 = Color3.fromRGB(255, 0, 0)
+	closeBtn.TextSize = 20
+	closeBtn.Font = Enum.Font.GothamBold
+
+	-- Progress Bar (The "Life" of the notification)
+	local progressBarBackground = Instance.new("Frame")
+	progressBarBackground.Name = "ProgressBarBackground"
+	progressBarBackground.Size = UDim2.new(1, 0, 0, 10)
+	progressBarBackground.Position = UDim2.new(0, 0, 1, -10)
+	progressBarBackground.BackgroundColor3 = Color3.fromRGB(0,0,0)
+	progressBarBackground.BackgroundTransparency = 0.7
+	progressBarBackground.BorderSizePixel = 0
+	progressBarBackground.Parent = frame
+
+	local progressBar = Instance.new("Frame")
+	progressBar.Name = "ProgressBar"
+	progressBar.Size = UDim2.new(1, 0, 1, 0)
+	progressBar.BackgroundColor3 = Color3.fromRGB(255,255,255)
+	progressBar.BorderSizePixel = 0
+	progressBar.Parent = progressBarBackground
+
+	-- Animations
+	local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
+
+	local function dismiss()
+		TS:Create(frame, tweenInfo, {Position = config.StartPosition, GroupTransparency = 1}):Play()
+		task.wait(0.6)
 		frame:Destroy()
+	end
+
+	closeBtn.MouseButton1Click:Connect(dismiss)
+
+	-- Play Intro
+	TS:Create(frame, tweenInfo, {Position = config.EndPosition, GroupTransparency = 0}):Play()
+
+	-- Animate Progress Bar
+	TS:Create(progressBar, TweenInfo.new(config.Duration or 5, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+
+	task.delay(config.Duration or 5, function()
+		if frame and frame.Parent then dismiss() end
 	end)
 end
 
