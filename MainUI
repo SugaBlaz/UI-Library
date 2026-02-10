@@ -442,7 +442,7 @@ function UILibrary:CreateKeyUI()
 	Instance.new("UICorner", GetKey).CornerRadius = UDim.new(0, 6)
 
 	GetKey.MouseButton1Click:Connect(function()
-		local link = self.Config.KeyLink or self.Config.Key
+		local link = self.Config.KeyLink
 		setclipboard(link)
 		self:Notify({
 			Title = "Link Copied!",
