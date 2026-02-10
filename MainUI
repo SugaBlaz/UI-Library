@@ -447,22 +447,21 @@ function UILibrary:CreateKeyUI()
 	Instance.new("UICorner", GetKey).CornerRadius = UDim.new(0, 6)
 
 	GetKey.MouseButton1Click:Connect(function()
-		local function buildUrl(baseUrl, params)
-		    local finalUrl = baseUrl
-		    local first = not string.find(baseUrl, "?") -- Check if we need a '?' or '&'
-		
-		    for key, value in pairs(params) do
-		        local separator = first and "?" or "&"
-		        finalUrl = finalUrl .. separator .. tostring(key) .. "=" .. tostring(value)
-		        first = false -- After the first one, everything else gets an '&'
-		    end
-		    
-		    return finalUrl
-		end
-		
-		local Key_Link = buildUrl(self.Config.KeyLink, self.Config.Addons)
-
-		setclipboard(Key_Link)
+		local url = self.Config.KeyLink or ""
+    
+	    -- Check if the developer actually provided any addons
+	    if self.Config.Addons and type(self.Config.Addons) == "table" then
+	        -- Figure out if the link already has a '?'
+	        local isFirst = not string.find(url, "?")
+	        
+	        for key, value in pairs(self.Config.Addons) do
+	            local separator = isFirst and "?" or "&"
+	            url = url .. separator .. tostring(key) .. "=" .. tostring(value)
+	            isFirst = false -- Everything after the first one gets an '&'
+	        end
+	    end
+	    
+	    setclipboard(url)
 
 		self:Notify({
 			Title = "Link Copied!",
