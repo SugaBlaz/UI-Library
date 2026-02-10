@@ -40,6 +40,7 @@ UILibrary.DefaultConfig = {
 	UIStrokeEnabled = true,
 	NotifcationSound = "rbxassetid://80833448337193",
 	ResetOnSpawn = false,
+	Addons = {}
 	Key = "Testing1",
 	KeyLink = "SomethingNotNil",
 	KeySystemEnabled = false,
@@ -446,9 +447,23 @@ function UILibrary:CreateKeyUI()
 	Instance.new("UICorner", GetKey).CornerRadius = UDim.new(0, 6)
 
 	GetKey.MouseButton1Click:Connect(function()
-		local thalink2 = self.Config.KeyLink
-		print(thalink2)
-		setclipboard(thalink2)
+		local function buildUrl(baseUrl, params)
+		    local finalUrl = baseUrl
+		    local first = not string.find(baseUrl, "?") -- Check if we need a '?' or '&'
+		
+		    for key, value in pairs(params) do
+		        local separator = first and "?" or "&"
+		        finalUrl = finalUrl .. separator .. tostring(key) .. "=" .. tostring(value)
+		        first = false -- After the first one, everything else gets an '&'
+		    end
+		    
+		    return finalUrl
+		end
+		
+		local Key_Link = buildUrl(self.Config.KeyLink, self.Config.Addons)
+
+		setclipboard(Key_Link)
+
 		self:Notify({
 			Title = "Link Copied!",
 			Text = "Link successfully copied to clipboard.",
