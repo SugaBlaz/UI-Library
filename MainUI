@@ -41,6 +41,7 @@ UILibrary.DefaultConfig = {
 	NotifcationSound = "rbxassetid://80833448337193",
 	ResetOnSpawn = false,
 	Addons = {},
+	insertKeyAtEnd = true,
 	Key = "Testing1",
 	KeyLink = "SomethingNotNil",
 	KeySystemEnabled = false,
@@ -83,15 +84,44 @@ function UILibrary.new(config)
 	local fileName = "SBEUI_Config.txt"
 
 	local function checkKey(key)
-		if key == "" or key == nil then return false end
-		local url = self.Config.Key
-		local s, res = pcall(function() return game:HttpGet(url) end)
-		if s then
-			local success, data = pcall(function() return game:GetService("HttpService"):JSONDecode(res) end)
-			return success and data and data.success
-		end
-		return false
-	end
+    if key == "" or key == nil then return false end
+    
+    local target = self.Config.Key
+    
+    -- Scenario 1: It's a Direct String (Not a URL)
+    if not string.find(target, "http://") and not string.find(target, "https://") then
+        return key == target
+    end
+
+    -- Scenario 2 & 3: It's a URL (API or Static Link)
+    local url = target
+    if self.Config.insertKeyAtEnd == true then
+        url = url .. key
+    end
+
+    local s, res = pcall(function() 
+        return game:HttpGet(url) 
+    end)
+
+    if s and res then
+        -- Try to parse as JSON (For APIs like KeyAuth or custom VPS scripts)
+        local jsonSuccess, data = pcall(function() 
+            return game:GetService("HttpService"):JSONDecode(res) 
+        end)
+
+        if jsonSuccess and type(data) == "table" then
+            -- Supports {success = true} or {valid = true}
+            return data.success == true or data.valid == true
+        else
+            -- Static Link Support: Check if the raw text from the URL matches the key
+            -- We use string.find or trim to avoid issues with newlines in text files
+            local cleanRes = string.gsub(res, "%s+", "") -- Remove whitespace/newlines
+            return key == cleanRes
+        end
+    end
+
+    return false
+end
 	
 	self:CreateScreenGui()
 	
