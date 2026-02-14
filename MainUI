@@ -72,6 +72,8 @@ function UILibrary.new(config)
 	self.Elements = {}
 	
 	self.Tabs = {}
+
+	self.Sections = {}
 	
 	self.FVisible = true
 	self.GVisible = true
@@ -198,7 +200,7 @@ function UILibrary:CreateUI()
 
 	self.TitleBar = Instance.new("Frame")
 	self.TitleBar.Name = "TitleBar"
-	self.TitleBar.Size = UDim2.new(1, 0, 0, self.Config.TitleHeight)
+	self.TitleBar.Size = UDim2.new(1, 0, 0, self.Config.TitleHeight) 
 	self.TitleBar.Position = UDim2.new(0, 0, 0, 0)
 	self.TitleBar.BackgroundColor3 = self.Colors.CollapseBtnColor
 	self.TitleBar.BorderSizePixel = 0
@@ -211,7 +213,7 @@ function UILibrary:CreateUI()
 
 	self.TitleText = Instance.new("TextLabel")
 	self.TitleText.Name = "TitleText"
-	self.TitleText.Size = UDim2.new(0.7, 0, 1, 0)
+	self.TitleText.Size = UDim2.new(1, -80, 0, self.Config.TitleHeight)
 	self.TitleText.Position = UDim2.new(0, 12, 0, 0)
 	self.TitleText.BackgroundTransparency = 1
 	self.TitleText.Text = self.Config.TitleText
@@ -222,10 +224,52 @@ function UILibrary:CreateUI()
 	self.TitleText.ZIndex = 3
 	self.TitleText.Parent = self.TitleBar
 
+	self.SearchFrame = Instance.new("Frame")
+	self.SearchFrame.Name = "SearchFrame"
+	self.SearchFrame.Parent = self.TitleBar
+	self.SearchFrame.Size = UDim2.new(1, -24, 0, 28)
+	self.SearchFrame.Position = UDim2.new(0, 12, 0, self.Config.TitleHeight)
+	self.SearchFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	self.SearchFrame.BackgroundTransparency = 0.2
+	self.SearchFrame.ZIndex = 3
+
+	local searchCorner = Instance.new("UICorner")
+	searchCorner.CornerRadius = UDim.new(0, 6)
+	searchCorner.Parent = self.SearchFrame
+
+	self.TabSearch = Instance.new("TextBox")
+	self.TabSearch.Name = "TabSearch"
+	self.TabSearch.Parent = self.SearchFrame
+	self.TabSearch.Size = UDim2.new(1, -30, 1, 0)
+	self.TabSearch.Position = UDim2.new(0, 10, 0, 0)
+	self.TabSearch.BackgroundTransparency = 1
+	self.TabSearch.PlaceholderText = "Search tabs..."
+	self.TabSearch.Text = ""
+	self.TabSearch.TextColor3 = Color3.new(1, 1, 1)
+	self.TabSearch.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+	self.TabSearch.TextSize = 12
+	self.TabSearch.Font = Enum.Font.Gotham
+	self.TabSearch.TextXAlignment = Enum.TextXAlignment.Left
+	self.TabSearch.ClearTextOnFocus = false
+	self.TabSearch.ZIndex = 4
+
+	self.ClearSearch = Instance.new("TextButton")
+	self.ClearSearch.Name = "ClearSearch"
+	self.ClearSearch.Parent = self.SearchFrame
+	self.ClearSearch.Size = UDim2.new(0, 20, 0, 20)
+	self.ClearSearch.Position = UDim2.new(1, -25, 0.5, -10)
+	self.ClearSearch.BackgroundTransparency = 1
+	self.ClearSearch.Text = "×"
+	self.ClearSearch.TextColor3 = Color3.fromRGB(200, 200, 200)
+	self.ClearSearch.TextSize = 18
+	self.ClearSearch.Visible = false
+	self.ClearSearch.ZIndex = 4
+
+	-- Adjusted Content Frame Position to start after the TitleBar
 	self.ScrollingFrame = Instance.new("ScrollingFrame")
 	self.ScrollingFrame.Name = "ContentFrame"
-	self.ScrollingFrame.Size = UDim2.new(1, 0, 1, -self.Config.TitleHeight)
-	self.ScrollingFrame.Position = UDim2.new(0, 0, 0, self.Config.TitleHeight)
+	self.ScrollingFrame.Size = UDim2.new(1, 0, 1, -(self.Config.TitleHeight + 35))
+	self.ScrollingFrame.Position = UDim2.new(0, 0, 0, self.Config.TitleHeight + 35)
 	self.ScrollingFrame.BackgroundTransparency = 1
 	self.ScrollingFrame.BorderSizePixel = 0
 	self.ScrollingFrame.ScrollBarThickness = 4
@@ -235,8 +279,8 @@ function UILibrary:CreateUI()
 
 	self.TabScrollingFrame = Instance.new("ScrollingFrame")
 	self.TabScrollingFrame.Name = "TabFrame"
-	self.TabScrollingFrame.Size = UDim2.new(1, -24, 1, -self.Config.TitleHeight)
-	self.TabScrollingFrame.Position = UDim2.new(1, -34, 0, self.Config.TitleHeight)
+	self.TabScrollingFrame.Size = UDim2.new(1, -24, 1, -(self.Config.TitleHeight + 35))
+	self.TabScrollingFrame.Position = UDim2.new(1, -34, 0, self.Config.TitleHeight + 35)
 	self.TabScrollingFrame.BackgroundTransparency = 1
 	self.TabScrollingFrame.BorderSizePixel = 0
 	self.TabScrollingFrame.ScrollBarThickness = 4
@@ -245,58 +289,35 @@ function UILibrary:CreateUI()
 	self.TabScrollingFrame.Parent = self.MainFrame
 
 	-- Buttons Container (Top Right)
-    local TopBtns = Instance.new("Frame", self.TitleBar)
-    TopBtns.Size = UDim2.new(0, 65, 1, 0)
-    TopBtns.Position = UDim2.new(1, -70, 0, 0)
-    TopBtns.BackgroundTransparency = 1
+	local TopBtns = Instance.new("Frame", self.TitleBar)
+	TopBtns.Size = UDim2.new(0, 65, 0, self.Config.TitleHeight)
+	TopBtns.Position = UDim2.new(1, -70, 0, 0)
+	TopBtns.BackgroundTransparency = 1
+	TopBtns.ZIndex = 4
 
-    local BtnLayout = Instance.new("UIListLayout", TopBtns)
-    BtnLayout.FillDirection = Enum.FillDirection.Horizontal
-    BtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-    BtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    BtnLayout.Padding = UDim.new(0, 5)
+	local BtnLayout = Instance.new("UIListLayout", TopBtns)
+	BtnLayout.FillDirection = Enum.FillDirection.Horizontal
+	BtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	BtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+	BtnLayout.Padding = UDim.new(0, 5)
 
-    -- Close Button
-    self.CloseBtn = Instance.new("TextButton", TopBtns)
-    self.CloseBtn.Size = UDim2.new(0, 25, 0, 25)
-    self.CloseBtn.BackgroundTransparency = 1
-    self.CloseBtn.Text = "×"
-    self.CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-    self.CloseBtn.TextSize = 20
-    self.CloseBtn.Font = Enum.Font.GothamBold
+	-- Close Button
+	self.CloseBtn = Instance.new("TextButton", TopBtns)
+	self.CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+	self.CloseBtn.BackgroundTransparency = 1
+	self.CloseBtn.Text = "×"
+	self.CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+	self.CloseBtn.TextSize = 20
+	self.CloseBtn.Font = Enum.Font.GothamBold
 
-    -- Minimize Button
-    self.MinimizeButton = Instance.new("TextButton", TopBtns)
-    self.MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
-    self.MinimizeButton.BackgroundTransparency = 1
-    self.MinimizeButton.Text = "-"
-    self.MinimizeButton.TextColor3 = self.Colors.TitleColor
-    self.MinimizeButton.TextSize = 20
-    self.MinimizeButton.Font = Enum.Font.GothamBold
-
-    -- [SEARCH BAR AREA]
-    self.SearchFrame = Instance.new("Frame", self.MainFrame)
-    self.SearchFrame.Size = UDim2.new(0, 24, 0, 60)
-    self.SearchFrame.Position = UDim2.new(1, -34, 0, self.Config.TitleHeight + 10)
-    self.SearchFrame.BackgroundColor3 = self.Colors.TabColor
-    
-    self.TabSearch = Instance.new("TextBox", self.SearchFrame)
-    self.TabSearch.Size = UDim2.new(1, 0, 1, -20)
-    self.TabSearch.BackgroundTransparency = 1
-    self.TabSearch.PlaceholderText = "..."
-    self.TabSearch.Text = ""
-    self.TabSearch.TextColor3 = Color3.new(1, 1, 1)
-    self.TabSearch.TextSize = 10
-    self.TabSearch.ClearTextOnFocus = false
-
-    self.ClearSearch = Instance.new("TextButton", self.SearchFrame)
-    self.ClearSearch.Size = UDim2.new(1, 0, 0, 20)
-    self.ClearSearch.Position = UDim2.new(0, 0, 1, -20)
-    self.ClearSearch.BackgroundColor3 = Color3.fromRGB(60, 20, 20)
-    self.ClearSearch.Text = "C"
-    self.ClearSearch.TextColor3 = Color3.new(1, 1, 1)
-    self.ClearSearch.TextSize = 10
-    self.ClearSearch.Visible = false
+	-- Minimize Button
+	self.MinimizeButton = Instance.new("TextButton", TopBtns)
+	self.MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
+	self.MinimizeButton.BackgroundTransparency = 1
+	self.MinimizeButton.Text = "-"
+	self.MinimizeButton.TextColor3 = self.Colors.TitleColor
+	self.MinimizeButton.TextSize = 20
+	self.MinimizeButton.Font = Enum.Font.GothamBold
 
 	self.UIListLayout = Instance.new("UIListLayout")
 	self.UIListLayout.Padding = UDim.new(0, self.Config.ElementPadding)
@@ -320,25 +341,31 @@ function UILibrary:CreateUI()
 	self.OriginalSize = self.MainFrame.Size
 	self.OriginalPosition = self.MainFrame.Position
 
-    self.TabSearch:GetPropertyChangedSignal("Text"):Connect(function()
-        local query = string.lower(self.TabSearch.Text)
-        self.ClearSearch.Visible = (query ~= "")
-        
-        for _, tab in pairs(self.Tabs) do
-            local btn = tab:FindFirstChildOfClass("TextButton")
-            if btn then
-                tab.Visible = string.find(string.lower(btn.Text), query) ~= nil or query == ""
-            end
-        end
-    end)
+	-- Logic: Search Functionality
+	self.TabSearch:GetPropertyChangedSignal("Text"):Connect(function()
+		local query = string.lower(self.TabSearch.Text)
+		self.ClearSearch.Visible = (query ~= "")
 
-    self.ClearSearch.MouseButton1Click:Connect(function()
-        self.TabSearch.Text = ""
-    end)
+		for _, tab in pairs(self.Tabs or {}) do
+			-- Looks for text in buttons or the tab name itself
+			local btn = tab:FindFirstChildOfClass("TextButton") or tab:FindFirstChildOfClass("TextLabel")
+			local tabName = btn and btn.Text or tab.Name
 
-    self.CloseBtn.MouseButton1Click:Connect(function()
-        self:PromptDestroy()
-    end)
+			if string.find(string.lower(tabName), query) then
+				tab.Visible = true
+			else
+				tab.Visible = false
+			end
+		end
+	end)
+
+	self.ClearSearch.MouseButton1Click:Connect(function()
+		self.TabSearch.Text = ""
+	end)
+
+	self.CloseBtn.MouseButton1Click:Connect(function()
+		self:PromptDestroy()
+	end)
 
 	self.MinimizeButton.MouseButton1Click:Connect(function()
 		self:ToggleMinimize()
@@ -764,7 +791,6 @@ function UILibrary:AddSection(text)
 	local section = Instance.new("Frame")
 	section.Name = "Section_" .. text
 	section.Size = UDim2.new(1, -24, 0, self.Config.SectionHeight)
-	section.Position = UDim2.new(0, 12, 0, 0)
 	section.BackgroundTransparency = 1
 	section.LayoutOrder = #self.Elements + 1
 	section.Parent = self.ScrollingFrame
@@ -772,7 +798,6 @@ function UILibrary:AddSection(text)
 	local sectionText = Instance.new("TextLabel")
 	sectionText.Name = "TextLabel"
 	sectionText.Size = UDim2.new(1, 0, 1, 0)
-	sectionText.Position = UDim2.new(0, 0, 0, 0)
 	sectionText.BackgroundTransparency = 1
 	sectionText.Text = text
 	sectionText.TextColor3 = self.Colors.SectionColor
@@ -781,51 +806,115 @@ function UILibrary:AddSection(text)
 	sectionText.TextSize = self.Config.TextSize + 1
 	sectionText.Parent = section
 
-	table.insert(self.Elements, section)
-
+	-- [ENHANCED TAB UI]
 	local tab = Instance.new("CanvasGroup")
 	tab.Name = "Tab_" .. text
-	tab.Size = UDim2.new(0, 13, 0, 54)
+	tab.Size = UDim2.new(0, 16, 0, 60) -- Slightly wider and taller for better click area
 	tab.BackgroundColor3 = self.Colors.TabColor
+	tab.GroupTransparency = 0.3 -- Start slightly faded
 	tab.LayoutOrder = #self.Tabs + 1
 	tab.Parent = self.TabScrollingFrame
 
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, self.Config.CornerRadius)
+	corner.CornerRadius = UDim.new(0, 4)
 	corner.Parent = tab
+
+	-- Accent Bar (The "Active" indicator)
+	local accent = Instance.new("Frame")
+	accent.Name = "Accent"
+	accent.Size = UDim2.new(0, 2, 0, 0) -- Starts at 0 height
+	accent.Position = UDim2.new(1, -2, 0.5, 0)
+	accent.AnchorPoint = Vector2.new(0, 0.5)
+	accent.BackgroundColor3 = self.Colors.AccentColor
+	accent.BorderSizePixel = 0
+	accent.Parent = tab
 
 	local btn = Instance.new("TextButton")
 	btn.Name = "Button_" .. text
 	btn.Rotation = 90
-	btn.Size = UDim2.new(0, 56, 0, 13)
+	btn.Size = UDim2.new(0, 56, 0, 16)
 	btn.Position = UDim2.new(0.5, 0, 0.5, 0)
-	btn.TextScaled = true
-	btn.AnchorPoint = Vector2.new(0.49, 0.5)
+	btn.AnchorPoint = Vector2.new(0.5, 0.5)
 	btn.BackgroundTransparency = 1
-	btn.Text = text
+	btn.Text = text:upper() -- Uppercase looks cleaner on vertical tabs
 	btn.TextColor3 = self.Colors.TitleColor
-	btn.Font = self.Config.Font
+	btn.TextTransparency = 0.2
+	btn.Font = Enum.Font.GothamBold
+	btn.TextScaled = true
 	btn.Parent = tab
 
+	-- Hover Animations
+	tab.MouseEnter:Connect(function()
+		TS:Create(tab, TweenInfo.new(0.3), {GroupTransparency = 0, BackgroundColor3 = self.Colors.AccentColor:Lerp(self.Colors.TabColor, 0.8)}):Play()
+		TS:Create(btn, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+	end)
+
+	tab.MouseLeave:Connect(function()
+		-- Only fade back if it's not the "active" tab (optional logic)
+		TS:Create(tab, TweenInfo.new(0.3), {GroupTransparency = 0.3, BackgroundColor3 = self.Colors.TabColor}):Play()
+		TS:Create(btn, TweenInfo.new(0.3), {TextTransparency = 0.2}):Play()
+	end)
+
 	btn.MouseButton1Click:Connect(function()
+		-- Reset all other tabs' accents
+		for _, t in pairs(self.Tabs) do
+			TS:Create(t.Accent, TweenInfo.new(0.3), {Size = UDim2.new(0, 2, 0, 0)}):Play()
+		end
+		-- Animate this accent
+		TS:Create(accent, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Size = UDim2.new(0, 2, 0, 40)}):Play()
+
 		local relativeOffset = section.AbsolutePosition.Y - self.ScrollingFrame.AbsolutePosition.Y
 		local targetY = self.ScrollingFrame.CanvasPosition.Y + relativeOffset
 
-		local tInfo = TweenInfo.new(
-			0.5,
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		)
-
-		local tween = TS:Create(self.ScrollingFrame, tInfo, {
+		TS:Create(self.ScrollingFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
 			CanvasPosition = Vector2.new(0, targetY)
-		})
-
-		tween:Play()
+		}):Play()
 	end)
 	
-	table.insert(self.Tabs, tab)
+	local lastActiveTab = nil -- Track the state to prevent lag
 
+	self.ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
+		local activeSection = nil
+
+		for _, section in ipairs(self.Sections) do
+			if section:GetAttribute("IsSection") then
+				if section.AbsolutePosition.Y <= (self.ScrollingFrame.AbsolutePosition.Y + 25) then
+					activeSection = section
+				end
+			end
+		end
+
+		if activeSection then
+			local targetTabName = activeSection:GetAttribute("TabName")
+
+			-- ONLY run the logic if the section actually CHANGED
+			if targetTabName ~= lastActiveTab then
+				lastActiveTab = targetTabName
+
+				for _, t in pairs(self.Tabs) do
+					local isMatch = (t.Name == targetTabName)
+
+					-- Animate Accent
+					TS:Create(t.Accent, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
+						Size = isMatch and UDim2.new(0, 2, 0, 40) or UDim2.new(0, 2, 0, 0)
+					}):Play()
+
+					-- Animate Background
+					TS:Create(t, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
+						GroupTransparency = isMatch and 0 or 0.3,
+						BackgroundColor3 = isMatch and self.Colors.AccentColor:Lerp(self.Colors.TabColor, 0.7) or self.Colors.TabColor
+					}):Play()
+				end
+			end
+		end
+	end)
+	
+	section:SetAttribute("TabName", tab.Name)
+	
+	table.insert(self.Sections, section)
+	table.insert(self.Elements, section)
+	table.insert(self.Tabs, tab)
+	
 	return section, tab
 end
 
