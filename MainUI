@@ -200,7 +200,7 @@ function UILibrary:CreateUI()
 
 	self.TitleBar = Instance.new("Frame")
 	self.TitleBar.Name = "TitleBar"
-	self.TitleBar.Size = UDim2.new(1, 0, 0, self.Config.TitleHeight) 
+	self.TitleBar.Size = UDim2.new(1, 0, 0, self.Config.TitleHeight + 35) 
 	self.TitleBar.Position = UDim2.new(0, 0, 0, 0)
 	self.TitleBar.BackgroundColor3 = self.Colors.CollapseBtnColor
 	self.TitleBar.BorderSizePixel = 0
@@ -213,8 +213,9 @@ function UILibrary:CreateUI()
 
 	self.TitleText = Instance.new("TextLabel")
 	self.TitleText.Name = "TitleText"
-	self.TitleText.Size = UDim2.new(1, -80, 0, self.Config.TitleHeight)
-	self.TitleText.Position = UDim2.new(0, 12, 0, 0)
+	
+	self.TitleText.Size = UDim2.new(0.6, 0, 1, 0) -- 100% of TitleBar height
+	self.TitleText.Position = UDim2.new(0, 12, -0.25, 0)
 	self.TitleText.BackgroundTransparency = 1
 	self.TitleText.Text = self.Config.TitleText
 	self.TitleText.TextColor3 = self.Colors.TitleColor
@@ -227,8 +228,8 @@ function UILibrary:CreateUI()
 	self.SearchFrame = Instance.new("Frame")
 	self.SearchFrame.Name = "SearchFrame"
 	self.SearchFrame.Parent = self.TitleBar
-	self.SearchFrame.Size = UDim2.new(1, -24, 0, 28)
-	self.SearchFrame.Position = UDim2.new(0, 12, 0, self.Config.TitleHeight)
+	self.SearchFrame.Size = UDim2.new(1, -24, 0.4, 0)
+	self.SearchFrame.Position = UDim2.new(0, 12, 0.5, 0)
 	self.SearchFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	self.SearchFrame.BackgroundTransparency = 0.2
 	self.SearchFrame.ZIndex = 3
@@ -240,7 +241,7 @@ function UILibrary:CreateUI()
 	self.TabSearch = Instance.new("TextBox")
 	self.TabSearch.Name = "TabSearch"
 	self.TabSearch.Parent = self.SearchFrame
-	self.TabSearch.Size = UDim2.new(1, -30, 1, 0)
+	self.TabSearch.Size = UDim2.new(1, 0, 1, 0)
 	self.TabSearch.Position = UDim2.new(0, 10, 0, 0)
 	self.TabSearch.BackgroundTransparency = 1
 	self.TabSearch.PlaceholderText = "Search tabs..."
@@ -288,27 +289,17 @@ function UILibrary:CreateUI()
 	self.TabScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 	self.TabScrollingFrame.Parent = self.MainFrame
 
-	-- Buttons Container (Top Right)
 	local TopBtns = Instance.new("Frame", self.TitleBar)
-	TopBtns.Size = UDim2.new(0, 65, 0, self.Config.TitleHeight)
-	TopBtns.Position = UDim2.new(1, -70, 0, 0)
+	TopBtns.Size = UDim2.new(0.3, 0, 1, 0)
+	TopBtns.Position = UDim2.new(1, 0, -0.25, 0)
+	TopBtns.AnchorPoint = Vector2.new(1, 0)
 	TopBtns.BackgroundTransparency = 1
-	TopBtns.ZIndex = 4
 
 	local BtnLayout = Instance.new("UIListLayout", TopBtns)
 	BtnLayout.FillDirection = Enum.FillDirection.Horizontal
 	BtnLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 	BtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 	BtnLayout.Padding = UDim.new(0, 5)
-
-	-- Close Button
-	self.CloseBtn = Instance.new("TextButton", TopBtns)
-	self.CloseBtn.Size = UDim2.new(0, 25, 0, 25)
-	self.CloseBtn.BackgroundTransparency = 1
-	self.CloseBtn.Text = "×"
-	self.CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-	self.CloseBtn.TextSize = 20
-	self.CloseBtn.Font = Enum.Font.GothamBold
 
 	-- Minimize Button
 	self.MinimizeButton = Instance.new("TextButton", TopBtns)
@@ -318,6 +309,15 @@ function UILibrary:CreateUI()
 	self.MinimizeButton.TextColor3 = self.Colors.TitleColor
 	self.MinimizeButton.TextSize = 20
 	self.MinimizeButton.Font = Enum.Font.GothamBold
+	
+	-- Close Button
+	self.CloseBtn = Instance.new("TextButton", TopBtns)
+	self.CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+	self.CloseBtn.BackgroundTransparency = 1
+	self.CloseBtn.Text = "×"
+	self.CloseBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+	self.CloseBtn.TextSize = 20
+	self.CloseBtn.Font = Enum.Font.GothamBold
 
 	self.UIListLayout = Instance.new("UIListLayout")
 	self.UIListLayout.Padding = UDim.new(0, self.Config.ElementPadding)
