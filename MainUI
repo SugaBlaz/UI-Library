@@ -1,7 +1,21 @@
 local UILibrary = {}
 
+function safeloadstring(url)
+    local code = game:HttpGet(url)
+    local func, errorMessage = loadstring(code)
+    
+    if func then
+        print("Script compiled! Executing...")
+        return func()
+    else
+        warn("LOADSTRING FAILED: " .. tostring(errorMessage))
+        return nil
+    end
+end
+
 local TS = game:GetService("TweenService")
 local UIS = game:GetService("UserInputService")
+local utility = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/Utility")
 
 UILibrary.DefaultColors = {
 	TitleColor = Color3.fromRGB(255, 255, 255),
@@ -60,7 +74,7 @@ function UILibrary.new(config)
         self.Config[k] = (config and config[k] ~= nil) and config[k] or v
     end
 
-	print(config.KeyLink)
+	self.HubFolder = utility:CreateFolder({Name = self.Config.Title})
 
     self.Config.KeyLink = config.KeyLink
 
@@ -81,47 +95,47 @@ function UILibrary.new(config)
 	
 	self.Minimized = false
 	
-	local fileName = "SBEUI_Config.txt"
+	local fileName = self.HubFolder .. "/Key.txt"
 
 	local function checkKey(key)
-    if key == "" or key == nil then return false end
-    
-    local target = self.Config.Key
-    
-    -- Scenario 1: It's a Direct String (Not a URL)
-    if not string.find(target, "http://") and not string.find(target, "https://") then
-        return key == target
-    end
-
-    -- Scenario 2 & 3: It's a URL (API or Static Link)
-    local url = target
-    if self.Config.insertKeyAtEnd == true then
-        url = url .. key
-    end
-
-    local s, res = pcall(function() 
-        return game:HttpGet(url) 
-    end)
-
-    if s and res then
-        -- Try to parse as JSON (For APIs like KeyAuth or custom VPS scripts)
-        local jsonSuccess, data = pcall(function() 
-            return game:GetService("HttpService"):JSONDecode(res) 
-        end)
-
-        if jsonSuccess and type(data) == "table" then
-            -- Supports {success = true} or {valid = true}
-            return data.success == true or data.valid == true
-        else
-            -- Static Link Support: Check if the raw text from the URL matches the key
-            -- We use string.find or trim to avoid issues with newlines in text files
-            local cleanRes = string.gsub(res, "%s+", "") -- Remove whitespace/newlines
-            return key == cleanRes
-        end
-    end
-
-    return false
-end
+	    if key == "" or key == nil then return false end
+	    
+	    local target = self.Config.Key
+	    
+	    -- Scenario 1: It's a Direct String (Not a URL)
+	    if not string.find(target, "http://") and not string.find(target, "https://") then
+	        return key == target
+	    end
+	
+	    -- Scenario 2 & 3: It's a URL (API or Static Link)
+	    local url = target
+	    if self.Config.insertKeyAtEnd == true then
+	        url = url .. key
+	    end
+	
+	    local s, res = pcall(function() 
+	        return game:HttpGet(url) 
+	    end)
+	
+	    if s and res then
+	        -- Try to parse as JSON (For APIs like KeyAuth or custom VPS scripts)
+	        local jsonSuccess, data = pcall(function() 
+	            return game:GetService("HttpService"):JSONDecode(res) 
+	        end)
+	
+	        if jsonSuccess and type(data) == "table" then
+	            -- Supports {success = true} or {valid = true}
+	            return data.success == true or data.valid == true
+	        else
+	            -- Static Link Support: Check if the raw text from the URL matches the key
+	            -- We use string.find or trim to avoid issues with newlines in text files
+	            local cleanRes = string.gsub(res, "%s+", "") -- Remove whitespace/newlines
+	            return key == cleanRes
+	        end
+	    end
+	
+	    return false
+	end
 	
 	self:CreateScreenGui()
 	
@@ -129,7 +143,8 @@ end
 
 	task.wait(4)
 
-	local savedKey = isfile(fileName) and readfile(fileName)
+	local savedKey = isfile(fileName) and utility:ReadFile({Path = fileName, IsJSON = false})
+
 	if self.Config.KeySystemEnabled then
 		if savedKey then
 			if checkKey(savedKey) then
@@ -408,6 +423,48 @@ function UILibrary:CreateUI()
 		self.ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, self.UIListLayout.AbsoluteContentSize.Y + 15)
 	end)
 
+	local lastActiveTab = nil
+
+	self.ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
+		local scrollY = self.ScrollingFrame.CanvasPosition.Y
+		local frameTop = self.ScrollingFrame.AbsolutePosition.Y
+		local activeSection = nil
+
+		-- 1. Find the section currently at the top of the viewport
+		-- We reverse the loop to find the "deepest" section that has passed the top
+		for i = #self.Sections, 1, -1 do
+			local section = self.Sections[i]
+			-- We check if the section is at or above the top of the scrolling window
+			if section.AbsolutePosition.Y <= (frameTop + 50) then -- 50px buffer for better feel
+				activeSection = section
+				break 
+			end
+		end
+
+		if activeSection then
+			local targetTabName = activeSection:GetAttribute("TabName")
+
+			if targetTabName ~= lastActiveTab then
+				lastActiveTab = targetTabName
+
+				-- Update all tabs in one go
+				for _, t in pairs(self.Tabs) do
+					local isMatch = (t.Name == targetTabName)
+
+					-- Fast Tweens for Mobile (Quart/Out is lighter than Back/Elastic)
+					TS:Create(t.Accent, TweenInfo.new(0.2), {
+						Size = isMatch and UDim2.new(0, 2, 0, 40) or UDim2.new(0, 2, 0, 0)
+					}):Play()
+
+					TS:Create(t, TweenInfo.new(0.2), {
+						GroupTransparency = isMatch and 0 or 0.3,
+						BackgroundColor3 = isMatch and self.Colors.AccentColor:Lerp(self.Colors.TabColor, 0.7) or self.Colors.TabColor
+					}):Play()
+				end
+			end
+		end
+	end)
+
 	self.TitleBar.MouseEnter:Connect(function()
 		self.TitleBar.BackgroundColor3 = Color3.new(
 			self.Colors.CollapseBtnColor.R * 1.2,
@@ -524,7 +581,7 @@ function UILibrary:CreateKeyUI()
 			t.Completed:Connect(function()
 				self.KeyFrame:Destroy()
 				
-				writefile("SBEUI_Config.txt", entered)
+				utility:WriteFile(self.HubFolder.."/Key.txt", entered)
 
 				if self.Config.KeyCallBack then 
 					self.Config.KeyCallBack() 
@@ -898,44 +955,6 @@ function UILibrary:AddSection(text)
 		TS:Create(self.ScrollingFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {
 			CanvasPosition = Vector2.new(0, targetY)
 		}):Play()
-	end)
-	
-	local lastActiveTab = nil -- Track the state to prevent lag
-
-	self.ScrollingFrame:GetPropertyChangedSignal("CanvasPosition"):Connect(function()
-		local activeSection = nil
-
-		for _, section in ipairs(self.Sections) do
-			if section:GetAttribute("IsSection") then
-				if section.AbsolutePosition.Y <= (self.ScrollingFrame.AbsolutePosition.Y + 25) then
-					activeSection = section
-				end
-			end
-		end
-
-		if activeSection then
-			local targetTabName = activeSection:GetAttribute("TabName")
-
-			-- ONLY run the logic if the section actually CHANGED
-			if targetTabName ~= lastActiveTab then
-				lastActiveTab = targetTabName
-
-				for _, t in pairs(self.Tabs) do
-					local isMatch = (t.Name == targetTabName)
-
-					-- Animate Accent
-					TS:Create(t.Accent, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
-						Size = isMatch and UDim2.new(0, 2, 0, 40) or UDim2.new(0, 2, 0, 0)
-					}):Play()
-
-					-- Animate Background
-					TS:Create(t, TweenInfo.new(0.25, Enum.EasingStyle.Quart), {
-						GroupTransparency = isMatch and 0 or 0.3,
-						BackgroundColor3 = isMatch and self.Colors.AccentColor:Lerp(self.Colors.TabColor, 0.7) or self.Colors.TabColor
-					}):Play()
-				end
-			end
-		end
 	end)
 	
 	section:SetAttribute("TabName", tab.Name)
