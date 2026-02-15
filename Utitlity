@@ -62,6 +62,7 @@ end
     Safely merges two tables. Great for applying default settings.
     Usage: local finalConfig = Utility:MergeTables(defaults, userConfig)
 ]]
+
 function Utility:MergeTables(t1, t2)
     local newTable = t1
     for k, v in pairs(t2) do
@@ -72,6 +73,19 @@ function Utility:MergeTables(t1, t2)
         end
     end
     return newTable
+end
+
+function Utility:SafeLoadstring(url)
+    local code = game:HttpGet(url)
+    local func, errorMessage = loadstring(code)
+    
+    if func then
+        print("Script compiled! Executing...")
+        return func()
+    else
+        warn("LOADSTRING FAILED: " .. tostring(errorMessage))
+        return nil
+    end
 end
 
 -- [ 2. UI VISUALS & ANIMATION ] --
