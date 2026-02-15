@@ -1,0 +1,249 @@
+local Utility = {}
+
+-- Services
+local TS = game:GetService("TweenService")
+local HS = game:GetService("HttpService")
+local UIS = game:GetService("UserInputService")
+local RS = game:GetService("RunService")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+-- [ 1. FILE SYSTEM & DATA ] --
+
+--[[
+    Usage: Utility:WriteFile({ Path = "config.json", Data = {myTable}, IsJSON = true })
+]]
+function Utility:WriteFile(config)
+    local path = config.Path
+    local data = config.Data or ""
+    
+    -- Auto-convert table to JSON if specified
+    if config.IsJSON and type(data) == "table" then
+        data = HS:JSONEncode(data)
+    else
+        data = tostring(data)
+    end
+    
+    writefile(path, data)
+end
+
+--[[
+    Usage: local data = Utility:ReadFile({ Path = "config.json", IsJSON = true })
+]]
+function Utility:ReadFile(config)
+    local path = config.Path
+    if not isfile(path) then return nil end
+    
+    local data = readfile(path)
+    
+    if config.IsJSON then
+        local success, decoded = pcall(function() return HS:JSONDecode(data) end)
+        return success and decoded or nil
+    end
+    
+    return data
+end
+
+--[[
+    Usage: Utility:CreateFolder({ Name = "MyHub" })
+]]
+function Utility:CreateFolder(config)
+    local name = config.Name
+    if not isfolder(name) then
+        makefolder(name)
+    end
+    return name
+end
+
+--[[
+    Safely merges two tables. Great for applying default settings.
+    Usage: local finalConfig = Utility:MergeTables(defaults, userConfig)
+]]
+function Utility:MergeTables(t1, t2)
+    local newTable = t1
+    for k, v in pairs(t2) do
+        if type(v) == "table" and type(newTable[k]) == "table" then
+            newTable[k] = self:MergeTables(newTable[k], v)
+        else
+            newTable[k] = v
+        end
+    end
+    return newTable
+end
+
+-- [ 2. UI VISUALS & ANIMATION ] --
+
+--[[
+    Usage: Utility:Tween({ Object = Frame, Goal = {Transparency = 1}, Time = 0.5 })
+]]
+function Utility:Tween(config)
+    local obj = config.Object
+    local goal = config.Goal
+    local time = config.Time or 0.5
+    local style = config.Style or Enum.EasingStyle.Quart
+    local dir = config.Direction or Enum.EasingDirection.Out
+    
+    local info = TweenInfo.new(time, style, dir)
+    local tween = TS:Create(obj, info, goal)
+    tween:Play()
+    
+    if config.Wait then
+        tween.Completed:Wait()
+    end
+    
+    return tween
+end
+
+function Utility:Ripple(config)
+    local btn = config.Parent
+    local x = config.X or Mouse.X
+    local y = config.Y or Mouse.Y
+    
+    spawn(function()
+        local circle = Instance.new("ImageLabel")
+        circle.Name = "Ripple"
+        circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        circle.BackgroundTransparency = 0.6
+        circle.BorderSizePixel = 0
+        circle.Image = "rbxassetid://266543268"
+        circle.ImageTransparency = 0.8
+        circle.ZIndex = 10
+        circle.Parent = btn
+
+        local btnSize = btn.AbsoluteSize
+        local maxSize = math.max(btnSize.X, btnSize.Y) * 1.5
+        local relativeX = x - btn.AbsolutePosition.X
+        local relativeY = y - btn.AbsolutePosition.Y
+
+        circle.Position = UDim2.new(0, relativeX, 0, relativeY)
+        circle.Size = UDim2.new(0, 0, 0, 0)
+
+        local tween = TS:Create(circle, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+            Size = UDim2.new(0, maxSize, 0, maxSize),
+            Position = UDim2.new(0, relativeX - maxSize/2, 0, relativeY - maxSize/2),
+            ImageTransparency = 1,
+            BackgroundTransparency = 1
+        })
+        
+        tween:Play()
+        tween.Completed:Connect(function() circle:Destroy() end)
+    end)
+end
+
+function Utility:MakeDraggable(config)
+    local frame = config.Frame
+    local dragObj = config.DragObject or frame
+    
+    local dragging, dragInput, dragStart, startPos
+
+    dragObj.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    dragObj.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            TS:Create(frame, TweenInfo.new(0.05), {
+                Position = UDim2.new(
+                    startPos.X.Scale, startPos.X.Offset + delta.X,
+                    startPos.Y.Scale, startPos.Y.Offset + delta.Y
+                )
+            }):Play()
+        end
+    end)
+end
+
+-- [ 3. NETWORKING & ASSETS ] --
+
+--[[
+    Checks if an image exists locally. If not, downloads it from URL and saves it.
+    Returns the asset path for ImageLabels.
+]]
+function Utility:GetImage(config)
+    local fileName = config.Name .. ".png"
+    local url = config.Url
+    
+    if not isfile(fileName) then
+        local content = game:HttpGet(url)
+        writefile(fileName, content)
+    end
+    
+    return getcustomasset(fileName)
+end
+
+-- [ 4. MISC UTILITIES ] --
+
+--[[
+    Protects the GUI from being detected by basic game scripts (if executor supports it)
+]]
+function Utility:ProtectGui(gui)
+    if gethui then
+        gui.Parent = gethui()
+    elseif syn and syn.protect_gui then
+        syn.protect_gui(gui)
+        gui.Parent = CoreGui
+    else
+        gui.Parent = CoreGui
+    end
+end
+
+--[[
+    Returns a Rainbow color based on time
+]]
+function Utility:GetRainbow(speed)
+    local hue = tick() % (speed or 5) / (speed or 5)
+    return Color3.fromHSV(hue, 1, 1)
+end
+
+--[[
+    Formats Enum.KeyCode.LeftShift into "LShift"
+]]
+function Utility:FormatKey(keyCode)
+    if not keyCode then return "None" end
+    local str = keyCode.Name
+    local replacements = {
+        ["LeftShift"] = "LShift",
+        ["RightShift"] = "RShift",
+        ["LeftControl"] = "LCtrl", 
+        ["RightControl"] = "RCtrl",
+        ["LeftAlt"] = "LAlt", 
+        ["RightAlt"] = "RAlt",
+        ["Return"] = "Enter", 
+        ["Backspace"] = "Back",
+        ["MouseButton1"] = "M1", 
+        ["MouseButton2"] = "M2"
+    }
+    return replacements[str] or str
+end
+
+--[[
+    Connects a signal and adds it to a table for easy cleanup later
+]]
+function Utility:Connect(signal, callback, storageTable)
+    local connection = signal:Connect(callback)
+    if storageTable then
+        table.insert(storageTable, connection)
+    end
+    return connection
+end
+
+return Utility
