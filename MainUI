@@ -992,7 +992,7 @@ UILibrary.Main = {
 		dragImage.Size = config.Size
 		dragImage.Position = config.Position
 		dragImage.BackgroundTransparency = 1
-		dragImage.Image = self:LoadImage(config.Name, config.URL)
+		dragImage.Image = utils:GetImage({Name = config.Name, Url = config.URL})
 		dragImage.ScaleType = Enum.ScaleType.Fit
 		dragImage.ZIndex = 2
 		dragImage.Parent = self.ScreenGui
@@ -1003,11 +1003,17 @@ UILibrary.Main = {
 			uistroke.Color = self.Colors.UIStrokeColor
 			uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 			uistroke.Parent = dragImage
-		elseif config.BGColor then
+		end
+
+		if config.BGColor then
 			dragImage.BackgroundColor3 = config.BGColor
-		elseif config.ScaleType then
+		end
+
+		if config.ScaleType then
 			dragImage.ScaleType = config.ScaleType
-		elseif config.BGTransparency then
+		end
+
+		if config.BGTransparency then
 			dragImage.BackgroundTransparency = config.BGTransparency
 		end
 
