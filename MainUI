@@ -766,7 +766,7 @@ UILibrary.Main = {
 				t.Completed:Connect(function()
 					self.KeyFrame:Destroy()
 
-					utils:WriteFile(self.HubFolder.."/Key.txt", entered)
+					utils:WriteFile({Path = self.HubFolder.."/Key.txt", Data = entered, IsJSON = false})
 
 					if self.Config.KeyCallBack then 
 						self.Config.KeyCallBack() 
