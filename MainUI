@@ -362,7 +362,7 @@ UILibrary.Main = {
 		self.Image.Size = UDim2.new(0, 500, 0, 500)
 		self.Image.Position = UDim2.new(0.5, 0, 0.5, 0)
 		self.Image.AnchorPoint = Vector2.new(0.5, 0.5)
-		self.Image.Image = utils:GetImage({name = "SBEUILib", Url = "https://i.ibb.co/xK20Pwph/SBEUILib.png"})
+		self.Image.Image = utils:GetImage({Name = "SBEUILib", Url = "https://i.ibb.co/xK20Pwph/SBEUILib.png"})
 		self.Image.BackgroundTransparency = 1
 		self.Image.ImageTransparency = 0
 		self.Image.Parent = self.ScreenGui
