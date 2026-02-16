@@ -200,7 +200,10 @@ UILibrary.Utility = {
 		local fileName = config.Name .. ".png"
 		if not isfile(fileName) then
 			local s, content = pcall(function() return game:HttpGet(config.Url) end)
-			if s then writefile(fileName, content) end
+
+			if s then 
+				self:WriteFile({Path = fileName, Data = content, IsJSON = false}) 
+			end
 		end
 		return getcustomasset(fileName)
 	end,
@@ -1012,43 +1015,7 @@ UILibrary.Main = {
 		dragCorner.CornerRadius = config.CornerRadius
 		dragCorner.Parent = dragImage
 
-		local dragging, dragInput, dragStart, startPos
-
-		local function update(input)
-			local delta = input.Position - dragStart
-			dragImage.Position = UDim2.new(
-				startPos.X.Scale, 
-				startPos.X.Offset + delta.X, 
-				startPos.Y.Scale, 
-				startPos.Y.Offset + delta.Y
-			)
-		end
-
-		dragImage.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				dragging = true
-				dragStart = input.Position
-				startPos = dragImage.Position
-
-				input.Changed:Connect(function()
-					if input.UserInputState == Enum.UserInputState.End then
-						dragging = false
-					end
-				end)
-			end
-		end)
-
-		dragImage.InputChanged:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-				dragInput = input
-			end
-		end)
-
-		UIS.InputChanged:Connect(function(input)
-			if input == dragInput and dragging then
-				update(input)
-			end
-		end)
+		utils:MakeDraggable({Frame = dragImage})
 
 		dragImage.MouseButton1Click:Connect(function()
 			config.Callback()
@@ -1438,6 +1405,91 @@ UILibrary.Main = {
 		return dropdownFrame
 	end,
 
+	AddKeybind = function(self, config)
+		local UIS = game:GetService("UserInputService")
+		local currentKey = config.Default or Enum.KeyCode.F
+		local binding = false
+
+		local keybindFrame = Instance.new("Frame")
+		keybindFrame.Name = "Keybind_" .. config.Text
+		keybindFrame.Size = UDim2.new(1, -24, 0, 30)
+		keybindFrame.BackgroundColor3 = self.Colors.ButtonColor
+		keybindFrame.BorderSizePixel = 0
+		keybindFrame.LayoutOrder = #self.Elements + 1
+		keybindFrame.Parent = self.ScrollingFrame
+
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 4)
+		corner.Parent = keybindFrame
+
+		local title = Instance.new("TextLabel")
+		title.Name = "Title"
+		title.Size = UDim2.new(1, -12, 1, 0)
+		title.Position = UDim2.new(0, 12, 0, 0)
+		title.BackgroundTransparency = 1
+		title.Text = config.Text
+		title.TextColor3 = self.Colors.TitleColor
+		title.Font = self.Config.Font
+		title.TextSize = self.Config.TextSize
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = keybindFrame
+
+		local bindButton = Instance.new("TextButton")
+		bindButton.Name = "BindDisplay"
+		bindButton.Size = UDim2.new(0, 30, 0, 20)
+		bindButton.Position = UDim2.new(1, -10, 0.5, 0)
+		bindButton.AnchorPoint = Vector2.new(1, 0.5)
+		bindButton.BackgroundColor3 = self.Colors.CollapseBtnColor
+		bindButton.Text = currentKey.Name
+		bindButton.TextColor3 = self.Colors.AccentColor
+		bindButton.Font = Enum.Font.GothamBold
+		bindButton.TextSize = 12
+		bindButton.AutoButtonColor = false
+		bindButton.Parent = keybindFrame
+
+		local bindCorner = Instance.new("UICorner")
+		bindCorner.CornerRadius = UDim.new(0, 4)
+		bindCorner.Parent = bindButton
+
+		-- Logic
+		bindButton.MouseButton1Click:Connect(function()
+			if binding then return end
+			
+			binding = true
+			bindButton.Text = "..."
+			-- Visual feedback that we are listening
+			TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.AccentColor, TextColor3 = Color3.new(1,1,1)}):Play()
+		end)
+
+		UIS.InputBegan:Connect(function(input, gpe)
+			if gpe then return end
+			
+			if binding then
+				if input.UserInputType == Enum.UserInputType.Keyboard then
+					currentKey = input.KeyCode
+					bindButton.Text = currentKey.Name
+					binding = false
+					
+					-- Reset visuals
+					TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.AccentColor}):Play()
+					
+					if config.ChangedCallback then
+						config.ChangedCallback(currentKey)
+					end
+				end
+			else
+				if input.KeyCode == currentKey then
+					if config.Callback then
+						config.Callback()
+					end
+				end
+			end
+		end)
+
+		table.insert(self.Elements, keybindFrame)
+		return keybindFrame
+	end,
+
 	AddTextBox = function(self, config)
 		local textBoxFrame = Instance.new("Frame")
 		textBoxFrame.Name = "TextBox_" .. config.Text
@@ -1762,7 +1814,7 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 1.1"
+		return "SBEUILib 1.2"
 	end,
 
 	PromptDestroy = function(self)
