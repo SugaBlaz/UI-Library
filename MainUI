@@ -112,6 +112,8 @@ function UILibrary.new(config)
 	    if self.Config.insertKeyAtEnd == true then
 	        url = url .. key
 	    end
+
+		print(url)
 	
 	    local s, res = pcall(function() 
 	        return game:HttpGet(url) 
@@ -125,6 +127,7 @@ function UILibrary.new(config)
 	
 	        if jsonSuccess and type(data) == "table" then
 	            -- Supports {success = true} or {valid = true}
+				print(data.success)
 	            return data.success == true or data.valid == true
 	        else
 	            -- Static Link Support: Check if the raw text from the URL matches the key
