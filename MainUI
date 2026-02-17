@@ -380,6 +380,8 @@ UILibrary.DefaultConfig = {
 	KeyLink = "SomethingNotNil",
 	KeySystemEnabled = false,
 	TabPadding = 10,
+	UseOwnTheme = false,
+	Theme = "Volanic",
 	KeyCallBack = function()
 
 	end,
@@ -601,8 +603,12 @@ UILibrary.Main = {
 			for colorName, defaultColor in pairs(UILibrary.DefaultThemes.Default) do
 				self.Colors[colorName] = config[colorName] or defaultColor
 			end
-		else
+		elseif self.Config.Theme then
 			for colorName, Color in pairs(UILibrary.DefaultThemes[self.Config.Theme]) do
+				self.Colors[colorName] = Color
+			end
+		else
+			for colorName, Color in pairs(UILibrary.DefaultThemes.Default) do
 				self.Colors[colorName] = Color
 			end
 		end
