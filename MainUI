@@ -1,3 +1,15 @@
+--[[
+
+SugaBlaz's Executor UI Library
+Made with passion by SugaBlaz
+
+SugaBlaz | Programming + Design
+Azka Warrior  | Design
+
+Version 1.67
+
+]]
+
 local UILibrary = {}
 
 local TS = game:GetService("TweenService")
@@ -7,25 +19,344 @@ local RS = game:GetService("RunService")
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
-UILibrary.DefaultColors = {
-	TitleColor = Color3.fromRGB(255, 255, 255),
-	CollapseBtnColor = Color3.fromRGB(25, 25, 25),
-	ButtonColor = Color3.fromRGB(45, 45, 45),
-	ButtonHoverColor = Color3.fromRGB(60, 60, 60),
-	ToggleColor = Color3.fromRGB(45, 45, 45),
-	ToggleColorOFF = Color3.fromRGB(200, 60, 60),
-	ToggleColorON = Color3.fromRGB(60, 200, 60),
-	MainFrameColor = Color3.fromRGB(35, 35, 35),
-	SeparatorColor = Color3.fromRGB(70, 70, 70),
-	TextBoxColor = Color3.fromRGB(45, 45, 45),
-	AccentColor = Color3.fromRGB(0, 120, 215),
-	SectionColor = Color3.fromRGB(90, 90, 90),
-	LabelColor = Color3.fromRGB(200, 200, 200),
-	SliderColor = Color3.fromRGB(70, 70, 70),
-	SliderHandleColor = Color3.fromRGB(100, 100, 100),
-	UIStrokeColor = Color3.fromRGB(60, 60, 60),
-	LoadingBarColor = Color3.fromRGB(0, 155, 255),
-	TabColor = Color3.fromRGB(55,55,55),
+UILibrary.DefaultThemes = {
+	Default = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(25, 25, 25),
+		ButtonColor = Color3.fromRGB(45, 45, 45),
+		ButtonHoverColor = Color3.fromRGB(60, 60, 60),
+		ToggleColor = Color3.fromRGB(45, 45, 45),
+		ToggleColorOFF = Color3.fromRGB(200, 60, 60),
+		ToggleColorON = Color3.fromRGB(60, 200, 60),
+		MainFrameColor = Color3.fromRGB(35, 35, 35),
+		SeparatorColor = Color3.fromRGB(70, 70, 70),
+		TextBoxColor = Color3.fromRGB(45, 45, 45),
+		AccentColor = Color3.fromRGB(0, 120, 215),
+		SectionColor = Color3.fromRGB(90, 90, 90),
+		LabelColor = Color3.fromRGB(200, 200, 200),
+		SliderColor = Color3.fromRGB(70, 70, 70),
+		SliderHandleColor = Color3.fromRGB(100, 100, 100),
+		UIStrokeColor = Color3.fromRGB(60, 60, 60),
+		LoadingBarColor = Color3.fromRGB(0, 155, 255),
+		TabColor = Color3.fromRGB(55,55,55),
+	},
+	
+	CyberNeon = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(15, 15, 20),
+		ButtonColor = Color3.fromRGB(30, 30, 35),
+		ButtonHoverColor = Color3.fromRGB(45, 45, 55),
+		ToggleColor = Color3.fromRGB(30, 30, 35),
+		ToggleColorOFF = Color3.fromRGB(255, 45, 85), -- Hot Pink
+		ToggleColorON = Color3.fromRGB(0, 255, 150),  -- Spring Green
+		MainFrameColor = Color3.fromRGB(10, 10, 12),
+		SeparatorColor = Color3.fromRGB(50, 50, 60),
+		TextBoxColor = Color3.fromRGB(25, 25, 30),
+		AccentColor = Color3.fromRGB(0, 255, 255),    -- Cyan
+		SectionColor = Color3.fromRGB(70, 70, 80),
+		LabelColor = Color3.fromRGB(180, 180, 190),
+		SliderColor = Color3.fromRGB(40, 40, 50),
+		SliderHandleColor = Color3.fromRGB(0, 255, 255),
+		UIStrokeColor = Color3.fromRGB(0, 180, 180),
+		LoadingBarColor = Color3.fromRGB(0, 255, 255),
+		TabColor = Color3.fromRGB(20, 20, 25),
+	},
+	
+	MidnightAmethyst = {
+		TitleColor = Color3.fromRGB(240, 230, 255),
+		CollapseBtnColor = Color3.fromRGB(25, 20, 35),
+		ButtonColor = Color3.fromRGB(40, 35, 55),
+		ButtonHoverColor = Color3.fromRGB(60, 50, 80),
+		ToggleColor = Color3.fromRGB(40, 35, 55),
+		ToggleColorOFF = Color3.fromRGB(120, 40, 40),
+		ToggleColorON = Color3.fromRGB(140, 80, 255),
+		MainFrameColor = Color3.fromRGB(20, 15, 25),
+		SeparatorColor = Color3.fromRGB(60, 50, 80),
+		TextBoxColor = Color3.fromRGB(35, 30, 50),
+		AccentColor = Color3.fromRGB(170, 120, 255),
+		SectionColor = Color3.fromRGB(90, 80, 110),
+		LabelColor = Color3.fromRGB(180, 170, 200),
+		SliderColor = Color3.fromRGB(50, 40, 70),
+		SliderHandleColor = Color3.fromRGB(170, 120, 255),
+		UIStrokeColor = Color3.fromRGB(80, 60, 120),
+		LoadingBarColor = Color3.fromRGB(170, 120, 255),
+		TabColor = Color3.fromRGB(45, 35, 65),
+	},
+	
+	EmeraldForest = {
+		TitleColor = Color3.fromRGB(220, 240, 220),
+		CollapseBtnColor = Color3.fromRGB(20, 25, 20),
+		ButtonColor = Color3.fromRGB(35, 45, 35),
+		ButtonHoverColor = Color3.fromRGB(50, 65, 50),
+		ToggleColor = Color3.fromRGB(35, 45, 35),
+		ToggleColorOFF = Color3.fromRGB(180, 70, 70),
+		ToggleColorON = Color3.fromRGB(100, 220, 100),
+		MainFrameColor = Color3.fromRGB(15, 20, 15),
+		SeparatorColor = Color3.fromRGB(60, 80, 60),
+		TextBoxColor = Color3.fromRGB(30, 40, 30),
+		AccentColor = Color3.fromRGB(40, 200, 120),
+		SectionColor = Color3.fromRGB(80, 100, 80),
+		LabelColor = Color3.fromRGB(170, 190, 170),
+		SliderColor = Color3.fromRGB(50, 70, 50),
+		SliderHandleColor = Color3.fromRGB(100, 220, 100),
+		UIStrokeColor = Color3.fromRGB(50, 100, 50),
+		LoadingBarColor = Color3.fromRGB(40, 200, 120),
+		TabColor = Color3.fromRGB(40, 55, 40),
+	},
+	
+	SakuraPetal = {
+		TitleColor = Color3.fromRGB(255, 240, 245),
+		CollapseBtnColor = Color3.fromRGB(45, 35, 40),
+		ButtonColor = Color3.fromRGB(65, 50, 60),
+		ButtonHoverColor = Color3.fromRGB(85, 70, 80),
+		ToggleColor = Color3.fromRGB(65, 50, 60),
+		ToggleColorOFF = Color3.fromRGB(200, 100, 100),
+		ToggleColorON = Color3.fromRGB(255, 150, 190),
+		MainFrameColor = Color3.fromRGB(35, 25, 30),
+		SeparatorColor = Color3.fromRGB(100, 70, 90),
+		TextBoxColor = Color3.fromRGB(55, 40, 50),
+		AccentColor = Color3.fromRGB(255, 182, 193),
+		SectionColor = Color3.fromRGB(120, 90, 110),
+		LabelColor = Color3.fromRGB(220, 200, 210),
+		SliderColor = Color3.fromRGB(90, 70, 85),
+		SliderHandleColor = Color3.fromRGB(255, 182, 193),
+		UIStrokeColor = Color3.fromRGB(150, 100, 120),
+		LoadingBarColor = Color3.fromRGB(255, 150, 190),
+		TabColor = Color3.fromRGB(75, 55, 70),
+	},
+	
+	BloodMoon = {
+		TitleColor = Color3.fromRGB(255, 200, 200),
+		CollapseBtnColor = Color3.fromRGB(20, 10, 10),
+		ButtonColor = Color3.fromRGB(40, 20, 20),
+		ButtonHoverColor = Color3.fromRGB(60, 30, 30),
+		ToggleColor = Color3.fromRGB(40, 20, 20),
+		ToggleColorOFF = Color3.fromRGB(80, 20, 20),
+		ToggleColorON = Color3.fromRGB(220, 40, 40),
+		MainFrameColor = Color3.fromRGB(15, 5, 5),
+		SeparatorColor = Color3.fromRGB(80, 40, 40),
+		TextBoxColor = Color3.fromRGB(30, 15, 15),
+		AccentColor = Color3.fromRGB(255, 50, 50),
+		SectionColor = Color3.fromRGB(100, 50, 50),
+		LabelColor = Color3.fromRGB(200, 160, 160),
+		SliderColor = Color3.fromRGB(60, 30, 30),
+		SliderHandleColor = Color3.fromRGB(255, 50, 50),
+		UIStrokeColor = Color3.fromRGB(100, 30, 30),
+		LoadingBarColor = Color3.fromRGB(255, 50, 50),
+		TabColor = Color3.fromRGB(50, 25, 25),
+	},
+	
+	RoyalGold = {
+		TitleColor = Color3.fromRGB(255, 245, 200),
+		CollapseBtnColor = Color3.fromRGB(20, 20, 20),
+		ButtonColor = Color3.fromRGB(35, 35, 35),
+		ButtonHoverColor = Color3.fromRGB(50, 50, 50),
+		ToggleColor = Color3.fromRGB(35, 35, 35),
+		ToggleColorOFF = Color3.fromRGB(120, 100, 60),
+		ToggleColorON = Color3.fromRGB(255, 215, 0), -- Gold
+		MainFrameColor = Color3.fromRGB(15, 15, 15),
+		SeparatorColor = Color3.fromRGB(80, 70, 40),
+		TextBoxColor = Color3.fromRGB(25, 25, 25),
+		AccentColor = Color3.fromRGB(212, 175, 55),  -- Metallic Gold
+		SectionColor = Color3.fromRGB(100, 90, 60),
+		LabelColor = Color3.fromRGB(200, 190, 150),
+		SliderColor = Color3.fromRGB(60, 55, 40),
+		SliderHandleColor = Color3.fromRGB(255, 215, 0),
+		UIStrokeColor = Color3.fromRGB(120, 100, 50),
+		LoadingBarColor = Color3.fromRGB(212, 175, 55),
+		TabColor = Color3.fromRGB(40, 40, 40),
+	},
+	
+	Synthwave = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(25, 15, 45),
+		ButtonColor = Color3.fromRGB(45, 25, 75),
+		ButtonHoverColor = Color3.fromRGB(65, 35, 105),
+		ToggleColor = Color3.fromRGB(45, 25, 75),
+		ToggleColorOFF = Color3.fromRGB(100, 40, 120),
+		ToggleColorON = Color3.fromRGB(255, 0, 255),  -- Neon Magenta
+		MainFrameColor = Color3.fromRGB(15, 5, 30),
+		SeparatorColor = Color3.fromRGB(120, 40, 180),
+		TextBoxColor = Color3.fromRGB(35, 15, 60),
+		AccentColor = Color3.fromRGB(0, 255, 255),    -- Cyan secondary
+		SectionColor = Color3.fromRGB(150, 50, 200),
+		LabelColor = Color3.fromRGB(220, 180, 255),
+		SliderColor = Color3.fromRGB(80, 40, 120),
+		SliderHandleColor = Color3.fromRGB(255, 0, 255),
+		UIStrokeColor = Color3.fromRGB(200, 0, 255),
+		LoadingBarColor = Color3.fromRGB(255, 0, 255),
+		TabColor = Color3.fromRGB(50, 20, 90),
+	},
+	
+	OceanicDeep = {
+		TitleColor = Color3.fromRGB(200, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(10, 25, 35),
+		ButtonColor = Color3.fromRGB(20, 45, 60),
+		ButtonHoverColor = Color3.fromRGB(30, 65, 85),
+		ToggleColor = Color3.fromRGB(20, 45, 60),
+		ToggleColorOFF = Color3.fromRGB(40, 80, 90),
+		ToggleColorON = Color3.fromRGB(0, 200, 200),
+		MainFrameColor = Color3.fromRGB(5, 15, 25),
+		SeparatorColor = Color3.fromRGB(40, 90, 110),
+		TextBoxColor = Color3.fromRGB(15, 35, 50),
+		AccentColor = Color3.fromRGB(0, 255, 180),    -- Bright Aquamarine
+		SectionColor = Color3.fromRGB(60, 120, 130),
+		LabelColor = Color3.fromRGB(150, 200, 200),
+		SliderColor = Color3.fromRGB(30, 70, 90),
+		SliderHandleColor = Color3.fromRGB(0, 255, 180),
+		UIStrokeColor = Color3.fromRGB(20, 100, 120),
+		LoadingBarColor = Color3.fromRGB(0, 255, 180),
+		TabColor = Color3.fromRGB(25, 55, 75),
+	},
+	
+	Volcanic = {
+		TitleColor = Color3.fromRGB(255, 220, 200),
+		CollapseBtnColor = Color3.fromRGB(20, 15, 15),
+		ButtonColor = Color3.fromRGB(40, 30, 30),
+		ButtonHoverColor = Color3.fromRGB(55, 40, 40),
+		ToggleColor = Color3.fromRGB(40, 30, 30),
+		ToggleColorOFF = Color3.fromRGB(100, 40, 20),
+		ToggleColorON = Color3.fromRGB(255, 100, 0), -- Lava Orange
+		MainFrameColor = Color3.fromRGB(15, 10, 10),
+		SeparatorColor = Color3.fromRGB(80, 40, 20),
+		TextBoxColor = Color3.fromRGB(30, 20, 20),
+		AccentColor = Color3.fromRGB(255, 65, 0),    -- Bright Orange
+		SectionColor = Color3.fromRGB(120, 50, 30),
+		LabelColor = Color3.fromRGB(200, 160, 140),
+		SliderColor = Color3.fromRGB(60, 35, 25),
+		SliderHandleColor = Color3.fromRGB(255, 150, 0),
+		UIStrokeColor = Color3.fromRGB(100, 40, 20),
+		LoadingBarColor = Color3.fromRGB(255, 65, 0),
+		TabColor = Color3.fromRGB(50, 35, 35),
+	},
+	
+	ArcticFrost = {
+		TitleColor = Color3.fromRGB(230, 245, 255),
+		CollapseBtnColor = Color3.fromRGB(35, 45, 55),
+		ButtonColor = Color3.fromRGB(55, 70, 85),
+		ButtonHoverColor = Color3.fromRGB(75, 95, 115),
+		ToggleColor = Color3.fromRGB(55, 70, 85),
+		ToggleColorOFF = Color3.fromRGB(100, 120, 140),
+		ToggleColorON = Color3.fromRGB(160, 220, 255),
+		MainFrameColor = Color3.fromRGB(25, 35, 45),
+		SeparatorColor = Color3.fromRGB(90, 115, 140),
+		TextBoxColor = Color3.fromRGB(45, 55, 70),
+		AccentColor = Color3.fromRGB(180, 230, 255), -- Ice Blue
+		SectionColor = Color3.fromRGB(110, 140, 170),
+		LabelColor = Color3.fromRGB(190, 210, 230),
+		SliderColor = Color3.fromRGB(70, 95, 120),
+		SliderHandleColor = Color3.fromRGB(180, 230, 255),
+		UIStrokeColor = Color3.fromRGB(100, 130, 160),
+		LoadingBarColor = Color3.fromRGB(180, 230, 255),
+		TabColor = Color3.fromRGB(65, 85, 105),
+	},
+	
+	EspressoAndCream = {
+		TitleColor = Color3.fromRGB(245, 235, 220),
+		CollapseBtnColor = Color3.fromRGB(35, 25, 20),
+		ButtonColor = Color3.fromRGB(55, 45, 35),
+		ButtonHoverColor = Color3.fromRGB(75, 65, 50),
+		ToggleColor = Color3.fromRGB(55, 45, 35),
+		ToggleColorOFF = Color3.fromRGB(110, 80, 70),
+		ToggleColorON = Color3.fromRGB(210, 180, 140), -- Tan/Cream
+		MainFrameColor = Color3.fromRGB(25, 18, 15),
+		SeparatorColor = Color3.fromRGB(90, 70, 50),
+		TextBoxColor = Color3.fromRGB(45, 35, 25),
+		AccentColor = Color3.fromRGB(230, 200, 160),
+		SectionColor = Color3.fromRGB(110, 90, 70),
+		LabelColor = Color3.fromRGB(210, 190, 170),
+		SliderColor = Color3.fromRGB(70, 50, 40),
+		SliderHandleColor = Color3.fromRGB(230, 200, 160),
+		UIStrokeColor = Color3.fromRGB(100, 80, 60),
+		LoadingBarColor = Color3.fromRGB(210, 180, 140),
+		TabColor = Color3.fromRGB(50, 40, 30),
+	},
+	
+	Terminal = {
+		TitleColor = Color3.fromRGB(0, 255, 0),
+		CollapseBtnColor = Color3.fromRGB(5, 15, 5),
+		ButtonColor = Color3.fromRGB(10, 30, 10),
+		ButtonHoverColor = Color3.fromRGB(15, 45, 15),
+		ToggleColor = Color3.fromRGB(10, 30, 10),
+		ToggleColorOFF = Color3.fromRGB(50, 0, 0),
+		ToggleColorON = Color3.fromRGB(0, 255, 0),
+		MainFrameColor = Color3.fromRGB(0, 0, 0),
+		SeparatorColor = Color3.fromRGB(0, 100, 0),
+		TextBoxColor = Color3.fromRGB(5, 20, 5),
+		AccentColor = Color3.fromRGB(0, 255, 0),
+		SectionColor = Color3.fromRGB(0, 150, 0),
+		LabelColor = Color3.fromRGB(150, 255, 150),
+		SliderColor = Color3.fromRGB(0, 50, 0),
+		SliderHandleColor = Color3.fromRGB(0, 255, 0),
+		UIStrokeColor = Color3.fromRGB(0, 100, 0),
+		LoadingBarColor = Color3.fromRGB(0, 255, 0),
+		TabColor = Color3.fromRGB(10, 20, 10),
+	},
+	
+	SolarizedDark = {
+		TitleColor = Color3.fromRGB(147, 161, 161),
+		CollapseBtnColor = Color3.fromRGB(0, 33, 43),
+		ButtonColor = Color3.fromRGB(7, 54, 66),
+		ButtonHoverColor = Color3.fromRGB(10, 75, 90),
+		ToggleColor = Color3.fromRGB(7, 54, 66),
+		ToggleColorOFF = Color3.fromRGB(220, 50, 47),
+		ToggleColorON = Color3.fromRGB(133, 153, 0),
+		MainFrameColor = Color3.fromRGB(0, 43, 54),
+		SeparatorColor = Color3.fromRGB(88, 110, 117),
+		TextBoxColor = Color3.fromRGB(0, 33, 43),
+		AccentColor = Color3.fromRGB(38, 139, 210), -- Solarized Blue
+		SectionColor = Color3.fromRGB(101, 123, 131),
+		LabelColor = Color3.fromRGB(131, 148, 150),
+		SliderColor = Color3.fromRGB(7, 54, 66),
+		SliderHandleColor = Color3.fromRGB(38, 139, 210),
+		UIStrokeColor = Color3.fromRGB(10, 60, 75),
+		LoadingBarColor = Color3.fromRGB(42, 161, 152),
+		TabColor = Color3.fromRGB(0, 55, 70),
+	},
+	
+	Bubblegum = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(40, 20, 50),
+		ButtonColor = Color3.fromRGB(70, 35, 90),
+		ButtonHoverColor = Color3.fromRGB(90, 45, 115),
+		ToggleColor = Color3.fromRGB(70, 35, 90),
+		ToggleColorOFF = Color3.fromRGB(255, 100, 150),
+		ToggleColorON = Color3.fromRGB(100, 200, 255),
+		MainFrameColor = Color3.fromRGB(25, 10, 35),
+		SeparatorColor = Color3.fromRGB(150, 50, 200),
+		TextBoxColor = Color3.fromRGB(50, 25, 65),
+		AccentColor = Color3.fromRGB(255, 105, 180), -- Hot Pink
+		SectionColor = Color3.fromRGB(180, 80, 220),
+		LabelColor = Color3.fromRGB(230, 200, 255),
+		SliderColor = Color3.fromRGB(100, 50, 130),
+		SliderHandleColor = Color3.fromRGB(255, 105, 180),
+		UIStrokeColor = Color3.fromRGB(200, 100, 255),
+		LoadingBarColor = Color3.fromRGB(100, 200, 255),
+		TabColor = Color3.fromRGB(60, 30, 80),
+	},
+	
+	ObsidianSilver = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(20, 20, 20),
+		ButtonColor = Color3.fromRGB(40, 40, 40),
+		ButtonHoverColor = Color3.fromRGB(60, 60, 60),
+		ToggleColor = Color3.fromRGB(40, 40, 40),
+		ToggleColorOFF = Color3.fromRGB(80, 80, 80),
+		ToggleColorON = Color3.fromRGB(255, 255, 255),
+		MainFrameColor = Color3.fromRGB(10, 10, 10),
+		SeparatorColor = Color3.fromRGB(70, 70, 70),
+		TextBoxColor = Color3.fromRGB(30, 30, 30),
+		AccentColor = Color3.fromRGB(220, 220, 220), -- Silver
+		SectionColor = Color3.fromRGB(100, 100, 100),
+		LabelColor = Color3.fromRGB(180, 180, 180),
+		SliderColor = Color3.fromRGB(50, 50, 50),
+		SliderHandleColor = Color3.fromRGB(255, 255, 255),
+		UIStrokeColor = Color3.fromRGB(60, 60, 60),
+		LoadingBarColor = Color3.fromRGB(200, 200, 200),
+		TabColor = Color3.fromRGB(45, 45, 45),
+	},
+	
+	-- add more themes here! - AzkaWarrior
 }
 
 UILibrary.DefaultConfig = {
@@ -65,7 +396,7 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
 UILibrary.Utility = {
-	-- [ 1. FILE SYSTEM & DATA ] --
+	-- [ FILE SYSTEM & DATA ] --
 
 	WriteFile = function(self, config)
 		local path = config.Path
@@ -119,7 +450,7 @@ UILibrary.Utility = {
 		end
 	end,
 
-	-- [ 2. UI VISUALS & ANIMATION ] --
+	-- [ UI VISUALS & ANIMATION ] --
 
 	Tween = function(self, config)
 		local obj = config.Object
@@ -194,7 +525,7 @@ UILibrary.Utility = {
 		end)
 	end,
 
-	-- [ 3. NETWORKING & ASSETS ] --
+	-- [ NETWORKING & ASSETS ] --
 
 	GetImage = function(self, config)
 		local fileName = config.Name .. ".png"
@@ -208,12 +539,22 @@ UILibrary.Utility = {
 		return getcustomasset(fileName)
 	end,
 
-	-- [ 4. MISC UTILITIES ] --
+	-- [ MISC UTILITIES ] --
 
 	ProtectGui = function(self, gui)
-		if gethui then gui.Parent = gethui()
-		elseif syn and syn.protect_gui then syn.protect_gui(gui) gui.Parent = CoreGui
-		else gui.Parent = CoreGui end
+		local success, coreGui = pcall(function()
+			return game:GetService("CoreGui") 
+		end)
+		
+		if gethui then
+			gui.Parent = gethui()
+		elseif syn and syn.protect_gui then
+			syn.protect_gui(gui) gui.Parent = CoreGui
+		elseif success and coreGui then
+			gui.Parent = CoreGui
+		else
+			gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+		end
 	end,
 
 	GetRainbow = function(self, speed)
@@ -244,20 +585,26 @@ UILibrary.Main = {
 		local self = setmetatable({}, { __index = UILibrary.Main})
 
 		self.Config = {}
+		self.UserConfig = {}
 
 		for k, v in pairs(UILibrary.DefaultConfig) do
 			self.Config[k] = (config and config[k] ~= nil) and config[k] or v
 		end
 
-		-- folders
 		self.HubFolder = utils:CreateFolder({Name = self.Config.Title})
-
+		
 		self.Config.KeyLink = config.KeyLink
 
 		self.Colors = {}
-
-		for colorName, defaultColor in pairs(UILibrary.DefaultColors) do
-			self.Colors[colorName] = config[colorName] or defaultColor
+		
+		if self.Config.UseOwnTheme then
+			for colorName, defaultColor in pairs(UILibrary.DefaultThemes.Default) do
+				self.Colors[colorName] = config[colorName] or defaultColor
+			end
+		else
+			for colorName, Color in pairs(UILibrary.DefaultThemes[self.Config.Theme]) do
+				self.Colors[colorName] = Color
+			end
 		end
 
 		self.Elements = {}
@@ -273,47 +620,6 @@ UILibrary.Main = {
 
 		local fileName = self.HubFolder .. "/Key.txt"
 
-		local function checkKey(key)
-			if key == "" or key == nil then return false end
-
-			local target = self.Config.Key
-
-			if not string.find(target, "http://") and not string.find(target, "https://") then
-				return key == target
-			end
-
-			local url = target
-			if self.Config.insertKeyAtEnd == true then
-				url = url .. key
-			end
-
-			print(url)
-
-			local s, res = pcall(function() 
-				return game:HttpGet(url) 
-			end)
-
-			if s and res then
-				-- Try to parse as JSON (For APIs like KeyAuth or custom VPS scripts)
-				local jsonSuccess, data = pcall(function() 
-					return game:GetService("HttpService"):JSONDecode(res) 
-				end)
-
-				if jsonSuccess and type(data) == "table" then
-					-- Supports {success = true} or {valid = true}
-					print(data.success)
-					return data.success == true or data.valid == true
-				else
-					-- Static Link Support: Check if the raw text from the URL matches the key
-					-- We use string.find or trim to avoid issues with newlines in text files
-					local cleanRes = string.gsub(res, "%s+", "") -- Remove whitespace/newlines
-					return key == cleanRes
-				end
-			end
-
-			return false
-		end
-
 		self:CreateScreenGui()
 
 		self:Intro()
@@ -324,7 +630,7 @@ UILibrary.Main = {
 
 		if self.Config.KeySystemEnabled then
 			if savedKey then
-				if checkKey(savedKey) then
+				if self.CheckKey(savedKey) then
 					if self.Config.KeyCallBack then
 						self.Config.KeyCallBack() 
 					end
@@ -337,10 +643,22 @@ UILibrary.Main = {
 		else
 			self:CreateUI()
 		end
+		
+		if self.Config.SaveOnExit then
+			LocalPlayer.AncestryChanged:Connect(function(_, parent)
+				if not parent then
+					self:SaveConfigurations()
+				end
+			end)
+			
+			game:BindToClose(function()
+				self:SaveConfigurations()
+			end)
+		end
 
 		return self
 	end,
-	
+
 	CreateScreenGui = function(self)
 		if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -349,17 +667,12 @@ UILibrary.Main = {
 		self.ScreenGui.DisplayOrder = 999999999 
 		self.ScreenGui.IgnoreGuiInset = true 
 
-		local success, coreGui = pcall(function() return game:GetService("CoreGui") end)
-		if success and coreGui then
-			self.ScreenGui.Parent = coreGui
-		else
-			self.ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-		end
+		utils.ProtectGui(self.ScreenGui)
 
 		self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
 	end,
-	
+
 	Intro = function(self)
 		self.Image = Instance.new("ImageLabel")
 		self.Image.Size = UDim2.new(0, 500, 0, 500)
@@ -384,7 +697,7 @@ UILibrary.Main = {
 			self.Image:Destroy()
 		end)
 	end,
-	
+
 	CheckKey = function(self, key)
 		if key == "" or key == nil then return false end
 
@@ -398,8 +711,6 @@ UILibrary.Main = {
 		if self.Config.insertKeyAtEnd == true then
 			url = url .. key
 		end
-
-		print(url)
 
 		local s, res = pcall(function() 
 			return game:HttpGet(url) 
@@ -514,7 +825,6 @@ UILibrary.Main = {
 		self.ClearSearch.Visible = false
 		self.ClearSearch.ZIndex = 4
 
-		-- Adjusted Content Frame Position to start after the TitleBar
 		self.ScrollingFrame = Instance.new("ScrollingFrame")
 		self.ScrollingFrame.Name = "ContentFrame"
 		self.ScrollingFrame.Size = UDim2.new(1, 0, 1, -(self.Config.TitleHeight + 35))
@@ -549,7 +859,6 @@ UILibrary.Main = {
 		BtnLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 		BtnLayout.Padding = UDim.new(0, 5)
 
-		-- Minimize Button
 		self.MinimizeButton = Instance.new("TextButton", TopBtns)
 		self.MinimizeButton.Size = UDim2.new(0, 25, 0, 25)
 		self.MinimizeButton.BackgroundTransparency = 1
@@ -558,7 +867,6 @@ UILibrary.Main = {
 		self.MinimizeButton.TextSize = 20
 		self.MinimizeButton.Font = Enum.Font.GothamBold
 
-		-- Close Button
 		self.CloseBtn = Instance.new("TextButton", TopBtns)
 		self.CloseBtn.Size = UDim2.new(0, 25, 0, 25)
 		self.CloseBtn.BackgroundTransparency = 1
@@ -589,13 +897,11 @@ UILibrary.Main = {
 		self.OriginalSize = self.MainFrame.Size
 		self.OriginalPosition = self.MainFrame.Position
 
-		-- Logic: Search Functionality
 		self.TabSearch:GetPropertyChangedSignal("Text"):Connect(function()
 			local query = string.lower(self.TabSearch.Text)
 			self.ClearSearch.Visible = (query ~= "")
 
 			for _, tab in pairs(self.Tabs or {}) do
-				-- Looks for text in buttons or the tab name itself
 				local btn = tab:FindFirstChildOfClass("TextButton") or tab:FindFirstChildOfClass("TextLabel")
 				local tabName = btn and btn.Text or tab.Name
 
@@ -634,11 +940,8 @@ UILibrary.Main = {
 			local frameTop = self.ScrollingFrame.AbsolutePosition.Y
 			local activeSection = nil
 
-			-- 1. Find the section currently at the top of the viewport
-			-- We reverse the loop to find the "deepest" section that has passed the top
 			for i = #self.Sections, 1, -1 do
 				local section = self.Sections[i]
-				-- We check if the section is at or above the top of the scrolling window
 				if section.AbsolutePosition.Y <= (frameTop + 50) then -- 50px buffer for better feel
 					activeSection = section
 					break 
@@ -651,11 +954,9 @@ UILibrary.Main = {
 				if targetTabName ~= lastActiveTab then
 					lastActiveTab = targetTabName
 
-					-- Update all tabs in one go
 					for _, t in pairs(self.Tabs) do
 						local isMatch = (t.Name == targetTabName)
 
-						-- Fast Tweens for Mobile (Quart/Out is lighter than Back/Elastic)
 						TS:Create(t.Accent, TweenInfo.new(0.2), {
 							Size = isMatch and UDim2.new(0, 2, 0, 40) or UDim2.new(0, 2, 0, 0)
 						}):Play()
@@ -682,8 +983,8 @@ UILibrary.Main = {
 		end)
 	end,
 
+	-- im gonna kill myself sdgyiawuedAWUDSIAGDHUASDGASU
 	CreateKeyUI = function(self)
-		-- Main Key Frame
 		self.KeyFrame = Instance.new("Frame")
 		self.KeyFrame.Name = "KeyFrame"
 		self.KeyFrame.Size = UDim2.new(0, 340, 0, 180)
@@ -700,7 +1001,6 @@ UILibrary.Main = {
 			s.Thickness = self.Config.UIStrokeThickness
 		end
 
-		-- Title Bar Container (to hold text and close button)
 		local TitleBar = Instance.new("Frame", self.KeyFrame)
 		TitleBar.Size = UDim2.new(1, 0, 0, 35)
 		TitleBar.BackgroundTransparency = 1
@@ -720,16 +1020,15 @@ UILibrary.Main = {
 		CloseBtn.Size = UDim2.new(0, 35, 0, 35)
 		CloseBtn.Position = UDim2.new(1, -35, 0, 0)
 		CloseBtn.BackgroundTransparency = 1
-		CloseBtn.Text = "×" -- Multiplier sign looks better than 'X'
-		CloseBtn.TextColor3 = Color3.fromRGB(200, 50, 50) -- Subtle red
+		CloseBtn.Text = "×" 
+		CloseBtn.TextColor3 = Color3.fromRGB(200, 50, 50)
 		CloseBtn.TextSize = 22
 		CloseBtn.Font = Enum.Font.GothamBold
 
 		CloseBtn.MouseButton1Click:Connect(function()
-			self.ScreenGui:Destroy() -- Removes the whole UI from the game
+			self:PromptDestroy()
 		end)
 
-		-- Key Input Box
 		self.KeyBox = Instance.new("TextBox", self.KeyFrame)
 		self.KeyBox.Size = UDim2.new(0.9, 0, 0, 40)
 		self.KeyBox.Position = UDim2.new(0.05, 0, 0.35, 0)
@@ -741,7 +1040,6 @@ UILibrary.Main = {
 		self.KeyBox.TextSize = 16
 		Instance.new("UICorner", self.KeyBox).CornerRadius = UDim.new(0, 6)
 
-		-- Buttons Container
 		local ButtonContainer = Instance.new("Frame", self.KeyFrame)
 		ButtonContainer.Size = UDim2.new(0.9, 0, 0, 35)
 		ButtonContainer.Position = UDim2.new(0.05, 0, 0.7, 0)
@@ -780,7 +1078,6 @@ UILibrary.Main = {
 			end
 		end
 
-		-- Submit Button
 		local Submit = Instance.new("TextButton", ButtonContainer)
 		Submit.Size = UDim2.new(0.48, 0, 1, 0)
 		Submit.BackgroundColor3 = Color3.fromRGB(0, 160, 0)
@@ -791,7 +1088,6 @@ UILibrary.Main = {
 		Instance.new("UICorner", Submit).CornerRadius = UDim.new(0, 6)
 		Submit.MouseButton1Click:Connect(verify)
 
-		-- Get Key Button
 		local GetKey = Instance.new("TextButton", ButtonContainer)
 		GetKey.Size = UDim2.new(0.48, 0, 1, 0)
 		GetKey.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -804,15 +1100,13 @@ UILibrary.Main = {
 		GetKey.MouseButton1Click:Connect(function()
 			local url = self.Config.KeyLink or ""
 
-			-- Check if the developer actually provided any addons
 			if self.Config.Addons and type(self.Config.Addons) == "table" then
-				-- Figure out if the link already has a '?'
 				local isFirst = not string.find(url, "?")
 
 				for key, value in pairs(self.Config.Addons) do
 					local separator = isFirst and "?" or "&"
 					url = url .. separator .. tostring(key) .. "=" .. tostring(value)
-					isFirst = false -- Everything after the first one gets an '&'
+					isFirst = false
 				end
 			end
 
@@ -828,7 +1122,8 @@ UILibrary.Main = {
 			})
 		end)
 	end,
-	
+
+	-- wow not that hard
 	CreateFakeLoading = function(self, config)
 		self.LoadFrame = Instance.new("Frame")
 		self.LoadFrame.Name = "LoadFrame"
@@ -985,6 +1280,12 @@ UILibrary.Main = {
 		self.Config.TitleText = newTitle
 		self.TitleText.Text = newTitle
 	end,
+	
+	SetTheme = function(self, newTheme)
+		for colorName, Color in pairs(UILibrary.DefaultThemes[newTheme]) do
+			self.Colors[colorName] = Color
+		end
+	end,
 
 	MakeDraggableButton = function(self, config)
 		local dragImage = Instance.new("ImageButton")
@@ -1047,12 +1348,11 @@ UILibrary.Main = {
 		sectionText.TextSize = self.Config.TextSize + 1
 		sectionText.Parent = section
 
-		-- [ENHANCED TAB UI]
 		local tab = Instance.new("CanvasGroup")
 		tab.Name = "Tab_" .. text
-		tab.Size = UDim2.new(0, 16, 0, 60) -- Slightly wider and taller for better click area
+		tab.Size = UDim2.new(0, 16, 0, 60) 
 		tab.BackgroundColor3 = self.Colors.TabColor
-		tab.GroupTransparency = 0.3 -- Start slightly faded
+		tab.GroupTransparency = 0.3
 		tab.LayoutOrder = #self.Tabs + 1
 		tab.Parent = self.TabScrollingFrame
 
@@ -1060,10 +1360,9 @@ UILibrary.Main = {
 		corner.CornerRadius = UDim.new(0, 4)
 		corner.Parent = tab
 
-		-- Accent Bar (The "Active" indicator)
 		local accent = Instance.new("Frame")
 		accent.Name = "Accent"
-		accent.Size = UDim2.new(0, 2, 0, 0) -- Starts at 0 height
+		accent.Size = UDim2.new(0, 2, 0, 0)
 		accent.Position = UDim2.new(1, -2, 0.5, 0)
 		accent.AnchorPoint = Vector2.new(0, 0.5)
 		accent.BackgroundColor3 = self.Colors.AccentColor
@@ -1077,31 +1376,28 @@ UILibrary.Main = {
 		btn.Position = UDim2.new(0.5, 0, 0.5, 0)
 		btn.AnchorPoint = Vector2.new(0.5, 0.5)
 		btn.BackgroundTransparency = 1
-		btn.Text = text:upper() -- Uppercase looks cleaner on vertical tabs
+		btn.Text = text:upper()
 		btn.TextColor3 = self.Colors.TitleColor
 		btn.TextTransparency = 0.2
 		btn.Font = Enum.Font.GothamBold
 		btn.TextScaled = true
 		btn.Parent = tab
 
-		-- Hover Animations
 		tab.MouseEnter:Connect(function()
 			TS:Create(tab, TweenInfo.new(0.3), {GroupTransparency = 0, BackgroundColor3 = self.Colors.AccentColor:Lerp(self.Colors.TabColor, 0.8)}):Play()
 			TS:Create(btn, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
 		end)
 
 		tab.MouseLeave:Connect(function()
-			-- Only fade back if it's not the "active" tab (optional logic)
 			TS:Create(tab, TweenInfo.new(0.3), {GroupTransparency = 0.3, BackgroundColor3 = self.Colors.TabColor}):Play()
 			TS:Create(btn, TweenInfo.new(0.3), {TextTransparency = 0.2}):Play()
 		end)
 
 		btn.MouseButton1Click:Connect(function()
-			-- Reset all other tabs' accents
 			for _, t in pairs(self.Tabs) do
 				TS:Create(t.Accent, TweenInfo.new(0.3), {Size = UDim2.new(0, 2, 0, 0)}):Play()
 			end
-			-- Animate this accent
+			
 			TS:Create(accent, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Size = UDim2.new(0, 2, 0, 40)}):Play()
 
 			local relativeOffset = section.AbsolutePosition.Y - self.ScrollingFrame.AbsolutePosition.Y
@@ -1158,7 +1454,6 @@ UILibrary.Main = {
 		corner.CornerRadius = UDim.new(0, 4)
 		corner.Parent = button
 
-		-- Add UI Stroke to button
 		if self.Config.UIStrokeEnabled then
 			local buttonStroke = Instance.new("UIStroke")
 			buttonStroke.Thickness = self.Config.UIStrokeThickness
@@ -1190,6 +1485,8 @@ UILibrary.Main = {
 	end,
 
 	AddToggle = function(self, config)
+		local lib = self
+		
 		local toggleFrame = Instance.new("Frame")
 		toggleFrame.Name = "Toggle_" .. config.Text
 		toggleFrame.Size = UDim2.new(1, -24, 0, 32)
@@ -1226,16 +1523,47 @@ UILibrary.Main = {
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius = UDim.new(0, 12)
 		corner.Parent = toggleButton
-
-		-- Add UI Stroke to toggle button
+		
 		if self.Config.UIStrokeEnabled then
-			local toggleStroke = Instance.new("UIStroke")
-			toggleStroke.Thickness = self.Config.UIStrokeThickness
-			toggleStroke.Color = self.Colors.UIStrokeColor
-			toggleStroke.Parent = toggleButton
+			local buttonStroke = Instance.new("UIStroke")
+			buttonStroke.Thickness = self.Config.UIStrokeThickness
+			buttonStroke.Color = self.Colors.UIStrokeColor
+			buttonStroke.Parent = toggleButton
 		end
+		
+		local toggle = {}
+		
+		local flag = config.Flag
 
 		local state = config.Default or false
+		
+		if self.UserConfig[flag] ~= nil then
+			state = self.UserConfig[flag]
+		end
+
+		local function update(value)
+			state = value
+			toggleButton.Text = state and "ON" or "OFF"
+			toggleButton.TextColor3 = state and lib.Colors.ToggleColorON or lib.Colors.ToggleColorOFF
+			
+			if config.SavingEnabled then
+				lib.UserConfig[flag] = state
+			end
+			
+			if config.Callback then
+				config.Callback(state)
+			end
+		end
+
+		update(state)
+
+		function toggle:Set(bool)
+			update(bool)
+		end
+
+		function toggle:Get()
+			return state
+		end
 
 		toggleButton.MouseEnter:Connect(function()
 			toggleButton.BackgroundColor3 = Color3.new(
@@ -1250,28 +1578,20 @@ UILibrary.Main = {
 		end)
 
 		toggleButton.MouseButton1Click:Connect(function()
-			state = not state
-			if state then
-				toggleButton.Text = "ON"
-				toggleButton.TextColor3 = self.Colors.ToggleColorON
-			else
-				toggleButton.Text = "OFF"
-				toggleButton.TextColor3 = self.Colors.ToggleColorOFF
-			end
-
-			if config.Callback then
-				config.Callback(state)
-			end
+			update(not state)
 		end)
 
 		table.insert(self.Elements, toggleFrame)
-		return toggleFrame, function() return state end
+		return toggle
 	end,
 
 	AddDropdown = function(self, config)
 		local dropdownHeight = config.DropDownHeight or 44
 		local optionHeight = config.OptionHeight or 30
 		local isOpen = false
+		local dropdown = {}
+		
+		local lib = self
 
 		local dropdownFrame = Instance.new("Frame")
 		dropdownFrame.Name = "Dropdown_" .. config.Text
@@ -1335,7 +1655,6 @@ UILibrary.Main = {
 		arrow.ImageColor3 = self.Colors.LabelColor
 		arrow.Parent = headerBtn
 
-		-- Container for Options
 		local optionHolder = Instance.new("Frame")
 		optionHolder.Name = "OptionHolder"
 		optionHolder.Size = UDim2.new(1, 0, 0, 0) 
@@ -1348,67 +1667,522 @@ UILibrary.Main = {
 		optionList.SortOrder = Enum.SortOrder.LayoutOrder
 		optionList.Parent = optionHolder
 
-		-- Function to Toggle Dropdown
 		local function toggle()
 			isOpen = not isOpen
 
 			local count = #config.Options
 			local newHeight = isOpen and (dropdownHeight + (count * optionHeight) + (count * 2) + 5) or dropdownHeight
 
-			-- Animate Frame Size
 			TS:Create(dropdownFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 				Size = UDim2.new(1, -24, 0, newHeight)
 			}):Play()
 
-			-- Rotate Arrow
 			TS:Create(arrow, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
 				Rotation = isOpen and 180 or 0
 			}):Play()
 
-			-- Color Feedback
 			TS:Create(headerBtn, TweenInfo.new(0.3), {
 				BackgroundColor3 = isOpen and self.Colors.ButtonHoverColor or self.Colors.ButtonColor
 			}):Play()
 		end
 
-		-- Create Option Buttons
-		for i, option in ipairs(config.Options) do
-			local optBtn = Instance.new("TextButton")
-			optBtn.Name = option
-			optBtn.Size = UDim2.new(1, 0, 0, optionHeight)
-			optBtn.BackgroundColor3 = self.Colors.CollapseBtnColor 
-			optBtn.Text = option
-			optBtn.TextColor3 = self.Colors.LabelColor
-			optBtn.Font = self.Config.Font
-			optBtn.TextSize = self.Config.TextSize
-			optBtn.AutoButtonColor = false
-			optBtn.Parent = optionHolder
+		local function update(options, clearcurrent)
+			for _, child in pairs(optionHolder:GetChildren()) do
+				if child:IsA("TextButton") then child:Destroy() end
+			end
+			
+			local selected = nil
 
-			local optCorner = Instance.new("UICorner")
-			optCorner.CornerRadius = UDim.new(0, 4)
-			optCorner.Parent = optBtn
+			local currentOptions = options or {}
 
-			optBtn.MouseButton1Click:Connect(function()
-				selectedLabel.Text = option
-				toggle()
+			if clearcurrent then
+				selectedLabel.Text = "None"
+				selected = nil
+			end
+			
+			local flag = config.Flag
+			
+			if lib.UserConfig[flag] ~= nil then
+				selected = lib.UserConfig[flag]
+				selectedLabel.Text = tostring(selected)
+			end
+			
+			for i, option in ipairs(currentOptions) do
+				local optBtn = Instance.new("TextButton")
+				optBtn.Name = option
+				optBtn.Size = UDim2.new(1, 0, 0, optionHeight)
+				optBtn.BackgroundColor3 = lib.Colors.CollapseBtnColor 
+				optBtn.Text = option
+				optBtn.TextColor3 = lib.Colors.LabelColor
+				optBtn.Font = lib.Config.Font
+				optBtn.TextSize = lib.Config.TextSize
+				optBtn.AutoButtonColor = false
+				optBtn.Parent = optionHolder
 
-				if config.Callback then
-					config.Callback(option)
-				end
-			end)
+				local optCorner = Instance.new("UICorner")
+				optCorner.CornerRadius = UDim.new(0, 4)
+				optCorner.Parent = optBtn
 
-			optBtn.MouseEnter:Connect(function()
-				TS:Create(optBtn, TweenInfo.new(0.2), { BackgroundColor3 = self.Colors.AccentColor, TextColor3 = Color3.new(1,1,1) }):Play()
-			end)
-			optBtn.MouseLeave:Connect(function()
-				TS:Create(optBtn, TweenInfo.new(0.2), { BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.LabelColor }):Play()
-			end)
+				optBtn.MouseButton1Click:Connect(function()
+					selectedLabel.Text = option
+					selected = option
+					
+					if config.SavingEnabled then
+						lib.UserConfig[flag] = selected
+					end
+					
+					toggle()
+
+					if config.Callback then
+						config.Callback(option)
+					end
+				end)
+
+				optBtn.MouseEnter:Connect(function()
+					TS:Create(optBtn, TweenInfo.new(0.2), { BackgroundColor3 = self.Colors.AccentColor, TextColor3 = Color3.new(1,1,1) }):Play()
+				end)
+				
+				optBtn.MouseLeave:Connect(function()
+					TS:Create(optBtn, TweenInfo.new(0.2), { BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.LabelColor }):Play()
+				end)
+			end
+		end
+		
+		update(config.Options, true)
+		
+		function dropdown:Update(config)
+			update(config.Options, true)
 		end
 
 		headerBtn.MouseButton1Click:Connect(toggle)
 
 		table.insert(self.Elements, dropdownFrame)
-		return dropdownFrame
+		return dropdown
+	end,
+	
+	AddMultiDropdown = function(self, config)
+		local dropdownHeight = config.DropDownHeight or 44
+		local optionHeight = config.OptionHeight or 30
+		local isOpen = false
+		local dropdown = {}
+		local selectedItems = {}
+
+		local lib = self
+
+		local dropdownFrame = Instance.new("Frame")
+		dropdownFrame.Name = "MultiDropdown_" .. config.Text
+		dropdownFrame.Size = UDim2.new(1, -24, 0, dropdownHeight)
+		dropdownFrame.Position = UDim2.new(0, 12, 0, 0)
+		dropdownFrame.BackgroundTransparency = 1
+		dropdownFrame.ClipsDescendants = true 
+		dropdownFrame.LayoutOrder = #self.Elements + 1
+		dropdownFrame.Parent = self.ScrollingFrame
+
+		local headerBtn = Instance.new("TextButton")
+		headerBtn.Name = "Header"
+		headerBtn.Size = UDim2.new(1, 0, 0, dropdownHeight)
+		headerBtn.BackgroundColor3 = self.Colors.ButtonColor
+		headerBtn.Text = ""
+		headerBtn.AutoButtonColor = false
+		headerBtn.Parent = dropdownFrame
+
+		local headerCorner = Instance.new("UICorner")
+		headerCorner.CornerRadius = UDim.new(0, 6)
+		headerCorner.Parent = headerBtn
+
+		if self.Config.UIStrokeEnabled then
+			local stroke = Instance.new("UIStroke")
+			stroke.Thickness = self.Config.UIStrokeThickness
+			stroke.Color = self.Colors.UIStrokeColor
+			stroke.Parent = headerBtn
+		end
+
+		local titleLabel = Instance.new("TextLabel")
+		titleLabel.Name = "Title"
+		titleLabel.Size = UDim2.new(1, -40, 0, 20) 
+		titleLabel.Position = UDim2.new(0, 10, 0, 5) 
+		titleLabel.BackgroundTransparency = 1
+		titleLabel.Text = config.Text
+		titleLabel.TextColor3 = self.Colors.TitleColor
+		titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+		titleLabel.Font = self.Config.Font
+		titleLabel.TextSize = self.Config.TextSize
+		titleLabel.Parent = headerBtn
+
+		local selectedLabel = Instance.new("TextLabel")
+		selectedLabel.Name = "Selected"
+		selectedLabel.Size = UDim2.new(1, -40, 0, 18)
+		selectedLabel.Position = UDim2.new(0, 10, 0, 22)
+		selectedLabel.BackgroundTransparency = 1
+		selectedLabel.Text = "None"
+		selectedLabel.TextColor3 = self.Colors.AccentColor 
+		selectedLabel.TextXAlignment = Enum.TextXAlignment.Left 
+		selectedLabel.Font = self.Config.Font
+		selectedLabel.TextScaled = true
+		selectedLabel.Parent = headerBtn
+
+		local sizeConstraint = Instance.new("UITextSizeConstraint")
+		sizeConstraint.MaxTextSize = self.Config.TextSize - 1
+		sizeConstraint.Parent = selectedLabel
+
+		local arrow = Instance.new("ImageLabel")
+		arrow.Name = "Arrow"
+		arrow.Size = UDim2.new(0, 20, 0, 20)
+		arrow.Position = UDim2.new(1, -25, 0.5, 0)
+		arrow.AnchorPoint = Vector2.new(0, 0.5)
+		arrow.BackgroundTransparency = 1
+		arrow.Image = "rbxassetid://6034818372" 
+		arrow.ImageColor3 = self.Colors.LabelColor
+		arrow.Parent = headerBtn
+
+		local optionHolder = Instance.new("Frame")
+		optionHolder.Name = "OptionHolder"
+		optionHolder.Size = UDim2.new(1, 0, 0, 0) 
+		optionHolder.Position = UDim2.new(0, 0, 0, dropdownHeight + 2)
+		optionHolder.BackgroundTransparency = 1
+		optionHolder.Parent = dropdownFrame
+
+		local optionList = Instance.new("UIListLayout")
+		optionList.Padding = UDim.new(0, 2)
+		optionList.SortOrder = Enum.SortOrder.LayoutOrder
+		optionList.Parent = optionHolder
+
+		local function updateHeaderText()
+			if #selectedItems == 0 then
+				selectedLabel.Text = "None"
+			else
+				selectedLabel.Text = table.concat(selectedItems, ", ")
+			end
+		end
+
+		local function toggle()
+			isOpen = not isOpen
+
+			local count = #config.Options
+			local newHeight = isOpen and (dropdownHeight + (count * optionHeight) + (count * 2) + 5) or dropdownHeight
+
+			TS:Create(dropdownFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Size = UDim2.new(1, -24, 0, newHeight)
+			}):Play()
+
+			TS:Create(arrow, TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+				Rotation = isOpen and 180 or 0
+			}):Play()
+
+			TS:Create(headerBtn, TweenInfo.new(0.3), {
+				BackgroundColor3 = isOpen and self.Colors.ButtonHoverColor or self.Colors.ButtonColor
+			}):Play()
+		end
+
+		local function update(options, clearcurrent)
+			for _, child in pairs(optionHolder:GetChildren()) do
+				if child:IsA("TextButton") then child:Destroy() end
+			end
+
+			local currentOptions = options or {}
+
+			if clearcurrent then
+				selectedItems = {}
+				updateHeaderText()
+			end
+
+			local flag = config.Flag
+
+			if lib.UserConfig[flag] ~= nil and type(lib.UserConfig[flag]) == "table" then
+				selectedItems = lib.UserConfig[flag]
+				updateHeaderText()
+			elseif config.Default then
+				if type(config.Default) == "table" then
+					selectedItems = config.Default
+				else
+					selectedItems = {config.Default}
+				end
+				updateHeaderText()
+			end
+
+			for i, option in ipairs(currentOptions) do
+				local optBtn = Instance.new("TextButton")
+				optBtn.Name = option
+				optBtn.Size = UDim2.new(1, 0, 0, optionHeight)
+				
+				local isSelected = table.find(selectedItems, option)
+				optBtn.BackgroundColor3 = isSelected and self.Colors.AccentColor or lib.Colors.CollapseBtnColor
+				optBtn.TextColor3 = isSelected and Color3.new(1,1,1) or lib.Colors.LabelColor
+
+				optBtn.Text = option
+				optBtn.Font = lib.Config.Font
+				optBtn.TextSize = lib.Config.TextSize
+				optBtn.AutoButtonColor = false
+				optBtn.Parent = optionHolder
+
+				local optCorner = Instance.new("UICorner")
+				optCorner.CornerRadius = UDim.new(0, 4)
+				optCorner.Parent = optBtn
+
+				optBtn.MouseButton1Click:Connect(function()
+					local index = table.find(selectedItems, option)
+
+					if index then
+						
+						table.remove(selectedItems, index)
+						TS:Create(optBtn, TweenInfo.new(0.2), { 
+							BackgroundColor3 = lib.Colors.CollapseBtnColor, 
+							TextColor3 = lib.Colors.LabelColor 
+						}):Play()
+					else
+					
+						table.insert(selectedItems, option)
+						TS:Create(optBtn, TweenInfo.new(0.2), { 
+							BackgroundColor3 = self.Colors.AccentColor, 
+							TextColor3 = Color3.new(1,1,1) 
+						}):Play()
+					end
+
+					updateHeaderText()
+
+					if config.SavingEnabled then
+						lib.UserConfig[flag] = selectedItems
+					end
+
+					
+
+					if config.Callback then
+						config.Callback(selectedItems)
+					end
+				end)
+			end
+		end
+
+		update(config.Options, true)
+
+		function dropdown:Update(config)
+			update(config.Options, true)
+		end
+
+		function dropdown:GetOptions()
+			return selectedItems
+		end
+
+		headerBtn.MouseButton1Click:Connect(toggle)
+
+		table.insert(self.Elements, dropdownFrame)
+		return dropdown
+	end,
+	
+	AddColorPicker = function(self, config)
+		local UIS = game:GetService("UserInputService")
+		local RS = game:GetService("RunService")
+		local TweenService = game:GetService("TweenService")
+		local lib = self
+		local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+		local h, s, v = defaultColor:ToHSV()
+		local isOpen = false
+		local isDraggingColor = false
+		local isDraggingHue = false
+
+		local pickerFrame = Instance.new("Frame")
+		pickerFrame.Name = "ColorPicker_" .. config.Text
+		pickerFrame.Size = UDim2.new(1, -24, 0, 30)
+		pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
+		pickerFrame.BorderSizePixel = 0
+		pickerFrame.ClipsDescendants = true
+		pickerFrame.LayoutOrder = #self.Elements + 1
+		pickerFrame.Parent = self.ScrollingFrame
+
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 4)
+		corner.Parent = pickerFrame
+
+		local headerBtn = Instance.new("TextButton")
+		headerBtn.Name = "Header"
+		headerBtn.Size = UDim2.new(1, 0, 0, 30)
+		headerBtn.BackgroundTransparency = 1
+		headerBtn.Text = ""
+		headerBtn.AutoButtonColor = false
+		headerBtn.Parent = pickerFrame
+
+		local title = Instance.new("TextLabel")
+		title.Name = "Title"
+		title.Size = UDim2.new(1, -50, 1, 0)
+		title.Position = UDim2.new(0, 12, 0, 0)
+		title.BackgroundTransparency = 1
+		title.Text = config.Text
+		title.TextColor3 = self.Colors.TitleColor
+		title.Font = self.Config.Font
+		title.TextSize = self.Config.TextSize
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = headerBtn
+
+		local colorDisplay = Instance.new("Frame")
+		colorDisplay.Name = "ColorDisplay"
+		colorDisplay.Size = UDim2.new(0, 30, 0, 20)
+		colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
+		colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
+		colorDisplay.BackgroundColor3 = defaultColor
+		colorDisplay.Parent = headerBtn
+
+		local displayCorner = Instance.new("UICorner")
+		displayCorner.CornerRadius = UDim.new(0, 4)
+		displayCorner.Parent = colorDisplay
+
+		local displayStroke = Instance.new("UIStroke")
+		displayStroke.Thickness = 1
+		displayStroke.Color = self.Colors.UIStrokeColor or Color3.fromRGB(60,60,60)
+		displayStroke.Parent = colorDisplay
+
+		local pickerContainer = Instance.new("Frame")
+		pickerContainer.Name = "PickerContainer"
+		pickerContainer.Size = UDim2.new(1, 0, 0, 100)
+		pickerContainer.Position = UDim2.new(0, 0, 0, 35)
+		pickerContainer.BackgroundTransparency = 1
+		pickerContainer.Visible = true 
+		pickerContainer.Parent = pickerFrame
+
+		local svPalette = Instance.new("TextButton") 
+		svPalette.Name = "SVPalette"
+		svPalette.Size = UDim2.new(0, 200, 0, 80)
+		svPalette.Position = UDim2.new(0, 12, 0, 0)
+		svPalette.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+		svPalette.Text = ""
+		svPalette.AutoButtonColor = false
+		svPalette.Parent = pickerContainer
+
+		local svCorner = Instance.new("UICorner")
+		svCorner.CornerRadius = UDim.new(0, 4)
+		svCorner.Parent = svPalette
+
+		local svImage = Instance.new("ImageLabel")
+		svImage.Size = UDim2.new(1, 0, 1, 0)
+		svImage.BackgroundTransparency = 1
+		svImage.Image = "rbxassetid://4155801252" 
+		svImage.Parent = svPalette
+
+		local svCursor = Instance.new("Frame")
+		svCursor.Name = "Cursor"
+		svCursor.Size = UDim2.new(0, 6, 0, 6)
+		svCursor.AnchorPoint = Vector2.new(0.5, 0.5)
+		svCursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		svCursor.BorderSizePixel = 0
+		svCursor.Parent = svPalette
+
+		local cursorCorner = Instance.new("UICorner")
+		cursorCorner.CornerRadius = UDim.new(1, 0)
+		cursorCorner.Parent = svCursor
+
+		local hueSlider = Instance.new("TextButton")
+		hueSlider.Name = "HueSlider"
+		hueSlider.Size = UDim2.new(0, 25, 0, 80)
+		hueSlider.Position = UDim2.new(0, 222, 0, 0) -- Right of SV box
+		hueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		hueSlider.Text = ""
+		hueSlider.AutoButtonColor = false
+		hueSlider.Parent = pickerContainer
+
+		local hueCorner = Instance.new("UICorner")
+		hueCorner.CornerRadius = UDim.new(0, 4)
+		hueCorner.Parent = hueSlider
+
+		local hueGradient = Instance.new("UIGradient")
+		hueGradient.Rotation = 90
+		hueGradient.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
+			ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 0, 255)),
+			ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 0, 255)),
+			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)),
+			ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 255, 0)),
+			ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 255, 0)),
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))
+		})
+		hueGradient.Parent = hueSlider
+
+		local hueCursor = Instance.new("Frame")
+		hueCursor.Size = UDim2.new(1, 0, 0, 2)
+		hueCursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		hueCursor.BorderSizePixel = 0
+		hueCursor.Parent = hueSlider
+		
+		local flag = config.Flag
+
+		local function UpdateColor(color1)
+			local color = color1 or Color3.fromHSV(h, s, v)
+
+			colorDisplay.BackgroundColor3 = color
+			svPalette.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+
+			hueCursor.Position = UDim2.new(0, 0, 1 - h, 0)
+			svCursor.Position = UDim2.new(s, 0, 1 - v, 0)
+			
+			if config.SavingEnabled then
+				lib.UserConfig[flag] = color
+			end
+			
+			if config.Callback then
+				config.Callback(color)
+			end
+		end
+
+		local function SetState()
+			isOpen = not isOpen
+
+			local targetHeight = isOpen and 125 or 30 -- 30 is base height, 125 is expanded
+
+			TweenService:Create(pickerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				Size = UDim2.new(1, -24, 0, targetHeight)
+			}):Play()
+		end
+		
+		if self.UserConfig[flag] ~= nil then
+			UpdateColor(self.UserConfig[flag])
+		end
+
+		hueSlider.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				isDraggingHue = true
+			end
+		end)
+
+		svPalette.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				isDraggingColor = true
+			end
+		end)
+
+		UIS.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				isDraggingHue = false
+				isDraggingColor = false
+			end
+		end)
+
+		RS.RenderStepped:Connect(function()
+			if not isOpen then return end
+
+			if isDraggingHue then
+				local mouseLocation = UIS:GetMouseLocation()
+				local relativeY = mouseLocation.Y - hueSlider.AbsolutePosition.Y - 36
+
+				local y = math.clamp((UIS:GetMouseLocation().Y - hueSlider.AbsolutePosition.Y) / hueSlider.AbsoluteSize.Y, 0, 1)
+				h = 1 - y
+				UpdateColor()
+			end
+
+			if isDraggingColor then
+				local mouse = UIS:GetMouseLocation()
+				local x = math.clamp((mouse.X - svPalette.AbsolutePosition.X) / svPalette.AbsoluteSize.X, 0, 1)
+				local y = math.clamp((mouse.Y - svPalette.AbsolutePosition.Y) / svPalette.AbsoluteSize.Y, 0, 1)
+
+				s = x
+				v = 1 - y
+				UpdateColor()
+			end
+		end)
+
+		UpdateColor()
+
+		headerBtn.MouseButton1Click:Connect(SetState)
+
+		table.insert(self.Elements, pickerFrame)
+		return pickerFrame
 	end,
 
 	AddKeybind = function(self, config)
@@ -1457,28 +2231,25 @@ UILibrary.Main = {
 		bindCorner.CornerRadius = UDim.new(0, 4)
 		bindCorner.Parent = bindButton
 
-		-- Logic
 		bindButton.MouseButton1Click:Connect(function()
 			if binding then return end
-			
+
 			binding = true
 			bindButton.Text = "..."
-			-- Visual feedback that we are listening
 			TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.AccentColor, TextColor3 = Color3.new(1,1,1)}):Play()
 		end)
 
 		UIS.InputBegan:Connect(function(input, gpe)
 			if gpe then return end
-			
+
 			if binding then
 				if input.UserInputType == Enum.UserInputType.Keyboard then
 					currentKey = input.KeyCode
 					bindButton.Text = currentKey.Name
 					binding = false
-					
-					-- Reset visuals
+
 					TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.AccentColor}):Play()
-					
+
 					if config.ChangedCallback then
 						config.ChangedCallback(currentKey)
 					end
@@ -1535,7 +2306,6 @@ UILibrary.Main = {
 		corner.CornerRadius = UDim.new(0, 4)
 		corner.Parent = textBox
 
-		-- Add UI Stroke to text box
 		if self.Config.UIStrokeEnabled then
 			local textBoxStroke = Instance.new("UIStroke")
 			textBoxStroke.Thickness = self.Config.UIStrokeThickness
@@ -1569,6 +2339,9 @@ UILibrary.Main = {
 	end,
 
 	AddSlider = function(self, config)
+		local lib = self
+		local slider = {}
+		
 		local sliderFrame = Instance.new("Frame")
 		sliderFrame.Name = "Slider_" .. config.Text
 		sliderFrame.Size = UDim2.new(1, -24, 0, 50)
@@ -1638,6 +2411,7 @@ UILibrary.Main = {
 
 		local dragging = false
 		local currentValue = config.Default
+		local flag = config.Flag
 
 		local function updateSlider(value)
 			value = math.clamp(value, config.Min, config.Max)
@@ -1654,10 +2428,18 @@ UILibrary.Main = {
 			end
 
 			sliderText.Text = config.Text .. ": " .. displayValue
-
+			
+			if config.SavingEnabled then
+				lib.UserConfig[flag] = tonumber(currentValue)
+			end
+			
 			if config.Callback then
 				config.Callback(value)
 			end
+		end
+		
+		if self.UserConfig[flag] ~= nil then
+			updateSlider(tonumber(self.UserConfig[flag]))
 		end
 
 		sliderHandle.MouseButton1Down:Connect(function()
@@ -1688,24 +2470,29 @@ UILibrary.Main = {
 			local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
 			updateSlider(value)
 		end)
+		
+		function slider:Set(value)
+			updateSlider(value)
+		end
+		
+		function slider:Get()
+			return currentValue
+		end
 
 		table.insert(self.Elements, sliderFrame)
-		return sliderFrame, function() return currentValue end
+		return slider
 	end,
 
 	Notify = function(self, config)   
-		local TS = game:GetService("TweenService")
 		local accentColor = config.AccentColor or Color3.fromRGB(0, 200, 255)
 
-		-- Sound Setup
 		local sound = Instance.new("Sound")
 		sound.SoundId = self.Config.NotifcationSound
 		sound.Parent = game:GetService("SoundService")
-		sound.Volume = 0.4
+		sound.Volume = 2
 		sound:Play()
 		game:GetService("Debris"):AddItem(sound, 2)
 
-		-- Main Container (CanvasGroup)
 		local frame = Instance.new("CanvasGroup")
 		frame.Name = "Notification"
 		frame.Parent = self.ScreenGui
@@ -1715,7 +2502,6 @@ UILibrary.Main = {
 		frame.GroupTransparency = 1
 		frame.BorderSizePixel = 0
 
-		-- Glassmorphism Gradient (High Contrast)
 		local bgGradient = Instance.new("UIGradient")
 		bgGradient.Color = ColorSequence.new({
 			ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 80, 90)), -- Bright top-left
@@ -1728,22 +2514,19 @@ UILibrary.Main = {
 		uicorner.CornerRadius = UDim.new(0, 12)
 		uicorner.Parent = frame
 
-		-- Vibrant Border (The "Glow" fix)
 		local uistroke = Instance.new("UIStroke")
 		uistroke.Color = accentColor
 		uistroke.Thickness = 2
 		uistroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-		uistroke.Transparency = 0.2 -- Bold and visible
+		uistroke.Transparency = 0.2
 		uistroke.Parent = frame
 
-		-- Accent Bar with a Glow
 		local accent = Instance.new("Frame")
 		accent.Size = UDim2.new(0, 5, 1, 0)
 		accent.BackgroundColor3 = accentColor
 		accent.BorderSizePixel = 0
 		accent.Parent = frame
 
-		-- Title (GothamBold + High Visibility)
 		local title = Instance.new("TextLabel")
 		title.Parent = frame
 		title.Size = UDim2.new(1, -70, 0, 35)
@@ -1751,25 +2534,23 @@ UILibrary.Main = {
 		title.BackgroundTransparency = 1
 		title.Text = config.Title
 		title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		title.TextSize = 18 -- Slightly larger
+		title.TextSize = 18
 		title.Font = Enum.Font.GothamBold
 		title.TextXAlignment = Enum.TextXAlignment.Left
 
-		-- Message (GothamBold)
 		local msg = Instance.new("TextLabel")
 		msg.Parent = frame
 		msg.Size = UDim2.new(1, -40, 0, 40)
 		msg.Position = UDim2.new(0, 20, 0, 40)
 		msg.BackgroundTransparency = 1
 		msg.Text = config.Text
-		msg.TextColor3 = Color3.fromRGB(245, 245, 245) -- Near white
+		msg.TextColor3 = Color3.fromRGB(245, 245, 245)
 		msg.TextSize = 14
 		msg.Font = Enum.Font.GothamBold
 		msg.TextWrapped = true
 		msg.TextXAlignment = Enum.TextXAlignment.Left
 		msg.TextYAlignment = Enum.TextYAlignment.Top
 
-		-- Close Button
 		local closeBtn = Instance.new("TextButton")
 		closeBtn.Parent = frame
 		closeBtn.Size = UDim2.new(0, 30, 0, 30)
@@ -1780,7 +2561,6 @@ UILibrary.Main = {
 		closeBtn.TextSize = 20
 		closeBtn.Font = Enum.Font.GothamBold
 
-		-- Progress Bar (The "Life" of the notification)
 		local progressBarBackground = Instance.new("Frame")
 		progressBarBackground.Name = "ProgressBarBackground"
 		progressBarBackground.Size = UDim2.new(1, 0, 0, 10)
@@ -1797,7 +2577,6 @@ UILibrary.Main = {
 		progressBar.BorderSizePixel = 0
 		progressBar.Parent = progressBarBackground
 
-		-- Animations
 		local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
 
 		local function dismiss()
@@ -1808,10 +2587,8 @@ UILibrary.Main = {
 
 		closeBtn.MouseButton1Click:Connect(dismiss)
 
-		-- Play Intro
 		TS:Create(frame, tweenInfo, {Position = config.EndPosition, GroupTransparency = 0}):Play()
 
-		-- Animate Progress Bar
 		TS:Create(progressBar, TweenInfo.new(config.Duration or 5, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)}):Play()
 
 		task.delay(config.Duration or 5, function()
@@ -1820,37 +2597,33 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 1.2"
+		return "SBEUILib 1.67"
 	end,
 
 	PromptDestroy = function(self)
-		-- 1. The Dimmer Overlay
 		local Dimmer = Instance.new("Frame")
 		Dimmer.Name = "PromptDimmer"
 		Dimmer.Size = UDim2.new(1, 0, 1, 0)
 		Dimmer.BackgroundColor3 = Color3.new(0, 0, 0)
 		Dimmer.BackgroundTransparency = 1
-		Dimmer.ZIndex = 100 -- Ensure it's above everything
+		Dimmer.ZIndex = 100 
 		Dimmer.Parent = self.ScreenGui
 
-		-- 2. The Modal Container (CanvasGroup for smooth fading)
 		local Modal = Instance.new("CanvasGroup")
 		Modal.Name = "DestroyModal"
 		Modal.Size = UDim2.new(0, 260, 0, 140)
 		Modal.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Modal.AnchorPoint = Vector2.new(0.5, 0.5)
 		Modal.BackgroundColor3 = self.Colors.MainFrameColor
-		Modal.GroupTransparency = 1 -- Start hidden
+		Modal.GroupTransparency = 1
 		Modal.ZIndex = 101
 		Modal.Parent = self.ScreenGui
 
-		-- Styling the Modal
 		Instance.new("UICorner", Modal).CornerRadius = UDim.new(0, self.Config.CornerRadius)
 		local Stroke = Instance.new("UIStroke", Modal)
 		Stroke.Color = self.Colors.UIStrokeColor
 		Stroke.Thickness = self.Config.UIStrokeThickness
 
-		-- Title/Warning Text
 		local WarningIcon = Instance.new("TextLabel", Modal)
 		WarningIcon.Size = UDim2.new(1, 0, 0, 40)
 		WarningIcon.Position = UDim2.new(0, 0, 0, 10)
@@ -1876,7 +2649,6 @@ UILibrary.Main = {
 		SubTitle.Font = Enum.Font.Gotham
 		SubTitle.TextSize = 12
 
-		-- Button Container
 		local BtnContainer = Instance.new("Frame", Modal)
 		BtnContainer.Size = UDim2.new(1, -30, 0, 32)
 		BtnContainer.Position = UDim2.new(0, 15, 1, -45)
@@ -1887,7 +2659,6 @@ UILibrary.Main = {
 		Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		Layout.Padding = UDim.new(0, 10)
 
-		-- Action Buttons
 		local function CreatePromptBtn(text, color)
 			local b = Instance.new("TextButton", BtnContainer)
 			b.Size = UDim2.new(0.48, 0, 1, 0)
@@ -1899,7 +2670,6 @@ UILibrary.Main = {
 			b.AutoButtonColor = false
 			Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
 
-			-- Hover effects
 			b.MouseEnter:Connect(function()
 				TS:Create(b, TweenInfo.new(0.2), {BackgroundColor3 = color:Lerp(Color3.new(1,1,1), 0.1)}):Play()
 			end)
@@ -1913,16 +2683,15 @@ UILibrary.Main = {
 		local CancelBtn = CreatePromptBtn("Cancel", Color3.fromRGB(60, 60, 60))
 		local ConfirmBtn = CreatePromptBtn("Close", Color3.fromRGB(180, 40, 40))
 
-		-- ANIMATIONS
-		-- 1. Entrance
 		TS:Create(Dimmer, TweenInfo.new(0.4), {BackgroundTransparency = 0.5}):Play()
-		Modal.Size = UDim2.new(0, 200, 0, 100) -- Start small
+		
+		Modal.Size = UDim2.new(0, 200, 0, 100) 
+		
 		TS:Create(Modal, TweenInfo.new(0.4, Enum.EasingStyle.Back), {
 			Size = UDim2.new(0, 260, 0, 140),
 			GroupTransparency = 0
 		}):Play()
 
-		-- 2. Functionality
 		local function ClosePrompt()
 			TS:Create(Dimmer, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
 			local t = TS:Create(Modal, TweenInfo.new(0.3, Enum.EasingStyle.Quart), {
@@ -1944,6 +2713,23 @@ UILibrary.Main = {
 			self:Destroy()
 		end)
 	end,
+	
+	SaveConfigurations = function(self)
+		local path = self.HubFolder.."/UserConfig"
+		utils:WriteFile({Path = path, Data = self.UserConfig, IsJSON = true})
+	end,
+	
+	LoadConfigurations = function(self)
+		local filename = self.HubFolder.."/UserConfig"
+		
+		if isfile(filename) then
+			local data = utils:ReadFile({Path = filename, IsJSON = true})
+			
+			if data then
+				self.UserConfig = data
+			end
+		end
+	end,
 
 	Destroy = function(self)
 		if self.ScreenGui then
@@ -1952,5 +2738,13 @@ UILibrary.Main = {
 		self = nil
 	end
 }
+
+--[[
+	well thats it folks
+	this took so long to make
+	hope u like it!
+	
+	- sugablaz
+]]
 
 return UILibrary
