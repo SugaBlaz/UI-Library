@@ -673,7 +673,7 @@ UILibrary.Main = {
 		self.ScreenGui.DisplayOrder = 999999999 
 		self.ScreenGui.IgnoreGuiInset = true 
 
-		utils.ProtectGui(self.ScreenGui)
+		utils:ProtectGui(self.ScreenGui)
 
 		self.ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 		self.ScreenGui.ResetOnSpawn = self.Config.ResetOnSpawn
