@@ -2011,7 +2011,7 @@ UILibrary.Main = {
 		return dropdown
 	end,
 	
-	UILibrary.AddColorPicker = function(self, config)
+	AddColorPicker = function(self, config)
 	    local TweenService = TS
 	    local lib = self
 	    local flag = config.Flag
