@@ -1,0 +1,134 @@
+function safeloadstring(url)
+	local code = game:HttpGet(url)
+	local func, errorMessage = loadstring(code)
+
+	if func then
+		print("Script compiled! Executing...")
+		return func()
+	else
+		warn("LOADSTRING FAILED: " .. tostring(errorMessage))
+		return nil
+	end
+end
+
+local UILibrary = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/MainUI")
+
+local ui = UILibrary.Main.new({
+	TitleText = "Universal Hub",
+	Size = UDim2.new(0, 175, 0, 225),
+	Position = UDim2.new(0.5, -140, 0.5, -190),
+	TitleHeight = 30,
+	CornerRadius = 6,
+	ElementPadding = 6,
+	Font = Enum.Font.GothamBold,
+	TextSize = 12,
+	SectionHeight = 20,
+	UIStrokeThickness = 1,
+	SliderColor = Color3.fromRGB(54, 54, 54),
+	NotifcationSound = "rbxassetid://80833448337193",
+	ResetOnSpawn = false,
+	Addons = {},
+	KeySystemEnabled = false,
+	TabPadding = 10,
+	UseOwnTheme = false,
+	Theme = "Serenity",
+	SaveOnExit = true,
+})
+
+ui:AddSection("Main Elements")
+
+ui:AddButton({
+	Text = "Btn",
+	TextSize = 14,
+	Callback = function()
+		print("clicked")
+	end,
+})
+
+ui:AddDropdown({
+	Text = "Select Something",
+	Default = "Option 1",
+	Options = {"Option 1", "Option 2", "Option 3"},
+	Callback = function(selectedOption)
+		print("User selected: " .. selectedOption)
+	end,
+	Flag = "D1",
+	SavingEnabled = true
+})
+
+ui:AddMultiDropdown({
+	Text = "Multi Select",
+	Flag = "MD1",
+	Options = {"O1","O2","O3","O4"},
+	Default = {"O1", "O4"}, -- Can be a table for multiple defaults
+	Callback = function(selectedList)
+		print("Currently selected items:")
+		for _, item in pairs(selectedList) do
+			print("- " .. item)
+		end
+	end,
+	SavingEnabled = true
+})
+
+ui:AddToggle({
+	Text = "Toggle",
+	Default = false,
+	Callback = function(state)
+		print("state changed", state)
+	end,
+	Flag = "T1",
+	SavingEnabled = true
+})
+
+ui:AddSlider({
+	Text = "Slider",
+	Default = 16,
+	Min = 0,
+	Max = 200,
+	Flag = "S1",
+	SavingEnabled = true,
+	Callback = function(num)
+		print("num:",num)
+	end,
+})
+
+ui:AddSeparator()
+
+ui:AddSection("Misc Elements")
+
+ui:AddTextBox({
+	Text = "Text Box",
+	Default = "Text Box",
+	Placeholder = "Text Box",
+	Callback = function(text)
+		print(text)
+	end,
+})
+
+ui:AddColorPicker({
+	Text = "Color Picker",
+	Default = Color3.fromRGB(0, 255, 255),
+	Flag = "CP1",
+	SavingEnabled = true,
+	Callback = function(selectedColor)
+		print("New color selected: ", selectedColor)
+	end
+})
+
+ui:AddKeybind({
+	Text = "Keybind",
+	Default = Enum.KeyCode.F2,
+	Callback = function()
+		print("Keybind triggered!")
+	end,
+	Flag = "KB1",
+	SavingEnabled = true,
+	ChangedCallback = function(newKey)
+		print("Bind changed to: " .. newKey.Name)
+	end
+})
+
+ui:AddSeparator()
+
+ui:AddLabel("Text Here")
+ui:AddLabel("Running "..ui:GetVersion())
