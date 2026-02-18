@@ -2012,181 +2012,189 @@ UILibrary.Main = {
 	end,
 	
 	AddColorPicker = function(self, config)
-	    local TweenService = TS
-	    local lib = self
-	    local flag = config.Flag
-	    local saved = self.UserConfig[flag]
+		local TweenService = TS
+		local lib = self
+		local flag = config.Flag
+		local saved = self.UserConfig[flag]
 	
-	    local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
-	    if saved and type(saved) == "table" then
-	        defaultColor = Color3.new(saved[1], saved[2], saved[3])
-	    end
+		local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+		if saved and type(saved) == "table" then
+			defaultColor = Color3.new(saved[1], saved[2], saved[3])
+		end
 	
-	    local r, g, b = math.floor(defaultColor.R * 255), math.floor(defaultColor.G * 255), math.floor(defaultColor.B * 255)
-	    local isOpen = false
+		local r, g, b = math.floor(defaultColor.R * 255), math.floor(defaultColor.G * 255), math.floor(defaultColor.B * 255)
+		local isOpen = false
 	
-	    local pickerFrame = Instance.new("Frame")
-	    pickerFrame.Name = "ColorPicker_" .. config.Text
-	    pickerFrame.Size = UDim2.new(1, -24, 0, 30)
-	    pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
-	    pickerFrame.ClipsDescendants = true
-	    pickerFrame.LayoutOrder = #self.Elements + 1
-	    pickerFrame.Parent = self.ScrollingFrame
+		local pickerFrame = Instance.new("Frame")
+		pickerFrame.Name = "ColorPicker_" .. config.Text
+		pickerFrame.Size = UDim2.new(1, -24, 0, 30)
+		pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
+		pickerFrame.ClipsDescendants = true
+		pickerFrame.LayoutOrder = #self.Elements + 1
+		pickerFrame.Parent = self.ScrollingFrame
 	
-	    Instance.new("UICorner", pickerFrame).CornerRadius = UDim.new(0, 4)
+		Instance.new("UICorner", pickerFrame).CornerRadius = UDim.new(0, 4)
 	
-	    local headerBtn = Instance.new("TextButton")
-	    headerBtn.Size = UDim2.new(1, 0, 0, 30)
-	    headerBtn.BackgroundTransparency = 1
-	    headerBtn.Text = ""
-	    headerBtn.Parent = pickerFrame
+		local headerBtn = Instance.new("TextButton")
+		headerBtn.Size = UDim2.new(1, 0, 0, 30)
+		headerBtn.BackgroundTransparency = 1
+		headerBtn.Text = ""
+		headerBtn.Parent = pickerFrame
 	
-	    local title = Instance.new("TextLabel")
-	    title.Size = UDim2.new(1, -50, 1, 0)
-	    title.Position = UDim2.new(0, 12, 0, 0)
-	    title.BackgroundTransparency = 1
-	    title.Text = config.Text
-	    title.TextColor3 = self.Colors.TitleColor
-	    title.Font = self.Config.Font
-	    title.TextSize = self.Config.TextSize
-	    title.TextXAlignment = Enum.TextXAlignment.Left
-	    title.Parent = headerBtn
+		local title = Instance.new("TextLabel")
+		title.Size = UDim2.new(1, -50, 1, 0)
+		title.Position = UDim2.new(0, 12, 0, 0)
+		title.BackgroundTransparency = 1
+		title.Text = config.Text
+		title.TextColor3 = self.Colors.TitleColor
+		title.Font = self.Config.Font
+		title.TextSize = self.Config.TextSize
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = headerBtn
 	
-	    local colorDisplay = Instance.new("Frame")
-	    colorDisplay.Size = UDim2.new(0, 30, 0, 18)
-	    colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
-	    colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
-	    colorDisplay.BackgroundColor3 = defaultColor
-	    colorDisplay.Parent = headerBtn
-	    Instance.new("UICorner", colorDisplay).CornerRadius = UDim.new(0, 4)
+		local colorDisplay = Instance.new("Frame")
+		colorDisplay.Size = UDim2.new(0, 30, 0, 18)
+		colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
+		colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
+		colorDisplay.BackgroundColor3 = defaultColor
+		colorDisplay.Parent = headerBtn
+		Instance.new("UICorner", colorDisplay).CornerRadius = UDim.new(0, 4)
 	
-	    local sliderContainer = Instance.new("Frame")
-	    sliderContainer.Size = UDim2.new(1, -24, 0, 90)
-	    sliderContainer.Position = UDim2.new(0, 12, 0, 35)
-	    sliderContainer.BackgroundTransparency = 1
-	    sliderContainer.Parent = pickerFrame
+		local sliderContainer = Instance.new("Frame")
+		sliderContainer.Size = UDim2.new(1, -24, 0, 90)
+		sliderContainer.Position = UDim2.new(0, 12, 0, 35)
+		sliderContainer.BackgroundTransparency = 1
+		sliderContainer.Parent = pickerFrame
 	
-	    local function createRGBSlider(name, color, pos, startVal)
-	        -- REPLACED TextLabel with TextBox
-	        local sliderInput = Instance.new("TextBox")
-	        sliderInput.Name = name .. "_Input"
-	        sliderInput.Text = startVal
-	        sliderInput.PlaceholderText = name
-	        sliderInput.Size = UDim2.new(0, 40, 0, 15)
-	        sliderInput.Position = UDim2.new(0, 0, 0, pos)
-	        sliderInput.BackgroundTransparency = 1
-	        sliderInput.TextColor3 = self.Colors.TitleColor
-	        sliderInput.TextSize = 12
-	        sliderInput.Font = self.Config.Font
-	        sliderInput.TextXAlignment = Enum.TextXAlignment.Left
-	        sliderInput.ClearTextOnFocus = false
-	        sliderInput.Parent = sliderContainer
+		local function createRGBSlider(name, color, pos, startVal)
+			local sliderInput = Instance.new("TextBox")
+			sliderInput.Name = name .. "_Input"
+			sliderInput.Text = startVal
+			sliderInput.PlaceholderText = name
+			sliderInput.Size = UDim2.new(0, 20, 0, 15)
+			sliderInput.Position = UDim2.new(0, 15, 0, pos)
+			sliderInput.BackgroundTransparency = 0
+			sliderInput.BackgroundColor3 = self.Colors.SectionColor
+			sliderInput.TextColor3 = self.Colors.TitleColor
+			sliderInput.TextSize = 10
+			sliderInput.Font = self.Config.Font
+			sliderInput.TextXAlignment = Enum.TextXAlignment.Center
+			sliderInput.ClearTextOnFocus = false
+			sliderInput.Parent = sliderContainer
 	
-	        -- Small indicator label (optional, keeps it clear which box is which)
-	        local nameLabel = Instance.new("TextLabel")
-	        nameLabel.Text = name .. ":"
-	        nameLabel.Size = UDim2.new(0, 15, 0, 15)
-	        nameLabel.Position = UDim2.new(0, -15, 0, pos) -- Sits just to the left
-	        nameLabel.BackgroundTransparency = 1
-	        nameLabel.TextColor3 = self.Colors.AccentColor
-	        nameLabel.TextSize = 12
-	        nameLabel.Font = self.Config.Font
-	        nameLabel.Parent = sliderInput
+			local nameLabel = Instance.new("TextLabel")
+			nameLabel.Text = name .. ":"
+			nameLabel.Size = UDim2.new(0, 15, 0, 15)
+			nameLabel.Position = UDim2.new(0, 0, 0, pos)
+			nameLabel.BackgroundTransparency = 1
+			nameLabel.TextColor3 = self.Colors.AccentColor
+			nameLabel.TextSize = 12
+			nameLabel.Font = self.Config.Font
+			nameLabel.Parent = sliderContainer
+			
+			if name == "R" then
+				nameLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+			elseif name == "G" then
+				nameLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+			elseif name == "B" then
+				nameLabel.TextColor3 = Color3.fromRGB(0, 0, 255)
+			end
+			
+			local namecorner = Instance.new("UICorner", sliderInput)
+			namecorner.CornerRadius = UDim.new(0, 4)
 	
-	        local track = Instance.new("TextButton")
-	        track.Size = UDim2.new(1, -15, 0, 4) -- Adjusted for the nameLabel
-	        track.Position = UDim2.new(0, 15, 0, pos + 18)
-	        track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	        track.BorderSizePixel = 0
-	        track.Text = ""
-	        track.Parent = sliderContainer
-	        Instance.new("UICorner", track)
+			local track = Instance.new("TextButton")
+			track.Size = UDim2.new(1, -15, 0, 4)
+			track.Position = UDim2.new(0, 15, 0, pos + 18)
+			track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+			track.BorderSizePixel = 0
+			track.Text = ""
+			track.Parent = sliderContainer
+			Instance.new("UICorner", track)
 	
-	        local fill = Instance.new("Frame")
-	        fill.Size = UDim2.new(startVal/255, 0, 1, 0)
-	        fill.BackgroundColor3 = color
-	        fill.BorderSizePixel = 0
-	        fill.Parent = track
-	        Instance.new("UICorner", fill)
+			local fill = Instance.new("Frame")
+			fill.Size = UDim2.new(startVal/255, 0, 1, 0)
+			fill.BackgroundColor3 = color
+			fill.BorderSizePixel = 0
+			fill.Parent = track
+			Instance.new("UICorner", fill)
 	
-	        local function updateEverything()
-	            local newColor = Color3.fromRGB(r, g, b)
-	            colorDisplay.BackgroundColor3 = newColor
-	            
-	            if config.SavingEnabled then
-	                lib.UserConfig[flag] = {newColor.R, newColor.G, newColor.B}
-	            end
-	            if config.Callback then config.Callback(newColor) end
-	        end
+			local function updateEverything()
+				local newColor = Color3.fromRGB(r, g, b)
+				colorDisplay.BackgroundColor3 = newColor
 	
-	        -- Handle Slider Dragging
-	        local dragging = false
-	        local function updateFromSlider(input)
-	            local ratio = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
-	            local val = math.floor(ratio * 255)
-	            
-	            fill.Size = UDim2.new(ratio, 0, 1, 0)
-	            sliderInput.Text = tostring(val)
-	            
-	            if name == "R" then r = val
-	            elseif name == "G" then g = val
-	            elseif name == "B" then b = val end
-	            
-	            updateEverything()
-	        end
+				if config.SavingEnabled then
+					lib.UserConfig[flag] = {newColor.R, newColor.G, newColor.B}
+				end
+				if config.Callback then config.Callback(newColor) end
+			end
 	
-	        -- Handle TextBox Input
-	        sliderInput.FocusLost:Connect(function()
-	            local val = tonumber(sliderInput.Text)
-	            if not val then
-	                sliderInput.Text = (name == "R" and r or name == "G" and g or b)
-	                return
-	            end
-	            
-	            val = math.clamp(math.floor(val), 0, 255)
-	            sliderInput.Text = tostring(val)
-	            fill.Size = UDim2.new(val/255, 0, 1, 0)
-	            
-	            if name == "R" then r = val
-	            elseif name == "G" then g = val
-	            elseif name == "B" then b = val end
-	            
-	            updateEverything()
-	        end)
+			local dragging = false
+			local function updateFromSlider(input)
+				local ratio = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+				local val = math.floor(ratio * 255)
 	
-	        track.InputBegan:Connect(function(input)
-	            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	                dragging = true
-	                updateFromSlider(input)
-	            end
-	        end)
+				fill.Size = UDim2.new(ratio, 0, 1, 0)
+				sliderInput.Text = tostring(val)
 	
-	        UIS.InputEnded:Connect(function(input)
-	            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	                dragging = false
-	            end
-	        end)
+				if name == "R" then r = val
+				elseif name == "G" then g = val
+				elseif name == "B" then b = val end
 	
-	        UIS.InputChanged:Connect(function(input)
-	            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-	                updateFromSlider(input)
-	            end
-	        end)
-	    end
+				updateEverything()
+			end
 	
-	    createRGBSlider("R", Color3.fromRGB(255, 70, 70), 0, r)
-	    createRGBSlider("G", Color3.fromRGB(70, 255, 70), 30, g)
-	    createRGBSlider("B", Color3.fromRGB(70, 70, 255), 60, b)
+			sliderInput.FocusLost:Connect(function()
+				local val = tonumber(sliderInput.Text)
+				if not val then
+					sliderInput.Text = (name == "R" and r or name == "G" and g or b)
+					return
+				end
 	
-	    headerBtn.MouseButton1Click:Connect(function()
-	        isOpen = not isOpen
-	        TweenService:Create(pickerFrame, TweenInfo.new(0.3), {
-	            Size = UDim2.new(1, -24, 0, isOpen and 135 or 30)
-	        }):Play()
-	    end)
+				val = math.clamp(math.floor(val), 0, 255)
+				sliderInput.Text = tostring(val)
+				fill.Size = UDim2.new(val/255, 0, 1, 0)
 	
-	    table.insert(self.Elements, pickerFrame)
-	    return pickerFrame
+				if name == "R" then r = val
+				elseif name == "G" then g = val
+				elseif name == "B" then b = val end
+	
+				updateEverything()
+			end)
+	
+			track.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					dragging = true
+					updateFromSlider(input)
+				end
+			end)
+	
+			UIS.InputEnded:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					dragging = false
+				end
+			end)
+	
+			UIS.InputChanged:Connect(function(input)
+				if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+					updateFromSlider(input)
+				end
+			end)
+		end
+	
+		createRGBSlider("R", Color3.fromRGB(255, 70, 70), 0, r)
+		createRGBSlider("G", Color3.fromRGB(70, 255, 70), 30, g)
+		createRGBSlider("B", Color3.fromRGB(70, 70, 255), 60, b)
+	
+		headerBtn.MouseButton1Click:Connect(function()
+			isOpen = not isOpen
+			TweenService:Create(pickerFrame, TweenInfo.new(0.3), {
+				Size = UDim2.new(1, -24, 0, isOpen and 135 or 30)
+			}):Play()
+		end)
+	
+		table.insert(self.Elements, pickerFrame)
+		return pickerFrame
 	end,
 
 	AddKeybind = function(self, config)
@@ -2378,7 +2386,6 @@ UILibrary.Main = {
 	    title.TextXAlignment = Enum.TextXAlignment.Left
 	    title.Parent = sliderFrame
 	
-	    -- THE TEXTBOX VALUE
 	    local valueInput = Instance.new("TextBox")
 	    valueInput.Name = "ValueInput"
 	    valueInput.Size = UDim2.new(0, 50, 0, 20)
