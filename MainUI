@@ -696,10 +696,6 @@ UILibrary.Main = {
 					self:SaveConfigurations()
 				end
 			end)
-			
-			game:BindToClose(function()
-				self:SaveConfigurations()
-			end)
 		end
 
 		return self
