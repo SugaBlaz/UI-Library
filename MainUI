@@ -2011,143 +2011,182 @@ UILibrary.Main = {
 		return dropdown
 	end,
 	
-	AddColorPicker = function(self, config)
-		local TweenService = TS
-		local lib = self
-		local flag = config.Flag
-		local saved = self.UserConfig[flag]
+	UILibrary.AddColorPicker = function(self, config)
+	    local TweenService = TS
+	    local lib = self
+	    local flag = config.Flag
+	    local saved = self.UserConfig[flag]
 	
-		local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
-		if saved and type(saved) == "table" then
-			defaultColor = Color3.new(saved[1], saved[2], saved[3])
-		end
+	    local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+	    if saved and type(saved) == "table" then
+	        defaultColor = Color3.new(saved[1], saved[2], saved[3])
+	    end
 	
-		local r, g, b = math.floor(defaultColor.R * 255), math.floor(defaultColor.G * 255), math.floor(defaultColor.B * 255)
-		local isOpen = false
+	    local r, g, b = math.floor(defaultColor.R * 255), math.floor(defaultColor.G * 255), math.floor(defaultColor.B * 255)
+	    local isOpen = false
 	
-		local pickerFrame = Instance.new("Frame")
-		pickerFrame.Name = "ColorPicker_" .. config.Text
-		pickerFrame.Size = UDim2.new(1, -24, 0, 30)
-		pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
-		pickerFrame.ClipsDescendants = true
-		pickerFrame.LayoutOrder = #self.Elements + 1
-		pickerFrame.Parent = self.ScrollingFrame
+	    local pickerFrame = Instance.new("Frame")
+	    pickerFrame.Name = "ColorPicker_" .. config.Text
+	    pickerFrame.Size = UDim2.new(1, -24, 0, 30)
+	    pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
+	    pickerFrame.ClipsDescendants = true
+	    pickerFrame.LayoutOrder = #self.Elements + 1
+	    pickerFrame.Parent = self.ScrollingFrame
 	
-		Instance.new("UICorner", pickerFrame).CornerRadius = UDim.new(0, 4)
+	    Instance.new("UICorner", pickerFrame).CornerRadius = UDim.new(0, 4)
 	
-		local headerBtn = Instance.new("TextButton")
-		headerBtn.Size = UDim2.new(1, 0, 0, 30)
-		headerBtn.BackgroundTransparency = 1
-		headerBtn.Text = ""
-		headerBtn.Parent = pickerFrame
+	    local headerBtn = Instance.new("TextButton")
+	    headerBtn.Size = UDim2.new(1, 0, 0, 30)
+	    headerBtn.BackgroundTransparency = 1
+	    headerBtn.Text = ""
+	    headerBtn.Parent = pickerFrame
 	
-		local title = Instance.new("TextLabel")
-		title.Size = UDim2.new(1, -50, 1, 0)
-		title.Position = UDim2.new(0, 12, 0, 0)
-		title.BackgroundTransparency = 1
-		title.Text = config.Text
-		title.TextColor3 = self.Colors.TitleColor
-		title.Font = self.Config.Font
-		title.TextSize = self.Config.TextSize
-		title.TextXAlignment = Enum.TextXAlignment.Left
-		title.Parent = headerBtn
+	    local title = Instance.new("TextLabel")
+	    title.Size = UDim2.new(1, -50, 1, 0)
+	    title.Position = UDim2.new(0, 12, 0, 0)
+	    title.BackgroundTransparency = 1
+	    title.Text = config.Text
+	    title.TextColor3 = self.Colors.TitleColor
+	    title.Font = self.Config.Font
+	    title.TextSize = self.Config.TextSize
+	    title.TextXAlignment = Enum.TextXAlignment.Left
+	    title.Parent = headerBtn
 	
-		local colorDisplay = Instance.new("Frame")
-		colorDisplay.Size = UDim2.new(0, 30, 0, 18)
-		colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
-		colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
-		colorDisplay.BackgroundColor3 = defaultColor
-		colorDisplay.Parent = headerBtn
-		Instance.new("UICorner", colorDisplay).CornerRadius = UDim.new(0, 4)
+	    local colorDisplay = Instance.new("Frame")
+	    colorDisplay.Size = UDim2.new(0, 30, 0, 18)
+	    colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
+	    colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
+	    colorDisplay.BackgroundColor3 = defaultColor
+	    colorDisplay.Parent = headerBtn
+	    Instance.new("UICorner", colorDisplay).CornerRadius = UDim.new(0, 4)
 	
-		local sliderContainer = Instance.new("Frame")
-		sliderContainer.Size = UDim2.new(1, -24, 0, 90)
-		sliderContainer.Position = UDim2.new(0, 12, 0, 35)
-		sliderContainer.BackgroundTransparency = 1
-		sliderContainer.Parent = pickerFrame
+	    local sliderContainer = Instance.new("Frame")
+	    sliderContainer.Size = UDim2.new(1, -24, 0, 90)
+	    sliderContainer.Position = UDim2.new(0, 12, 0, 35)
+	    sliderContainer.BackgroundTransparency = 1
+	    sliderContainer.Parent = pickerFrame
 	
-		local function createRGBSlider(name, color, pos, startVal)
-			local sliderLabel = Instance.new("TextLabel")
-			sliderLabel.Text = name .. ": " .. startVal
-			sliderLabel.Size = UDim2.new(1, 0, 0, 15)
-			sliderLabel.Position = UDim2.new(0, 0, 0, pos)
-			sliderLabel.BackgroundTransparency = 1
-			sliderLabel.TextColor3 = self.Colors.TitleColor
-			sliderLabel.TextSize = 12
-			sliderLabel.Font = self.Config.Font
-			sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-			sliderLabel.Parent = sliderContainer
+	    local function createRGBSlider(name, color, pos, startVal)
+	        -- REPLACED TextLabel with TextBox
+	        local sliderInput = Instance.new("TextBox")
+	        sliderInput.Name = name .. "_Input"
+	        sliderInput.Text = startVal
+	        sliderInput.PlaceholderText = name
+	        sliderInput.Size = UDim2.new(0, 40, 0, 15)
+	        sliderInput.Position = UDim2.new(0, 0, 0, pos)
+	        sliderInput.BackgroundTransparency = 1
+	        sliderInput.TextColor3 = self.Colors.TitleColor
+	        sliderInput.TextSize = 12
+	        sliderInput.Font = self.Config.Font
+	        sliderInput.TextXAlignment = Enum.TextXAlignment.Left
+	        sliderInput.ClearTextOnFocus = false
+	        sliderInput.Parent = sliderContainer
 	
-			local track = Instance.new("TextButton")
-			track.Size = UDim2.new(1, 0, 0, 4)
-			track.Position = UDim2.new(0, 0, 0, pos + 18)
-			track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-			track.BorderSizePixel = 0
-			track.Text = ""
-			track.Parent = sliderContainer
-			Instance.new("UICorner", track)
+	        -- Small indicator label (optional, keeps it clear which box is which)
+	        local nameLabel = Instance.new("TextLabel")
+	        nameLabel.Text = name .. ":"
+	        nameLabel.Size = UDim2.new(0, 15, 0, 15)
+	        nameLabel.Position = UDim2.new(0, -15, 0, pos) -- Sits just to the left
+	        nameLabel.BackgroundTransparency = 1
+	        nameLabel.TextColor3 = self.Colors.AccentColor
+	        nameLabel.TextSize = 12
+	        nameLabel.Font = self.Config.Font
+	        nameLabel.Parent = sliderInput
 	
-			local fill = Instance.new("Frame")
-			fill.Size = UDim2.new(startVal/255, 0, 1, 0)
-			fill.BackgroundColor3 = color
-			fill.BorderSizePixel = 0
-			fill.Parent = track
-			Instance.new("UICorner", fill)
+	        local track = Instance.new("TextButton")
+	        track.Size = UDim2.new(1, -15, 0, 4) -- Adjusted for the nameLabel
+	        track.Position = UDim2.new(0, 15, 0, pos + 18)
+	        track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	        track.BorderSizePixel = 0
+	        track.Text = ""
+	        track.Parent = sliderContainer
+	        Instance.new("UICorner", track)
 	
-			local dragging = false
+	        local fill = Instance.new("Frame")
+	        fill.Size = UDim2.new(startVal/255, 0, 1, 0)
+	        fill.BackgroundColor3 = color
+	        fill.BorderSizePixel = 0
+	        fill.Parent = track
+	        Instance.new("UICorner", fill)
 	
-			local function update(input)
-				local pos = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
-				fill.Size = UDim2.new(pos, 0, 1, 0)
-				local val = math.floor(pos * 255)
-				sliderLabel.Text = name .. ": " .. val
+	        local function updateEverything()
+	            local newColor = Color3.fromRGB(r, g, b)
+	            colorDisplay.BackgroundColor3 = newColor
+	            
+	            if config.SavingEnabled then
+	                lib.UserConfig[flag] = {newColor.R, newColor.G, newColor.B}
+	            end
+	            if config.Callback then config.Callback(newColor) end
+	        end
 	
-				if name == "R" then r = val
-				elseif name == "G" then g = val
-				elseif name == "B" then b = val end
+	        -- Handle Slider Dragging
+	        local dragging = false
+	        local function updateFromSlider(input)
+	            local ratio = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+	            local val = math.floor(ratio * 255)
+	            
+	            fill.Size = UDim2.new(ratio, 0, 1, 0)
+	            sliderInput.Text = tostring(val)
+	            
+	            if name == "R" then r = val
+	            elseif name == "G" then g = val
+	            elseif name == "B" then b = val end
+	            
+	            updateEverything()
+	        end
 	
-				local newColor = Color3.fromRGB(r, g, b)
-				colorDisplay.BackgroundColor3 = newColor
+	        -- Handle TextBox Input
+	        sliderInput.FocusLost:Connect(function()
+	            local val = tonumber(sliderInput.Text)
+	            if not val then
+	                sliderInput.Text = (name == "R" and r or name == "G" and g or b)
+	                return
+	            end
+	            
+	            val = math.clamp(math.floor(val), 0, 255)
+	            sliderInput.Text = tostring(val)
+	            fill.Size = UDim2.new(val/255, 0, 1, 0)
+	            
+	            if name == "R" then r = val
+	            elseif name == "G" then g = val
+	            elseif name == "B" then b = val end
+	            
+	            updateEverything()
+	        end)
 	
-				if config.SavingEnabled then
-					lib.UserConfig[flag] = {newColor.R, newColor.G, newColor.B}
-				end
-				if config.Callback then config.Callback(newColor) end
-			end
+	        track.InputBegan:Connect(function(input)
+	            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	                dragging = true
+	                updateFromSlider(input)
+	            end
+	        end)
 	
-			track.InputBegan:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-					dragging = true
-					update(input)
-				end
-			end)
+	        UIS.InputEnded:Connect(function(input)
+	            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	                dragging = false
+	            end
+	        end)
 	
-			UIS.InputEnded:Connect(function(input)
-				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-					dragging = false
-				end
-			end)
+	        UIS.InputChanged:Connect(function(input)
+	            if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+	                updateFromSlider(input)
+	            end
+	        end)
+	    end
 	
-			UIS.InputChanged:Connect(function(input)
-				if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-					update(input)
-				end
-			end)
-		end
+	    createRGBSlider("R", Color3.fromRGB(255, 70, 70), 0, r)
+	    createRGBSlider("G", Color3.fromRGB(70, 255, 70), 30, g)
+	    createRGBSlider("B", Color3.fromRGB(70, 70, 255), 60, b)
 	
-		createRGBSlider("R", Color3.fromRGB(255, 70, 70), 0, r)
-		createRGBSlider("G", Color3.fromRGB(70, 255, 70), 30, g)
-		createRGBSlider("B", Color3.fromRGB(70, 70, 255), 60, b)
+	    headerBtn.MouseButton1Click:Connect(function()
+	        isOpen = not isOpen
+	        TweenService:Create(pickerFrame, TweenInfo.new(0.3), {
+	            Size = UDim2.new(1, -24, 0, isOpen and 135 or 30)
+	        }):Play()
+	    end)
 	
-		headerBtn.MouseButton1Click:Connect(function()
-			isOpen = not isOpen
-			TweenService:Create(pickerFrame, TweenInfo.new(0.3), {
-				Size = UDim2.new(1, -24, 0, isOpen and 135 or 30)
-			}):Play()
-		end)
-	
-		table.insert(self.Elements, pickerFrame)
-		return pickerFrame
+	    table.insert(self.Elements, pickerFrame)
+	    return pickerFrame
 	end,
 
 	AddKeybind = function(self, config)
@@ -2316,109 +2355,127 @@ UILibrary.Main = {
 	    local lib = self
 	    local slider = {}
 	    
+	    local dragging = false
+	    local currentValue = config.Default or config.Min
+	    local flag = config.Flag
+	    
 	    local sliderFrame = Instance.new("Frame")
 	    sliderFrame.Name = "Slider_" .. config.Text
 	    sliderFrame.Size = UDim2.new(1, -24, 0, 50)
-	    sliderFrame.Position = UDim2.new(0, 12, 0, 0)
 	    sliderFrame.BackgroundTransparency = 1
 	    sliderFrame.LayoutOrder = #self.Elements + 1
 	    sliderFrame.Parent = self.ScrollingFrame
 	
-	    local sliderText = Instance.new("TextLabel")
-	    sliderText.Name = "TextLabel"
-	    sliderText.Size = UDim2.new(1, 0, 0.4, 0)
-	    sliderText.Position = UDim2.new(0, 0, 0, 0)
-	    sliderText.BackgroundTransparency = 1
-	    sliderText.Text = config.Text .. ": " .. config.Default
-	    sliderText.TextColor3 = self.Colors.TitleColor
-	    sliderText.TextXAlignment = Enum.TextXAlignment.Left
-	    sliderText.Font = self.Config.Font
-	    sliderText.TextSize = self.Config.TextSize
-	    sliderText.Parent = sliderFrame
+	    local title = Instance.new("TextLabel")
+	    title.Name = "Title"
+	    title.Size = UDim2.new(1, -60, 0, 20)
+	    title.Position = UDim2.new(0, 0, 0, 0)
+	    title.BackgroundTransparency = 1
+	    title.Text = config.Text
+	    title.TextColor3 = self.Colors.TitleColor
+	    title.Font = self.Config.Font
+	    title.TextSize = self.Config.TextSize
+	    title.TextXAlignment = Enum.TextXAlignment.Left
+	    title.Parent = sliderFrame
+	
+	    -- THE TEXTBOX VALUE
+	    local valueInput = Instance.new("TextBox")
+	    valueInput.Name = "ValueInput"
+	    valueInput.Size = UDim2.new(0, 50, 0, 20)
+	    valueInput.Position = UDim2.new(1, 0, 0, 0)
+	    valueInput.AnchorPoint = Vector2.new(1, 0)
+	    valueInput.BackgroundTransparency = 0.1
+	    valueInput.BackgroundColor3 = self.Colors.ButtonColor
+	    valueInput.Text = tostring(currentValue)
+	    valueInput.TextColor3 = self.Colors.AccentColor
+	    valueInput.Font = self.Config.Font
+	    valueInput.TextSize = self.Config.TextSize - 2
+	    valueInput.ClearTextOnFocus = false
+	    valueInput.Parent = sliderFrame
+	    Instance.new("UICorner", valueInput).CornerRadius = UDim.new(0, 4)
 	
 	    local sliderTrack = Instance.new("TextButton")
 	    sliderTrack.Name = "Track"
 	    sliderTrack.Text = ""
-	    sliderTrack.Size = UDim2.new(1, 0, 0.25, 0)
-	    sliderTrack.Position = UDim2.new(0, 0, 0.7, 0)
+	    sliderTrack.Size = UDim2.new(1, 0, 0, 6)
+	    sliderTrack.Position = UDim2.new(0, 0, 0, 32)
 	    sliderTrack.BackgroundColor3 = self.Colors.SliderColor
 	    sliderTrack.BorderSizePixel = 0
 	    sliderTrack.AutoButtonColor = false
 	    sliderTrack.Parent = sliderFrame
-	
-	    local sliderCorner = Instance.new("UICorner")
-	    sliderCorner.CornerRadius = UDim.new(1, 0)
-	    sliderCorner.Parent = sliderTrack
+	    Instance.new("UICorner", sliderTrack).CornerRadius = UDim.new(1, 0)
 	
 	    local sliderFill = Instance.new("Frame")
 	    sliderFill.Name = "Fill"
-	    sliderFill.Size = UDim2.new((config.Default - config.Min) / (config.Max - config.Min), 0, 1, 0)
+	    sliderFill.Size = UDim2.new(0, 0, 1, 0)
 	    sliderFill.BackgroundColor3 = self.Colors.AccentColor
 	    sliderFill.BorderSizePixel = 0
 	    sliderFill.Parent = sliderTrack
+	    Instance.new("UICorner", sliderFill).CornerRadius = UDim.new(1, 0)
 	
-	    local fillCorner = Instance.new("UICorner")
-	    fillCorner.CornerRadius = UDim.new(1, 0)
-	    fillCorner.Parent = sliderFill
-	
-	    local sliderHandle = Instance.new("TextButton")
+	    local sliderHandle = Instance.new("Frame")
 	    sliderHandle.Name = "Handle"
-	    sliderHandle.Size = UDim2.new(0, 16, 0, 16)
-	    sliderHandle.Position = UDim2.new(sliderFill.Size.X.Scale, -8, 0.5, -8)
+	    sliderHandle.Size = UDim2.new(0, 14, 0, 14)
+	    sliderHandle.AnchorPoint = Vector2.new(0.5, 0.5)
+	    sliderHandle.Position = UDim2.new(0, 0, 0.5, 0)
 	    sliderHandle.BackgroundColor3 = self.Colors.SliderHandleColor
-	    sliderHandle.BorderSizePixel = 0
-	    sliderHandle.Text = ""
-	    sliderHandle.AutoButtonColor = false
-	    sliderHandle.ZIndex = 2
 	    sliderHandle.Parent = sliderTrack
-	
-	    local handleCorner = Instance.new("UICorner")
-	    handleCorner.CornerRadius = UDim.new(1, 0)
-	    handleCorner.Parent = sliderHandle
+	    Instance.new("UICorner", sliderHandle).CornerRadius = UDim.new(1, 0)
 	
 	    if self.Config.UIStrokeEnabled then
-	        local handleStroke = Instance.new("UIStroke")
+	        local handleStroke = Instance.new("UIStroke", sliderHandle)
 	        handleStroke.Thickness = self.Config.UIStrokeThickness
 	        handleStroke.Color = self.Colors.UIStrokeColor
-	        handleStroke.Parent = sliderHandle
 	    end
 	
-	    local dragging = false
-	    local currentValue = config.Default
-	    local flag = config.Flag
-	
-	    local function updateSlider(value)
+	    local function updateSlider(value, ignoreInput)
 	        value = math.clamp(value, config.Min, config.Max)
 	        currentValue = value
+	        
 	        local fillSize = (value - config.Min) / (config.Max - config.Min)
-	        sliderFill.Size = UDim2.new(fillSize, 0, 1, 0)
-	        sliderHandle.Position = UDim2.new(fillSize, -8, 0.5, -8)
+	        
+	        TS:Create(sliderFill, TweenInfo.new(0.1), {Size = UDim2.new(fillSize, 0, 1, 0)}):Play()
+	        TS:Create(sliderHandle, TweenInfo.new(0.1), {Position = UDim2.new(fillSize, 0, 0.5, 0)}):Play()
 	
-	        local displayValue
+	        local displayValue = value
 	        if config.Round and config.Round > 0 then
 	            displayValue = tonumber(string.format("%."..config.Round.."f", value))
 	        else
 	            displayValue = math.floor(value)
 	        end
 	
-	        sliderText.Text = config.Text .. ": " .. displayValue
+	        if not ignoreInput then
+	            valueInput.Text = tostring(displayValue)
+	        end
 	        
 	        if config.SavingEnabled then
-	            lib.UserConfig[flag] = tonumber(currentValue)
+	            lib.UserConfig[flag] = displayValue
 	        end
 	        
 	        if config.Callback then
-	            config.Callback(value)
+	            config.Callback(displayValue)
 	        end
 	    end
-	    
-	    if self.UserConfig[flag] ~= nil then
-	        updateSlider(tonumber(self.UserConfig[flag]))
+	
+	    valueInput.FocusLost:Connect(function()
+	        local val = tonumber(valueInput.Text)
+	        if not val then
+	            valueInput.Text = tostring(currentValue)
+	            return
+	        end
+	        updateSlider(val)
+	    end)
+	
+	    local function moveFromInput(input)
+	        local relativeX = math.clamp((input.Position.X - sliderTrack.AbsolutePosition.X) / sliderTrack.AbsoluteSize.X, 0, 1)
+	        local value = config.Min + (config.Max - config.Min) * relativeX
+	        updateSlider(value)
 	    end
 	
-	    sliderHandle.InputBegan:Connect(function(input)
+	    sliderTrack.InputBegan:Connect(function(input)
 	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 	            dragging = true
+	            moveFromInput(input)
 	        end
 	    end)
 	
@@ -2430,34 +2487,18 @@ UILibrary.Main = {
 	
 	    UIS.InputChanged:Connect(function(input)
 	        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-	            local inputPos = input.Position
-	            local trackPos = sliderTrack.AbsolutePosition
-	            local trackSize = sliderTrack.AbsoluteSize
-	            local relativeX = (inputPos.X - trackPos.X) / trackSize.X
-	            local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
-	            updateSlider(value)
+	            moveFromInput(input)
 	        end
 	    end)
 	
-	    sliderTrack.InputBegan:Connect(function(input)
-	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-	            local inputPos = input.Position
-	            local trackPos = sliderTrack.AbsolutePosition
-	            local trackSize = sliderTrack.AbsoluteSize
-	            local relativeX = (inputPos.X - trackPos.X) / trackSize.X
-	            local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
-	            updateSlider(value)
-	            dragging = true
-	        end
-	    end)
-	    
-	    function slider:Set(value)
-	        updateSlider(value)
+	    if self.UserConfig[flag] ~= nil then
+	        updateSlider(tonumber(self.UserConfig[flag]))
+	    else
+	        updateSlider(currentValue)
 	    end
-	    
-	    function slider:Get()
-	        return currentValue
-	    end
+	
+	    function slider:Set(value) updateSlider(value) end
+	    function slider:Get() return currentValue end
 	
 	    table.insert(self.Elements, sliderFrame)
 	    return slider
