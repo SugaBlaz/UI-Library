@@ -2012,11 +2012,14 @@ UILibrary.Main = {
 	end,
 	
 	AddColorPicker = function(self, config)
-		local UIS = game:GetService("UserInputService")
-		local RS = game:GetService("RunService")
 		local TweenService = game:GetService("TweenService")
 		local lib = self
-		local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+		local saved = self.UserConfig[flag]
+    	local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+    
+	    if saved and type(saved) == "table" then
+	        defaultColor = Color3.new(saved[1], saved[2], saved[3])
+	    end
 		local h, s, v = defaultColor:ToHSV()
 		local isOpen = false
 		local isDraggingColor = false
@@ -2082,7 +2085,7 @@ UILibrary.Main = {
 
 		local svPalette = Instance.new("TextButton") 
 		svPalette.Name = "SVPalette"
-		svPalette.Size = UDim2.new(0, 200, 0, 80)
+		svPalette.Size = UDim2.new(0, 100, 0, 80)
 		svPalette.Position = UDim2.new(0, 12, 0, 0)
 		svPalette.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
 		svPalette.Text = ""
@@ -2155,7 +2158,7 @@ UILibrary.Main = {
 			svCursor.Position = UDim2.new(s, 0, 1 - v, 0)
 			
 			if config.SavingEnabled then
-				lib.UserConfig[flag] = color
+				lib.UserConfig[flag] = {color.R, color.G, color.B}
 			end
 			
 			if config.Callback then
@@ -2171,10 +2174,6 @@ UILibrary.Main = {
 			TweenService:Create(pickerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 				Size = UDim2.new(1, -24, 0, targetHeight)
 			}):Play()
-		end
-		
-		if self.UserConfig[flag] ~= nil then
-			UpdateColor(self.UserConfig[flag])
 		end
 
 		hueSlider.InputBegan:Connect(function(input)
@@ -2219,7 +2218,7 @@ UILibrary.Main = {
 			end
 		end)
 
-		UpdateColor()
+		UpdateColor(defaultColor)
 
 		headerBtn.MouseButton1Click:Connect(SetState)
 
