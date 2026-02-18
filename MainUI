@@ -25,7 +25,7 @@ UILibrary.DefaultThemes = {
 		CollapseBtnColor = Color3.fromRGB(25, 25, 25),
 		ButtonColor = Color3.fromRGB(45, 45, 45),
 		ButtonHoverColor = Color3.fromRGB(60, 60, 60),
-		ToggleColor = Color3.fromRGB(45, 45, 45),
+		ToggleColor = Color3.fromRGB(45, 45, 45), 
 		ToggleColorOFF = Color3.fromRGB(200, 60, 60),
 		ToggleColorON = Color3.fromRGB(60, 200, 60),
 		MainFrameColor = Color3.fromRGB(35, 35, 35),
@@ -40,91 +40,30 @@ UILibrary.DefaultThemes = {
 		LoadingBarColor = Color3.fromRGB(0, 155, 255),
 		TabColor = Color3.fromRGB(55,55,55),
 	},
-	
-	CyberNeon = {
-		TitleColor = Color3.fromRGB(255, 255, 255),
-		CollapseBtnColor = Color3.fromRGB(15, 15, 20),
-		ButtonColor = Color3.fromRGB(30, 30, 35),
-		ButtonHoverColor = Color3.fromRGB(45, 45, 55),
-		ToggleColor = Color3.fromRGB(30, 30, 35),
-		ToggleColorOFF = Color3.fromRGB(255, 45, 85), -- Hot Pink
-		ToggleColorON = Color3.fromRGB(0, 255, 150),  -- Spring Green
-		MainFrameColor = Color3.fromRGB(10, 10, 12),
-		SeparatorColor = Color3.fromRGB(50, 50, 60),
-		TextBoxColor = Color3.fromRGB(25, 25, 30),
-		AccentColor = Color3.fromRGB(0, 255, 255),    -- Cyan
-		SectionColor = Color3.fromRGB(70, 70, 80),
-		LabelColor = Color3.fromRGB(180, 180, 190),
-		SliderColor = Color3.fromRGB(40, 40, 50),
-		SliderHandleColor = Color3.fromRGB(0, 255, 255),
-		UIStrokeColor = Color3.fromRGB(0, 180, 180),
-		LoadingBarColor = Color3.fromRGB(0, 255, 255),
-		TabColor = Color3.fromRGB(20, 20, 25),
-	},
-	
-	MidnightAmethyst = {
-		TitleColor = Color3.fromRGB(240, 230, 255),
-		CollapseBtnColor = Color3.fromRGB(25, 20, 35),
-		ButtonColor = Color3.fromRGB(40, 35, 55),
-		ButtonHoverColor = Color3.fromRGB(60, 50, 80),
-		ToggleColor = Color3.fromRGB(40, 35, 55),
-		ToggleColorOFF = Color3.fromRGB(120, 40, 40),
-		ToggleColorON = Color3.fromRGB(140, 80, 255),
-		MainFrameColor = Color3.fromRGB(20, 15, 25),
-		SeparatorColor = Color3.fromRGB(60, 50, 80),
-		TextBoxColor = Color3.fromRGB(35, 30, 50),
-		AccentColor = Color3.fromRGB(170, 120, 255),
-		SectionColor = Color3.fromRGB(90, 80, 110),
-		LabelColor = Color3.fromRGB(180, 170, 200),
-		SliderColor = Color3.fromRGB(50, 40, 70),
-		SliderHandleColor = Color3.fromRGB(170, 120, 255),
-		UIStrokeColor = Color3.fromRGB(80, 60, 120),
-		LoadingBarColor = Color3.fromRGB(170, 120, 255),
-		TabColor = Color3.fromRGB(45, 35, 65),
-	},
-	
-	EmeraldForest = {
-		TitleColor = Color3.fromRGB(220, 240, 220),
-		CollapseBtnColor = Color3.fromRGB(20, 25, 20),
-		ButtonColor = Color3.fromRGB(35, 45, 35),
-		ButtonHoverColor = Color3.fromRGB(50, 65, 50),
-		ToggleColor = Color3.fromRGB(35, 45, 35),
-		ToggleColorOFF = Color3.fromRGB(180, 70, 70),
-		ToggleColorON = Color3.fromRGB(100, 220, 100),
-		MainFrameColor = Color3.fromRGB(15, 20, 15),
-		SeparatorColor = Color3.fromRGB(60, 80, 60),
-		TextBoxColor = Color3.fromRGB(30, 40, 30),
-		AccentColor = Color3.fromRGB(40, 200, 120),
-		SectionColor = Color3.fromRGB(80, 100, 80),
-		LabelColor = Color3.fromRGB(170, 190, 170),
-		SliderColor = Color3.fromRGB(50, 70, 50),
-		SliderHandleColor = Color3.fromRGB(100, 220, 100),
-		UIStrokeColor = Color3.fromRGB(50, 100, 50),
-		LoadingBarColor = Color3.fromRGB(40, 200, 120),
-		TabColor = Color3.fromRGB(40, 55, 40),
-	},
-	
-	SakuraPetal = {
-		TitleColor = Color3.fromRGB(255, 240, 245),
-		CollapseBtnColor = Color3.fromRGB(45, 35, 40),
-		ButtonColor = Color3.fromRGB(65, 50, 60),
-		ButtonHoverColor = Color3.fromRGB(85, 70, 80),
-		ToggleColor = Color3.fromRGB(65, 50, 60),
+
+	-- 2. Light Mode (Serenity)
+	Serenity = {
+		TitleColor = Color3.fromRGB(40, 40, 40),
+		CollapseBtnColor = Color3.fromRGB(220, 220, 220),
+		ButtonColor = Color3.fromRGB(240, 240, 240),
+		ButtonHoverColor = Color3.fromRGB(210, 210, 210),
+		ToggleColor = Color3.fromRGB(240, 240, 240),
 		ToggleColorOFF = Color3.fromRGB(200, 100, 100),
-		ToggleColorON = Color3.fromRGB(255, 150, 190),
-		MainFrameColor = Color3.fromRGB(35, 25, 30),
-		SeparatorColor = Color3.fromRGB(100, 70, 90),
-		TextBoxColor = Color3.fromRGB(55, 40, 50),
-		AccentColor = Color3.fromRGB(255, 182, 193),
-		SectionColor = Color3.fromRGB(120, 90, 110),
-		LabelColor = Color3.fromRGB(220, 200, 210),
-		SliderColor = Color3.fromRGB(90, 70, 85),
-		SliderHandleColor = Color3.fromRGB(255, 182, 193),
-		UIStrokeColor = Color3.fromRGB(150, 100, 120),
-		LoadingBarColor = Color3.fromRGB(255, 150, 190),
-		TabColor = Color3.fromRGB(75, 55, 70),
+		ToggleColorON = Color3.fromRGB(100, 200, 100),
+		MainFrameColor = Color3.fromRGB(255, 255, 255),
+		SeparatorColor = Color3.fromRGB(200, 200, 200),
+		TextBoxColor = Color3.fromRGB(230, 230, 230),
+		AccentColor = Color3.fromRGB(0, 120, 215),
+		SectionColor = Color3.fromRGB(200, 200, 200),
+		LabelColor = Color3.fromRGB(80, 80, 80),
+		SliderColor = Color3.fromRGB(220, 220, 220),
+		SliderHandleColor = Color3.fromRGB(0, 120, 215),
+		UIStrokeColor = Color3.fromRGB(200, 200, 200),
+		LoadingBarColor = Color3.fromRGB(0, 120, 215),
+		TabColor = Color3.fromRGB(240, 240, 240),
 	},
-	
+
+	-- 3. Blood Moon (Red/Black)
 	BloodMoon = {
 		TitleColor = Color3.fromRGB(255, 200, 200),
 		CollapseBtnColor = Color3.fromRGB(20, 10, 10),
@@ -145,50 +84,31 @@ UILibrary.DefaultThemes = {
 		LoadingBarColor = Color3.fromRGB(255, 50, 50),
 		TabColor = Color3.fromRGB(50, 25, 25),
 	},
-	
-	RoyalGold = {
-		TitleColor = Color3.fromRGB(255, 245, 200),
-		CollapseBtnColor = Color3.fromRGB(20, 20, 20),
-		ButtonColor = Color3.fromRGB(35, 35, 35),
-		ButtonHoverColor = Color3.fromRGB(50, 50, 50),
-		ToggleColor = Color3.fromRGB(35, 35, 35),
-		ToggleColorOFF = Color3.fromRGB(120, 100, 60),
-		ToggleColorON = Color3.fromRGB(255, 215, 0), -- Gold
-		MainFrameColor = Color3.fromRGB(15, 15, 15),
-		SeparatorColor = Color3.fromRGB(80, 70, 40),
-		TextBoxColor = Color3.fromRGB(25, 25, 25),
-		AccentColor = Color3.fromRGB(212, 175, 55),  -- Metallic Gold
-		SectionColor = Color3.fromRGB(100, 90, 60),
-		LabelColor = Color3.fromRGB(200, 190, 150),
-		SliderColor = Color3.fromRGB(60, 55, 40),
-		SliderHandleColor = Color3.fromRGB(255, 215, 0),
-		UIStrokeColor = Color3.fromRGB(120, 100, 50),
-		LoadingBarColor = Color3.fromRGB(212, 175, 55),
-		TabColor = Color3.fromRGB(40, 40, 40),
+
+	-- 4. Terminal (Green/Black Matrix)
+	Terminal = {
+		TitleColor = Color3.fromRGB(0, 255, 0),
+		CollapseBtnColor = Color3.fromRGB(5, 15, 5),
+		ButtonColor = Color3.fromRGB(10, 30, 10),
+		ButtonHoverColor = Color3.fromRGB(15, 45, 15),
+		ToggleColor = Color3.fromRGB(10, 30, 10),
+		ToggleColorOFF = Color3.fromRGB(50, 0, 0),
+		ToggleColorON = Color3.fromRGB(0, 255, 0),
+		MainFrameColor = Color3.fromRGB(0, 10, 0),
+		SeparatorColor = Color3.fromRGB(0, 80, 0),
+		TextBoxColor = Color3.fromRGB(5, 25, 5),
+		AccentColor = Color3.fromRGB(0, 255, 0),
+		SectionColor = Color3.fromRGB(0, 100, 0),
+		LabelColor = Color3.fromRGB(150, 255, 150),
+		SliderColor = Color3.fromRGB(0, 50, 0),
+		SliderHandleColor = Color3.fromRGB(0, 255, 0),
+		UIStrokeColor = Color3.fromRGB(0, 80, 0),
+		LoadingBarColor = Color3.fromRGB(0, 255, 0),
+		TabColor = Color3.fromRGB(10, 35, 10),
 	},
-	
-	Synthwave = {
-		TitleColor = Color3.fromRGB(255, 255, 255),
-		CollapseBtnColor = Color3.fromRGB(25, 15, 45),
-		ButtonColor = Color3.fromRGB(45, 25, 75),
-		ButtonHoverColor = Color3.fromRGB(65, 35, 105),
-		ToggleColor = Color3.fromRGB(45, 25, 75),
-		ToggleColorOFF = Color3.fromRGB(100, 40, 120),
-		ToggleColorON = Color3.fromRGB(255, 0, 255),  -- Neon Magenta
-		MainFrameColor = Color3.fromRGB(15, 5, 30),
-		SeparatorColor = Color3.fromRGB(120, 40, 180),
-		TextBoxColor = Color3.fromRGB(35, 15, 60),
-		AccentColor = Color3.fromRGB(0, 255, 255),    -- Cyan secondary
-		SectionColor = Color3.fromRGB(150, 50, 200),
-		LabelColor = Color3.fromRGB(220, 180, 255),
-		SliderColor = Color3.fromRGB(80, 40, 120),
-		SliderHandleColor = Color3.fromRGB(255, 0, 255),
-		UIStrokeColor = Color3.fromRGB(200, 0, 255),
-		LoadingBarColor = Color3.fromRGB(255, 0, 255),
-		TabColor = Color3.fromRGB(50, 20, 90),
-	},
-	
-	OceanicDeep = {
+
+	-- 5. Ocean (Deep Blue/Teal)
+	Ocean = {
 		TitleColor = Color3.fromRGB(200, 255, 255),
 		CollapseBtnColor = Color3.fromRGB(10, 25, 35),
 		ButtonColor = Color3.fromRGB(20, 45, 60),
@@ -199,28 +119,95 @@ UILibrary.DefaultThemes = {
 		MainFrameColor = Color3.fromRGB(5, 15, 25),
 		SeparatorColor = Color3.fromRGB(40, 90, 110),
 		TextBoxColor = Color3.fromRGB(15, 35, 50),
-		AccentColor = Color3.fromRGB(0, 255, 180),    -- Bright Aquamarine
+		AccentColor = Color3.fromRGB(0, 255, 220),
 		SectionColor = Color3.fromRGB(60, 120, 130),
 		LabelColor = Color3.fromRGB(150, 200, 200),
 		SliderColor = Color3.fromRGB(30, 70, 90),
-		SliderHandleColor = Color3.fromRGB(0, 255, 180),
+		SliderHandleColor = Color3.fromRGB(0, 255, 220),
 		UIStrokeColor = Color3.fromRGB(20, 100, 120),
-		LoadingBarColor = Color3.fromRGB(0, 255, 180),
+		LoadingBarColor = Color3.fromRGB(0, 255, 220),
 		TabColor = Color3.fromRGB(25, 55, 75),
 	},
-	
-	Volcanic = {
+
+	-- 6. Royal Gold (Luxury)
+	RoyalGold = {
+		TitleColor = Color3.fromRGB(255, 245, 200),
+		CollapseBtnColor = Color3.fromRGB(20, 20, 20),
+		ButtonColor = Color3.fromRGB(35, 35, 35),
+		ButtonHoverColor = Color3.fromRGB(50, 50, 50),
+		ToggleColor = Color3.fromRGB(35, 35, 35),
+		ToggleColorOFF = Color3.fromRGB(120, 100, 60),
+		ToggleColorON = Color3.fromRGB(255, 215, 0),
+		MainFrameColor = Color3.fromRGB(15, 15, 15),
+		SeparatorColor = Color3.fromRGB(80, 70, 40),
+		TextBoxColor = Color3.fromRGB(25, 25, 25),
+		AccentColor = Color3.fromRGB(212, 175, 55),
+		SectionColor = Color3.fromRGB(100, 90, 60),
+		LabelColor = Color3.fromRGB(200, 190, 150),
+		SliderColor = Color3.fromRGB(60, 55, 40),
+		SliderHandleColor = Color3.fromRGB(255, 215, 0),
+		UIStrokeColor = Color3.fromRGB(120, 100, 50),
+		LoadingBarColor = Color3.fromRGB(212, 175, 55),
+		TabColor = Color3.fromRGB(40, 40, 40),
+	},
+
+	-- 7. Synthwave (Retrowave Purple/Pink)
+	Synthwave = {
+		TitleColor = Color3.fromRGB(255, 255, 255),
+		CollapseBtnColor = Color3.fromRGB(25, 15, 45),
+		ButtonColor = Color3.fromRGB(45, 25, 75),
+		ButtonHoverColor = Color3.fromRGB(65, 35, 105),
+		ToggleColor = Color3.fromRGB(45, 25, 75),
+		ToggleColorOFF = Color3.fromRGB(100, 40, 120),
+		ToggleColorON = Color3.fromRGB(255, 0, 255),
+		MainFrameColor = Color3.fromRGB(15, 5, 30),
+		SeparatorColor = Color3.fromRGB(120, 40, 180),
+		TextBoxColor = Color3.fromRGB(35, 15, 60),
+		AccentColor = Color3.fromRGB(0, 255, 255),
+		SectionColor = Color3.fromRGB(150, 50, 200),
+		LabelColor = Color3.fromRGB(220, 180, 255),
+		SliderColor = Color3.fromRGB(80, 40, 120),
+		SliderHandleColor = Color3.fromRGB(255, 0, 255),
+		UIStrokeColor = Color3.fromRGB(200, 0, 255),
+		LoadingBarColor = Color3.fromRGB(255, 0, 255),
+		TabColor = Color3.fromRGB(50, 20, 90),
+	},
+
+	-- 8. Sakura (Pink/White)
+	Sakura = {
+		TitleColor = Color3.fromRGB(255, 240, 245),
+		CollapseBtnColor = Color3.fromRGB(45, 35, 40),
+		ButtonColor = Color3.fromRGB(65, 50, 60),
+		ButtonHoverColor = Color3.fromRGB(85, 70, 80),
+		ToggleColor = Color3.fromRGB(65, 50, 60),
+		ToggleColorOFF = Color3.fromRGB(200, 100, 100),
+		ToggleColorON = Color3.fromRGB(255, 150, 190),
+		MainFrameColor = Color3.fromRGB(35, 25, 30),
+		SeparatorColor = Color3.fromRGB(100, 70, 90),
+		TextBoxColor = Color3.fromRGB(55, 40, 50),
+		AccentColor = Color3.fromRGB(255, 182, 193),
+		SectionColor = Color3.fromRGB(120, 90, 110),
+		LabelColor = Color3.fromRGB(220, 200, 210),
+		SliderColor = Color3.fromRGB(90, 70, 85),
+		SliderHandleColor = Color3.fromRGB(255, 182, 193),
+		UIStrokeColor = Color3.fromRGB(150, 100, 120),
+		LoadingBarColor = Color3.fromRGB(255, 150, 190),
+		TabColor = Color3.fromRGB(75, 55, 70),
+	},
+
+	-- 9. Magma (Orange/Charcoal)
+	Magma = {
 		TitleColor = Color3.fromRGB(255, 220, 200),
 		CollapseBtnColor = Color3.fromRGB(20, 15, 15),
 		ButtonColor = Color3.fromRGB(40, 30, 30),
 		ButtonHoverColor = Color3.fromRGB(55, 40, 40),
 		ToggleColor = Color3.fromRGB(40, 30, 30),
 		ToggleColorOFF = Color3.fromRGB(100, 40, 20),
-		ToggleColorON = Color3.fromRGB(255, 100, 0), -- Lava Orange
+		ToggleColorON = Color3.fromRGB(255, 100, 0),
 		MainFrameColor = Color3.fromRGB(15, 10, 10),
 		SeparatorColor = Color3.fromRGB(80, 40, 20),
 		TextBoxColor = Color3.fromRGB(30, 20, 20),
-		AccentColor = Color3.fromRGB(255, 65, 0),    -- Bright Orange
+		AccentColor = Color3.fromRGB(255, 65, 0),
 		SectionColor = Color3.fromRGB(120, 50, 30),
 		LabelColor = Color3.fromRGB(200, 160, 140),
 		SliderColor = Color3.fromRGB(60, 35, 25),
@@ -229,36 +216,104 @@ UILibrary.DefaultThemes = {
 		LoadingBarColor = Color3.fromRGB(255, 65, 0),
 		TabColor = Color3.fromRGB(50, 35, 35),
 	},
-	
-	ArcticFrost = {
-		TitleColor = Color3.fromRGB(230, 245, 255),
-		CollapseBtnColor = Color3.fromRGB(35, 45, 55),
-		ButtonColor = Color3.fromRGB(55, 70, 85),
-		ButtonHoverColor = Color3.fromRGB(75, 95, 115),
-		ToggleColor = Color3.fromRGB(55, 70, 85),
-		ToggleColorOFF = Color3.fromRGB(100, 120, 140),
-		ToggleColorON = Color3.fromRGB(160, 220, 255),
-		MainFrameColor = Color3.fromRGB(25, 35, 45),
-		SeparatorColor = Color3.fromRGB(90, 115, 140),
-		TextBoxColor = Color3.fromRGB(45, 55, 70),
-		AccentColor = Color3.fromRGB(180, 230, 255), -- Ice Blue
-		SectionColor = Color3.fromRGB(110, 140, 170),
-		LabelColor = Color3.fromRGB(190, 210, 230),
-		SliderColor = Color3.fromRGB(70, 95, 120),
-		SliderHandleColor = Color3.fromRGB(180, 230, 255),
-		UIStrokeColor = Color3.fromRGB(100, 130, 160),
-		LoadingBarColor = Color3.fromRGB(180, 230, 255),
-		TabColor = Color3.fromRGB(65, 85, 105),
+
+	-- 10. Nordic (Cool Grey/Blue)
+	Nordic = {
+		TitleColor = Color3.fromRGB(236, 239, 244),
+		CollapseBtnColor = Color3.fromRGB(46, 52, 64),
+		ButtonColor = Color3.fromRGB(59, 66, 82),
+		ButtonHoverColor = Color3.fromRGB(67, 76, 94),
+		ToggleColor = Color3.fromRGB(59, 66, 82),
+		ToggleColorOFF = Color3.fromRGB(191, 97, 106),
+		ToggleColorON = Color3.fromRGB(163, 190, 140),
+		MainFrameColor = Color3.fromRGB(35, 39, 46),
+		SeparatorColor = Color3.fromRGB(76, 86, 106),
+		TextBoxColor = Color3.fromRGB(46, 52, 64),
+		AccentColor = Color3.fromRGB(136, 192, 208),
+		SectionColor = Color3.fromRGB(76, 86, 106),
+		LabelColor = Color3.fromRGB(216, 222, 233),
+		SliderColor = Color3.fromRGB(59, 66, 82),
+		SliderHandleColor = Color3.fromRGB(129, 161, 193),
+		UIStrokeColor = Color3.fromRGB(76, 86, 106),
+		LoadingBarColor = Color3.fromRGB(136, 192, 208),
+		TabColor = Color3.fromRGB(59, 66, 82),
 	},
-	
-	EspressoAndCream = {
+
+	-- 11. Obsidian (Monochrome)
+	Obsidian = {
+		TitleColor = Color3.fromRGB(240, 240, 240),
+		CollapseBtnColor = Color3.fromRGB(10, 10, 10),
+		ButtonColor = Color3.fromRGB(25, 25, 25),
+		ButtonHoverColor = Color3.fromRGB(40, 40, 40),
+		ToggleColor = Color3.fromRGB(25, 25, 25),
+		ToggleColorOFF = Color3.fromRGB(60, 60, 60),
+		ToggleColorON = Color3.fromRGB(200, 200, 200),
+		MainFrameColor = Color3.fromRGB(5, 5, 5),
+		SeparatorColor = Color3.fromRGB(50, 50, 50),
+		TextBoxColor = Color3.fromRGB(20, 20, 20),
+		AccentColor = Color3.fromRGB(255, 255, 255),
+		SectionColor = Color3.fromRGB(60, 60, 60),
+		LabelColor = Color3.fromRGB(180, 180, 180),
+		SliderColor = Color3.fromRGB(40, 40, 40),
+		SliderHandleColor = Color3.fromRGB(255, 255, 255),
+		UIStrokeColor = Color3.fromRGB(80, 80, 80),
+		LoadingBarColor = Color3.fromRGB(255, 255, 255),
+		TabColor = Color3.fromRGB(30, 30, 30),
+	},
+
+	-- 12. Forest (Green/Brown Nature)
+	Forest = {
+		TitleColor = Color3.fromRGB(220, 240, 220),
+		CollapseBtnColor = Color3.fromRGB(20, 25, 20),
+		ButtonColor = Color3.fromRGB(35, 45, 35),
+		ButtonHoverColor = Color3.fromRGB(50, 65, 50),
+		ToggleColor = Color3.fromRGB(35, 45, 35),
+		ToggleColorOFF = Color3.fromRGB(180, 70, 70),
+		ToggleColorON = Color3.fromRGB(100, 220, 100),
+		MainFrameColor = Color3.fromRGB(15, 20, 15),
+		SeparatorColor = Color3.fromRGB(60, 80, 60),
+		TextBoxColor = Color3.fromRGB(30, 40, 30),
+		AccentColor = Color3.fromRGB(40, 200, 120),
+		SectionColor = Color3.fromRGB(80, 100, 80),
+		LabelColor = Color3.fromRGB(170, 190, 170),
+		SliderColor = Color3.fromRGB(50, 70, 50),
+		SliderHandleColor = Color3.fromRGB(100, 220, 100),
+		UIStrokeColor = Color3.fromRGB(50, 100, 50),
+		LoadingBarColor = Color3.fromRGB(40, 200, 120),
+		TabColor = Color3.fromRGB(40, 55, 40),
+	},
+
+	-- 13. Amethyst (Deep Purple)
+	Amethyst = {
+		TitleColor = Color3.fromRGB(240, 230, 255),
+		CollapseBtnColor = Color3.fromRGB(25, 20, 35),
+		ButtonColor = Color3.fromRGB(40, 35, 55),
+		ButtonHoverColor = Color3.fromRGB(60, 50, 80),
+		ToggleColor = Color3.fromRGB(40, 35, 55),
+		ToggleColorOFF = Color3.fromRGB(120, 40, 40),
+		ToggleColorON = Color3.fromRGB(140, 80, 255),
+		MainFrameColor = Color3.fromRGB(20, 15, 25),
+		SeparatorColor = Color3.fromRGB(60, 50, 80),
+		TextBoxColor = Color3.fromRGB(35, 30, 50),
+		AccentColor = Color3.fromRGB(170, 120, 255),
+		SectionColor = Color3.fromRGB(90, 80, 110),
+		LabelColor = Color3.fromRGB(180, 170, 200),
+		SliderColor = Color3.fromRGB(50, 40, 70),
+		SliderHandleColor = Color3.fromRGB(170, 120, 255),
+		UIStrokeColor = Color3.fromRGB(80, 60, 120),
+		LoadingBarColor = Color3.fromRGB(170, 120, 255),
+		TabColor = Color3.fromRGB(45, 35, 65),
+	},
+
+	-- 14. Espresso (Coffee)
+	Espresso = {
 		TitleColor = Color3.fromRGB(245, 235, 220),
 		CollapseBtnColor = Color3.fromRGB(35, 25, 20),
 		ButtonColor = Color3.fromRGB(55, 45, 35),
 		ButtonHoverColor = Color3.fromRGB(75, 65, 50),
 		ToggleColor = Color3.fromRGB(55, 45, 35),
 		ToggleColorOFF = Color3.fromRGB(110, 80, 70),
-		ToggleColorON = Color3.fromRGB(210, 180, 140), -- Tan/Cream
+		ToggleColorON = Color3.fromRGB(210, 180, 140),
 		MainFrameColor = Color3.fromRGB(25, 18, 15),
 		SeparatorColor = Color3.fromRGB(90, 70, 50),
 		TextBoxColor = Color3.fromRGB(45, 35, 25),
@@ -271,29 +326,9 @@ UILibrary.DefaultThemes = {
 		LoadingBarColor = Color3.fromRGB(210, 180, 140),
 		TabColor = Color3.fromRGB(50, 40, 30),
 	},
-	
-	Terminal = {
-		TitleColor = Color3.fromRGB(0, 255, 0),
-		CollapseBtnColor = Color3.fromRGB(5, 15, 5),
-		ButtonColor = Color3.fromRGB(10, 30, 10),
-		ButtonHoverColor = Color3.fromRGB(15, 45, 15),
-		ToggleColor = Color3.fromRGB(10, 30, 10),
-		ToggleColorOFF = Color3.fromRGB(50, 0, 0),
-		ToggleColorON = Color3.fromRGB(0, 255, 0),
-		MainFrameColor = Color3.fromRGB(0, 0, 0),
-		SeparatorColor = Color3.fromRGB(0, 100, 0),
-		TextBoxColor = Color3.fromRGB(5, 20, 5),
-		AccentColor = Color3.fromRGB(0, 255, 0),
-		SectionColor = Color3.fromRGB(0, 150, 0),
-		LabelColor = Color3.fromRGB(150, 255, 150),
-		SliderColor = Color3.fromRGB(0, 50, 0),
-		SliderHandleColor = Color3.fromRGB(0, 255, 0),
-		UIStrokeColor = Color3.fromRGB(0, 100, 0),
-		LoadingBarColor = Color3.fromRGB(0, 255, 0),
-		TabColor = Color3.fromRGB(10, 20, 10),
-	},
-	
-	SolarizedDark = {
+
+	-- 15. Solarized (Coding)
+	Solarized = {
 		TitleColor = Color3.fromRGB(147, 161, 161),
 		CollapseBtnColor = Color3.fromRGB(0, 33, 43),
 		ButtonColor = Color3.fromRGB(7, 54, 66),
@@ -304,7 +339,7 @@ UILibrary.DefaultThemes = {
 		MainFrameColor = Color3.fromRGB(0, 43, 54),
 		SeparatorColor = Color3.fromRGB(88, 110, 117),
 		TextBoxColor = Color3.fromRGB(0, 33, 43),
-		AccentColor = Color3.fromRGB(38, 139, 210), -- Solarized Blue
+		AccentColor = Color3.fromRGB(38, 139, 210),
 		SectionColor = Color3.fromRGB(101, 123, 131),
 		LabelColor = Color3.fromRGB(131, 148, 150),
 		SliderColor = Color3.fromRGB(7, 54, 66),
@@ -313,47 +348,49 @@ UILibrary.DefaultThemes = {
 		LoadingBarColor = Color3.fromRGB(42, 161, 152),
 		TabColor = Color3.fromRGB(0, 55, 70),
 	},
-	
-	Bubblegum = {
-		TitleColor = Color3.fromRGB(255, 255, 255),
-		CollapseBtnColor = Color3.fromRGB(40, 20, 50),
-		ButtonColor = Color3.fromRGB(70, 35, 90),
-		ButtonHoverColor = Color3.fromRGB(90, 45, 115),
-		ToggleColor = Color3.fromRGB(70, 35, 90),
-		ToggleColorOFF = Color3.fromRGB(255, 100, 150),
-		ToggleColorON = Color3.fromRGB(100, 200, 255),
-		MainFrameColor = Color3.fromRGB(25, 10, 35),
-		SeparatorColor = Color3.fromRGB(150, 50, 200),
-		TextBoxColor = Color3.fromRGB(50, 25, 65),
-		AccentColor = Color3.fromRGB(255, 105, 180), -- Hot Pink
-		SectionColor = Color3.fromRGB(180, 80, 220),
-		LabelColor = Color3.fromRGB(230, 200, 255),
-		SliderColor = Color3.fromRGB(100, 50, 130),
-		SliderHandleColor = Color3.fromRGB(255, 105, 180),
-		UIStrokeColor = Color3.fromRGB(200, 100, 255),
-		LoadingBarColor = Color3.fromRGB(100, 200, 255),
-		TabColor = Color3.fromRGB(60, 30, 80),
+
+	-- 16. Mint Chip (Fresh Green)
+	MintChip = {
+		TitleColor = Color3.fromRGB(240, 255, 245),
+		CollapseBtnColor = Color3.fromRGB(20, 35, 30),
+		ButtonColor = Color3.fromRGB(35, 55, 50),
+		ButtonHoverColor = Color3.fromRGB(50, 75, 70),
+		ToggleColor = Color3.fromRGB(35, 55, 50),
+		ToggleColorOFF = Color3.fromRGB(150, 80, 80),
+		ToggleColorON = Color3.fromRGB(80, 220, 150),
+		MainFrameColor = Color3.fromRGB(15, 25, 20),
+		SeparatorColor = Color3.fromRGB(50, 90, 80),
+		TextBoxColor = Color3.fromRGB(25, 45, 40),
+		AccentColor = Color3.fromRGB(60, 255, 170),
+		SectionColor = Color3.fromRGB(70, 110, 100),
+		LabelColor = Color3.fromRGB(200, 230, 220),
+		SliderColor = Color3.fromRGB(45, 65, 60),
+		SliderHandleColor = Color3.fromRGB(60, 255, 170),
+		UIStrokeColor = Color3.fromRGB(40, 100, 80),
+		LoadingBarColor = Color3.fromRGB(60, 255, 170),
+		TabColor = Color3.fromRGB(30, 50, 45),
 	},
-	
-	ObsidianSilver = {
-		TitleColor = Color3.fromRGB(255, 255, 255),
-		CollapseBtnColor = Color3.fromRGB(20, 20, 20),
-		ButtonColor = Color3.fromRGB(40, 40, 40),
-		ButtonHoverColor = Color3.fromRGB(60, 60, 60),
-		ToggleColor = Color3.fromRGB(40, 40, 40),
-		ToggleColorOFF = Color3.fromRGB(80, 80, 80),
-		ToggleColorON = Color3.fromRGB(255, 255, 255),
-		MainFrameColor = Color3.fromRGB(10, 10, 10),
-		SeparatorColor = Color3.fromRGB(70, 70, 70),
-		TextBoxColor = Color3.fromRGB(30, 30, 30),
-		AccentColor = Color3.fromRGB(220, 220, 220), -- Silver
-		SectionColor = Color3.fromRGB(100, 100, 100),
-		LabelColor = Color3.fromRGB(180, 180, 180),
-		SliderColor = Color3.fromRGB(50, 50, 50),
-		SliderHandleColor = Color3.fromRGB(255, 255, 255),
-		UIStrokeColor = Color3.fromRGB(60, 60, 60),
-		LoadingBarColor = Color3.fromRGB(200, 200, 200),
-		TabColor = Color3.fromRGB(45, 45, 45),
+
+	-- 17. Cyber (High Tech Cyan)
+	Cyber = {
+		TitleColor = Color3.fromRGB(0, 240, 255),
+		CollapseBtnColor = Color3.fromRGB(5, 15, 20),
+		ButtonColor = Color3.fromRGB(10, 25, 30),
+		ButtonHoverColor = Color3.fromRGB(15, 40, 50),
+		ToggleColor = Color3.fromRGB(10, 25, 30),
+		ToggleColorOFF = Color3.fromRGB(150, 30, 30),
+		ToggleColorON = Color3.fromRGB(0, 220, 255),
+		MainFrameColor = Color3.fromRGB(2, 10, 12),
+		SeparatorColor = Color3.fromRGB(0, 100, 120),
+		TextBoxColor = Color3.fromRGB(8, 20, 25),
+		AccentColor = Color3.fromRGB(0, 200, 255),
+		SectionColor = Color3.fromRGB(0, 120, 150),
+		LabelColor = Color3.fromRGB(180, 230, 255),
+		SliderColor = Color3.fromRGB(15, 35, 45),
+		SliderHandleColor = Color3.fromRGB(0, 200, 255),
+		UIStrokeColor = Color3.fromRGB(0, 150, 200),
+		LoadingBarColor = Color3.fromRGB(0, 200, 255),
+		TabColor = Color3.fromRGB(10, 30, 40),
 	},
 	
 	-- add more themes here! - AzkaWarrior
@@ -381,7 +418,8 @@ UILibrary.DefaultConfig = {
 	KeySystemEnabled = false,
 	TabPadding = 10,
 	UseOwnTheme = false,
-	Theme = "Volanic",
+	Theme = "Magma",
+	SaveOnExit = true,
 	KeyCallBack = function()
 
 	end,
@@ -594,6 +632,8 @@ UILibrary.Main = {
 		end
 
 		self.HubFolder = utils:CreateFolder({Name = self.Config.Title})
+		self.KeyFile = self.HubFolder .. "/Key.txt"
+		self.UserConfigFile = self.HubFolder.."/UserConfig"
 		
 		self.Config.KeyLink = config.KeyLink
 
@@ -601,7 +641,7 @@ UILibrary.Main = {
 		
 		if self.Config.UseOwnTheme then
 			for colorName, defaultColor in pairs(UILibrary.DefaultThemes.Default) do
-				self.Colors[colorName] = config[colorName] or defaultColor
+				self.Colors[colorName] = config.Colors[colorName] or defaultColor
 			end
 		elseif self.Config.Theme then
 			for colorName, Color in pairs(UILibrary.DefaultThemes[self.Config.Theme]) do
@@ -624,7 +664,7 @@ UILibrary.Main = {
 
 		self.Minimized = false
 
-		local fileName = self.HubFolder .. "/Key.txt"
+		self:LoadConfigurations()
 
 		self:CreateScreenGui()
 
@@ -632,11 +672,11 @@ UILibrary.Main = {
 
 		task.wait(4)
 
-		local savedKey = isfile(fileName) and utils:ReadFile({Path = fileName, IsJSON = false})
+		local savedKey = isfile(self.KeyFile) and utils:ReadFile({Path = self.KeyFile, IsJSON = false})
 
 		if self.Config.KeySystemEnabled then
 			if savedKey then
-				if self.CheckKey(savedKey) then
+				if self:CheckKey(savedKey) then
 					if self.Config.KeyCallBack then
 						self.Config.KeyCallBack() 
 					end
@@ -1070,7 +1110,7 @@ UILibrary.Main = {
 				t.Completed:Connect(function()
 					self.KeyFrame:Destroy()
 
-					utils:WriteFile({Path = self.HubFolder.."/Key.txt", Data = entered, IsJSON = false})
+					utils:WriteFile({Path = self.KeyFile, Data = entered, IsJSON = false})
 
 					if self.Config.KeyCallBack then 
 						self.Config.KeyCallBack() 
@@ -2721,12 +2761,12 @@ UILibrary.Main = {
 	end,
 	
 	SaveConfigurations = function(self)
-		local path = self.HubFolder.."/UserConfig"
+		local path = self.UserConfigFile
 		utils:WriteFile({Path = path, Data = self.UserConfig, IsJSON = true})
 	end,
 	
 	LoadConfigurations = function(self)
-		local filename = self.HubFolder.."/UserConfig"
+		local filename = self.UserConfigFile
 		
 		if isfile(filename) then
 			local data = utils:ReadFile({Path = filename, IsJSON = true})
