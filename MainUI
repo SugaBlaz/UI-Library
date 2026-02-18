@@ -2011,43 +2011,37 @@ UILibrary.Main = {
 		return dropdown
 	end,
 	
-	AddColorPicker = function(self, config)
-		local TweenService = game:GetService("TweenService")
+	UILibrary.AddColorPicker = function(self, config)
+		local TweenService = TS
 		local lib = self
+		local flag = config.Flag
 		local saved = self.UserConfig[flag]
-    	local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
-    
-	    if saved and type(saved) == "table" then
-	        defaultColor = Color3.new(saved[1], saved[2], saved[3])
-	    end
-		local h, s, v = defaultColor:ToHSV()
+	
+		local defaultColor = config.Default or Color3.fromRGB(255, 255, 255)
+		if saved and type(saved) == "table" then
+			defaultColor = Color3.new(saved[1], saved[2], saved[3])
+		end
+	
+		local r, g, b = math.floor(defaultColor.R * 255), math.floor(defaultColor.G * 255), math.floor(defaultColor.B * 255)
 		local isOpen = false
-		local isDraggingColor = false
-		local isDraggingHue = false
-
+	
 		local pickerFrame = Instance.new("Frame")
 		pickerFrame.Name = "ColorPicker_" .. config.Text
 		pickerFrame.Size = UDim2.new(1, -24, 0, 30)
 		pickerFrame.BackgroundColor3 = self.Colors.ButtonColor
-		pickerFrame.BorderSizePixel = 0
 		pickerFrame.ClipsDescendants = true
 		pickerFrame.LayoutOrder = #self.Elements + 1
 		pickerFrame.Parent = self.ScrollingFrame
-
-		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 4)
-		corner.Parent = pickerFrame
-
+	
+		Instance.new("UICorner", pickerFrame).CornerRadius = UDim.new(0, 4)
+	
 		local headerBtn = Instance.new("TextButton")
-		headerBtn.Name = "Header"
 		headerBtn.Size = UDim2.new(1, 0, 0, 30)
 		headerBtn.BackgroundTransparency = 1
 		headerBtn.Text = ""
-		headerBtn.AutoButtonColor = false
 		headerBtn.Parent = pickerFrame
-
+	
 		local title = Instance.new("TextLabel")
-		title.Name = "Title"
 		title.Size = UDim2.new(1, -50, 1, 0)
 		title.Position = UDim2.new(0, 12, 0, 0)
 		title.BackgroundTransparency = 1
@@ -2057,175 +2051,104 @@ UILibrary.Main = {
 		title.TextSize = self.Config.TextSize
 		title.TextXAlignment = Enum.TextXAlignment.Left
 		title.Parent = headerBtn
-
+	
 		local colorDisplay = Instance.new("Frame")
-		colorDisplay.Name = "ColorDisplay"
-		colorDisplay.Size = UDim2.new(0, 30, 0, 20)
+		colorDisplay.Size = UDim2.new(0, 30, 0, 18)
 		colorDisplay.Position = UDim2.new(1, -10, 0.5, 0)
 		colorDisplay.AnchorPoint = Vector2.new(1, 0.5)
 		colorDisplay.BackgroundColor3 = defaultColor
 		colorDisplay.Parent = headerBtn
-
-		local displayCorner = Instance.new("UICorner")
-		displayCorner.CornerRadius = UDim.new(0, 4)
-		displayCorner.Parent = colorDisplay
-
-		local displayStroke = Instance.new("UIStroke")
-		displayStroke.Thickness = 1
-		displayStroke.Color = self.Colors.UIStrokeColor or Color3.fromRGB(60,60,60)
-		displayStroke.Parent = colorDisplay
-
-		local pickerContainer = Instance.new("Frame")
-		pickerContainer.Name = "PickerContainer"
-		pickerContainer.Size = UDim2.new(1, 0, 0, 100)
-		pickerContainer.Position = UDim2.new(0, 0, 0, 35)
-		pickerContainer.BackgroundTransparency = 1
-		pickerContainer.Visible = true 
-		pickerContainer.Parent = pickerFrame
-
-		local svPalette = Instance.new("TextButton") 
-		svPalette.Name = "SVPalette"
-		svPalette.Size = UDim2.new(0, 100, 0, 80)
-		svPalette.Position = UDim2.new(0, 12, 0, 0)
-		svPalette.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
-		svPalette.Text = ""
-		svPalette.AutoButtonColor = false
-		svPalette.Parent = pickerContainer
-
-		local svCorner = Instance.new("UICorner")
-		svCorner.CornerRadius = UDim.new(0, 4)
-		svCorner.Parent = svPalette
-
-		local svImage = Instance.new("ImageLabel")
-		svImage.Size = UDim2.new(1, 0, 1, 0)
-		svImage.BackgroundTransparency = 1
-		svImage.Image = "rbxassetid://4155801252" 
-		svImage.Parent = svPalette
-
-		local svCursor = Instance.new("Frame")
-		svCursor.Name = "Cursor"
-		svCursor.Size = UDim2.new(0, 6, 0, 6)
-		svCursor.AnchorPoint = Vector2.new(0.5, 0.5)
-		svCursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		svCursor.BorderSizePixel = 0
-		svCursor.Parent = svPalette
-
-		local cursorCorner = Instance.new("UICorner")
-		cursorCorner.CornerRadius = UDim.new(1, 0)
-		cursorCorner.Parent = svCursor
-
-		local hueSlider = Instance.new("TextButton")
-		hueSlider.Name = "HueSlider"
-		hueSlider.Size = UDim2.new(0, 25, 0, 80)
-		hueSlider.Position = UDim2.new(0, 222, 0, 0) -- Right of SV box
-		hueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		hueSlider.Text = ""
-		hueSlider.AutoButtonColor = false
-		hueSlider.Parent = pickerContainer
-
-		local hueCorner = Instance.new("UICorner")
-		hueCorner.CornerRadius = UDim.new(0, 4)
-		hueCorner.Parent = hueSlider
-
-		local hueGradient = Instance.new("UIGradient")
-		hueGradient.Rotation = 90
-		hueGradient.Color = ColorSequence.new({
-			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 0)),
-			ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 0, 255)),
-			ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 0, 255)),
-			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)),
-			ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 255, 0)),
-			ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 255, 0)),
-			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 0))
-		})
-		hueGradient.Parent = hueSlider
-
-		local hueCursor = Instance.new("Frame")
-		hueCursor.Size = UDim2.new(1, 0, 0, 2)
-		hueCursor.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		hueCursor.BorderSizePixel = 0
-		hueCursor.Parent = hueSlider
-		
-		local flag = config.Flag
-
-		local function UpdateColor(color1)
-			local color = color1 or Color3.fromHSV(h, s, v)
-
-			colorDisplay.BackgroundColor3 = color
-			svPalette.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
-
-			hueCursor.Position = UDim2.new(0, 0, 1 - h, 0)
-			svCursor.Position = UDim2.new(s, 0, 1 - v, 0)
-			
-			if config.SavingEnabled then
-				lib.UserConfig[flag] = {color.R, color.G, color.B}
+		Instance.new("UICorner", colorDisplay).CornerRadius = UDim.new(0, 4)
+	
+		local sliderContainer = Instance.new("Frame")
+		sliderContainer.Size = UDim2.new(1, -24, 0, 90)
+		sliderContainer.Position = UDim2.new(0, 12, 0, 35)
+		sliderContainer.BackgroundTransparency = 1
+		sliderContainer.Parent = pickerFrame
+	
+		local function createRGBSlider(name, color, pos, startVal)
+			local sliderLabel = Instance.new("TextLabel")
+			sliderLabel.Text = name .. ": " .. startVal
+			sliderLabel.Size = UDim2.new(1, 0, 0, 15)
+			sliderLabel.Position = UDim2.new(0, 0, 0, pos)
+			sliderLabel.BackgroundTransparency = 1
+			sliderLabel.TextColor3 = self.Colors.TitleColor
+			sliderLabel.TextSize = 12
+			sliderLabel.Font = self.Config.Font
+			sliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+			sliderLabel.Parent = sliderContainer
+	
+			local track = Instance.new("TextButton")
+			track.Size = UDim2.new(1, 0, 0, 4)
+			track.Position = UDim2.new(0, 0, 0, pos + 18)
+			track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+			track.BorderSizePixel = 0
+			track.Text = ""
+			track.Parent = sliderContainer
+			Instance.new("UICorner", track)
+	
+			local fill = Instance.new("Frame")
+			fill.Size = UDim2.new(startVal/255, 0, 1, 0)
+			fill.BackgroundColor3 = color
+			fill.BorderSizePixel = 0
+			fill.Parent = track
+			Instance.new("UICorner", fill)
+	
+			local dragging = false
+	
+			local function update(input)
+				local pos = math.clamp((input.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+				fill.Size = UDim2.new(pos, 0, 1, 0)
+				local val = math.floor(pos * 255)
+				sliderLabel.Text = name .. ": " .. val
+	
+				if name == "R" then r = val
+				elseif name == "G" then g = val
+				elseif name == "B" then b = val end
+	
+				local newColor = Color3.fromRGB(r, g, b)
+				colorDisplay.BackgroundColor3 = newColor
+	
+				if config.SavingEnabled then
+					lib.UserConfig[flag] = {newColor.R, newColor.G, newColor.B}
+				end
+				if config.Callback then config.Callback(newColor) end
 			end
-			
-			if config.Callback then
-				config.Callback(color)
-			end
+	
+			track.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					dragging = true
+					update(input)
+				end
+			end)
+	
+			UIS.InputEnded:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+					dragging = false
+				end
+			end)
+	
+			UIS.InputChanged:Connect(function(input)
+				if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+					update(input)
+				end
+			end)
 		end
-
-		local function SetState()
+	
+		createRGBSlider("R", Color3.fromRGB(255, 70, 70), 0, r)
+		createRGBSlider("G", Color3.fromRGB(70, 255, 70), 30, g)
+		createRGBSlider("B", Color3.fromRGB(70, 70, 255), 60, b)
+	
+		headerBtn.MouseButton1Click:Connect(function()
 			isOpen = not isOpen
-
-			local targetHeight = isOpen and 125 or 30 -- 30 is base height, 125 is expanded
-
-			TweenService:Create(pickerFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-				Size = UDim2.new(1, -24, 0, targetHeight)
+			TweenService:Create(pickerFrame, TweenInfo.new(0.3), {
+				Size = UDim2.new(1, -24, 0, isOpen and 135 or 30)
 			}):Play()
-		end
-
-		hueSlider.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				isDraggingHue = true
-			end
 		end)
-
-		svPalette.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				isDraggingColor = true
-			end
-		end)
-
-		UIS.InputEnded:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-				isDraggingHue = false
-				isDraggingColor = false
-			end
-		end)
-
-		RS.RenderStepped:Connect(function()
-			if not isOpen then return end
-
-			if isDraggingHue then
-				local mouseLocation = UIS:GetMouseLocation()
-				local relativeY = mouseLocation.Y - hueSlider.AbsolutePosition.Y - 36
-
-				local y = math.clamp((UIS:GetMouseLocation().Y - hueSlider.AbsolutePosition.Y) / hueSlider.AbsoluteSize.Y, 0, 1)
-				h = 1 - y
-				UpdateColor()
-			end
-
-			if isDraggingColor then
-				local mouse = UIS:GetMouseLocation()
-				local x = math.clamp((mouse.X - svPalette.AbsolutePosition.X) / svPalette.AbsoluteSize.X, 0, 1)
-				local y = math.clamp((mouse.Y - svPalette.AbsolutePosition.Y) / svPalette.AbsoluteSize.Y, 0, 1)
-
-				s = x
-				v = 1 - y
-				UpdateColor()
-			end
-		end)
-
-		UpdateColor(defaultColor)
-
-		headerBtn.MouseButton1Click:Connect(SetState)
-
+	
 		table.insert(self.Elements, pickerFrame)
 		return pickerFrame
 	end,
-
 	AddKeybind = function(self, config)
 		local UIS = game:GetService("UserInputService")
 		local currentKey = config.Default or Enum.KeyCode.F
