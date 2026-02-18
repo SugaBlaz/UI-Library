@@ -2231,6 +2231,7 @@ UILibrary.Main = {
 		local UIS = game:GetService("UserInputService")
 		local currentKey = config.Default or Enum.KeyCode.F
 		local binding = false
+		local flag = config.Flag
 
 		local keybindFrame = Instance.new("Frame")
 		keybindFrame.Name = "Keybind_" .. config.Text
