@@ -2273,6 +2273,10 @@ UILibrary.Main = {
 		bindCorner.CornerRadius = UDim.new(0, 4)
 		bindCorner.Parent = bindButton
 
+		if self.UserConfig[flag] ~= nil then
+			currentKey = self.UserConfig[flag]
+		end
+
 		bindButton.MouseButton1Click:Connect(function()
 			if binding then return end
 
@@ -2291,6 +2295,10 @@ UILibrary.Main = {
 					binding = false
 
 					TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.AccentColor}):Play()
+
+					if config.SavingEnabled then
+						self.UserConfig[flag] = currentKey
+					end
 
 					if config.ChangedCallback then
 						config.ChangedCallback(currentKey)
@@ -2381,148 +2389,154 @@ UILibrary.Main = {
 	end,
 
 	AddSlider = function(self, config)
-		local lib = self
-		local slider = {}
-		
-		local sliderFrame = Instance.new("Frame")
-		sliderFrame.Name = "Slider_" .. config.Text
-		sliderFrame.Size = UDim2.new(1, -24, 0, 50)
-		sliderFrame.Position = UDim2.new(0, 12, 0, 0)
-		sliderFrame.BackgroundTransparency = 1
-		sliderFrame.LayoutOrder = #self.Elements + 1
-		sliderFrame.Parent = self.ScrollingFrame
-
-		local sliderText = Instance.new("TextLabel")
-		sliderText.Name = "TextLabel"
-		sliderText.Size = UDim2.new(1, 0, 0.4, 0)
-		sliderText.Position = UDim2.new(0, 0, 0, 0)
-		sliderText.BackgroundTransparency = 1
-		sliderText.Text = config.Text .. ": " .. config.Default
-		sliderText.TextColor3 = self.Colors.TitleColor
-		sliderText.TextXAlignment = Enum.TextXAlignment.Left
-		sliderText.Font = self.Config.Font
-		sliderText.TextSize = self.Config.TextSize
-		sliderText.Parent = sliderFrame
-
-		local sliderTrack = Instance.new("TextButton")
-		sliderTrack.Name = "Track"
-		sliderTrack.Text = ""
-		sliderTrack.Size = UDim2.new(1, 0, 0.25, 0)
-		sliderTrack.Position = UDim2.new(0, 0, 0.7, 0)
-		sliderTrack.BackgroundColor3 = self.Colors.SliderColor
-		sliderTrack.BorderSizePixel = 0
-		sliderTrack.AutoButtonColor = false
-		sliderTrack.Parent = sliderFrame
-
-		local sliderCorner = Instance.new("UICorner")
-		sliderCorner.CornerRadius = UDim.new(1, 0)
-		sliderCorner.Parent = sliderTrack
-
-		local sliderFill = Instance.new("Frame")
-		sliderFill.Name = "Fill"
-		sliderFill.Size = UDim2.new((config.Default - config.Min) / (config.Max - config.Min), 0, 1, 0)
-		sliderFill.BackgroundColor3 = self.Colors.AccentColor
-		sliderFill.BorderSizePixel = 0
-		sliderFill.Parent = sliderTrack
-
-		local fillCorner = Instance.new("UICorner")
-		fillCorner.CornerRadius = UDim.new(1, 0)
-		fillCorner.Parent = sliderFill
-
-		local sliderHandle = Instance.new("TextButton")
-		sliderHandle.Name = "Handle"
-		sliderHandle.Size = UDim2.new(0, 16, 0, 16)
-		sliderHandle.Position = UDim2.new(sliderFill.Size.X.Scale, -8, 0.5, -8)
-		sliderHandle.BackgroundColor3 = self.Colors.SliderHandleColor
-		sliderHandle.BorderSizePixel = 0
-		sliderHandle.Text = ""
-		sliderHandle.AutoButtonColor = false
-		sliderHandle.ZIndex = 2
-		sliderHandle.Parent = sliderTrack
-
-		local handleCorner = Instance.new("UICorner")
-		handleCorner.CornerRadius = UDim.new(1, 0)
-		handleCorner.Parent = sliderHandle
-
-		if self.Config.UIStrokeEnabled then
-			local handleStroke = Instance.new("UIStroke")
-			handleStroke.Thickness = self.Config.UIStrokeThickness
-			handleStroke.Color = self.Colors.UIStrokeColor
-			handleStroke.Parent = sliderHandle
-		end
-
-		local dragging = false
-		local currentValue = config.Default
-		local flag = config.Flag
-
-		local function updateSlider(value)
-			value = math.clamp(value, config.Min, config.Max)
-			currentValue = value
-			local fillSize = (value - config.Min) / (config.Max - config.Min)
-			sliderFill.Size = UDim2.new(fillSize, 0, 1, 0)
-			sliderHandle.Position = UDim2.new(fillSize, -8, 0.5, -8)
-
-			local displayValue
-			if config.Round and config.Round > 0 then
-				displayValue = tonumber(string.format("%."..config.Round.."f", value))
-			else
-				displayValue = math.floor(value)
-			end
-
-			sliderText.Text = config.Text .. ": " .. displayValue
-			
-			if config.SavingEnabled then
-				lib.UserConfig[flag] = tonumber(currentValue)
-			end
-			
-			if config.Callback then
-				config.Callback(value)
-			end
-		end
-		
-		if self.UserConfig[flag] ~= nil then
-			updateSlider(tonumber(self.UserConfig[flag]))
-		end
-
-		sliderHandle.MouseButton1Down:Connect(function()
-			dragging = true
-		end)
-
-		game:GetService("UserInputService").InputEnded:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				dragging = false
-			end
-		end)
-
-		game:GetService("UserInputService").InputChanged:Connect(function(input)
-			if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-				local mousePos = game:GetService("UserInputService"):GetMouseLocation()
-				local trackPos = sliderTrack.AbsolutePosition
-				local trackSize = sliderTrack.AbsoluteSize
-				local relativeX = (mousePos.X - trackPos.X) / trackSize.X
-				local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
-				updateSlider(value)
-			end
-		end)
-
-		sliderTrack.MouseButton1Down:Connect(function(x, y)
-			local trackPos = sliderTrack.AbsolutePosition
-			local trackSize = sliderTrack.AbsoluteSize
-			local relativeX = (x - trackPos.X) / trackSize.X
-			local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
-			updateSlider(value)
-		end)
-		
-		function slider:Set(value)
-			updateSlider(value)
-		end
-		
-		function slider:Get()
-			return currentValue
-		end
-
-		table.insert(self.Elements, sliderFrame)
-		return slider
+	    local lib = self
+	    local slider = {}
+	    
+	    local sliderFrame = Instance.new("Frame")
+	    sliderFrame.Name = "Slider_" .. config.Text
+	    sliderFrame.Size = UDim2.new(1, -24, 0, 50)
+	    sliderFrame.Position = UDim2.new(0, 12, 0, 0)
+	    sliderFrame.BackgroundTransparency = 1
+	    sliderFrame.LayoutOrder = #self.Elements + 1
+	    sliderFrame.Parent = self.ScrollingFrame
+	
+	    local sliderText = Instance.new("TextLabel")
+	    sliderText.Name = "TextLabel"
+	    sliderText.Size = UDim2.new(1, 0, 0.4, 0)
+	    sliderText.Position = UDim2.new(0, 0, 0, 0)
+	    sliderText.BackgroundTransparency = 1
+	    sliderText.Text = config.Text .. ": " .. config.Default
+	    sliderText.TextColor3 = self.Colors.TitleColor
+	    sliderText.TextXAlignment = Enum.TextXAlignment.Left
+	    sliderText.Font = self.Config.Font
+	    sliderText.TextSize = self.Config.TextSize
+	    sliderText.Parent = sliderFrame
+	
+	    local sliderTrack = Instance.new("TextButton")
+	    sliderTrack.Name = "Track"
+	    sliderTrack.Text = ""
+	    sliderTrack.Size = UDim2.new(1, 0, 0.25, 0)
+	    sliderTrack.Position = UDim2.new(0, 0, 0.7, 0)
+	    sliderTrack.BackgroundColor3 = self.Colors.SliderColor
+	    sliderTrack.BorderSizePixel = 0
+	    sliderTrack.AutoButtonColor = false
+	    sliderTrack.Parent = sliderFrame
+	
+	    local sliderCorner = Instance.new("UICorner")
+	    sliderCorner.CornerRadius = UDim.new(1, 0)
+	    sliderCorner.Parent = sliderTrack
+	
+	    local sliderFill = Instance.new("Frame")
+	    sliderFill.Name = "Fill"
+	    sliderFill.Size = UDim2.new((config.Default - config.Min) / (config.Max - config.Min), 0, 1, 0)
+	    sliderFill.BackgroundColor3 = self.Colors.AccentColor
+	    sliderFill.BorderSizePixel = 0
+	    sliderFill.Parent = sliderTrack
+	
+	    local fillCorner = Instance.new("UICorner")
+	    fillCorner.CornerRadius = UDim.new(1, 0)
+	    fillCorner.Parent = sliderFill
+	
+	    local sliderHandle = Instance.new("TextButton")
+	    sliderHandle.Name = "Handle"
+	    sliderHandle.Size = UDim2.new(0, 16, 0, 16)
+	    sliderHandle.Position = UDim2.new(sliderFill.Size.X.Scale, -8, 0.5, -8)
+	    sliderHandle.BackgroundColor3 = self.Colors.SliderHandleColor
+	    sliderHandle.BorderSizePixel = 0
+	    sliderHandle.Text = ""
+	    sliderHandle.AutoButtonColor = false
+	    sliderHandle.ZIndex = 2
+	    sliderHandle.Parent = sliderTrack
+	
+	    local handleCorner = Instance.new("UICorner")
+	    handleCorner.CornerRadius = UDim.new(1, 0)
+	    handleCorner.Parent = sliderHandle
+	
+	    if self.Config.UIStrokeEnabled then
+	        local handleStroke = Instance.new("UIStroke")
+	        handleStroke.Thickness = self.Config.UIStrokeThickness
+	        handleStroke.Color = self.Colors.UIStrokeColor
+	        handleStroke.Parent = sliderHandle
+	    end
+	
+	    local dragging = false
+	    local currentValue = config.Default
+	    local flag = config.Flag
+	
+	    local function updateSlider(value)
+	        value = math.clamp(value, config.Min, config.Max)
+	        currentValue = value
+	        local fillSize = (value - config.Min) / (config.Max - config.Min)
+	        sliderFill.Size = UDim2.new(fillSize, 0, 1, 0)
+	        sliderHandle.Position = UDim2.new(fillSize, -8, 0.5, -8)
+	
+	        local displayValue
+	        if config.Round and config.Round > 0 then
+	            displayValue = tonumber(string.format("%."..config.Round.."f", value))
+	        else
+	            displayValue = math.floor(value)
+	        end
+	
+	        sliderText.Text = config.Text .. ": " .. displayValue
+	        
+	        if config.SavingEnabled then
+	            lib.UserConfig[flag] = tonumber(currentValue)
+	        end
+	        
+	        if config.Callback then
+	            config.Callback(value)
+	        end
+	    end
+	    
+	    if self.UserConfig[flag] ~= nil then
+	        updateSlider(tonumber(self.UserConfig[flag]))
+	    end
+	
+	    sliderHandle.InputBegan:Connect(function(input)
+	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	            dragging = true
+	        end
+	    end)
+	
+	    UIS.InputEnded:Connect(function(input)
+	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	            dragging = false
+	        end
+	    end)
+	
+	    UIS.InputChanged:Connect(function(input)
+	        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+	            local inputPos = input.Position
+	            local trackPos = sliderTrack.AbsolutePosition
+	            local trackSize = sliderTrack.AbsoluteSize
+	            local relativeX = (inputPos.X - trackPos.X) / trackSize.X
+	            local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
+	            updateSlider(value)
+	        end
+	    end)
+	
+	    sliderTrack.InputBegan:Connect(function(input)
+	        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+	            local inputPos = input.Position
+	            local trackPos = sliderTrack.AbsolutePosition
+	            local trackSize = sliderTrack.AbsoluteSize
+	            local relativeX = (inputPos.X - trackPos.X) / trackSize.X
+	            local value = config.Min + (config.Max - config.Min) * math.clamp(relativeX, 0, 1)
+	            updateSlider(value)
+	            dragging = true
+	        end
+	    end)
+	    
+	    function slider:Set(value)
+	        updateSlider(value)
+	    end
+	    
+	    function slider:Get()
+	        return currentValue
+	    end
+	
+	    table.insert(self.Elements, sliderFrame)
+	    return slider
 	end,
 
 	Notify = function(self, config)   
@@ -2639,7 +2653,7 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 1.67"
+		return "SBEUILib 1.87"
 	end,
 
 	PromptDestroy = function(self)
