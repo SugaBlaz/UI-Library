@@ -686,8 +686,6 @@ UILibrary.Main = {
 			else
 				self:CreateKeyUI()
 			end
-		else
-			self:CreateUI()
 		end
 		
 		if self.Config.SaveOnExit then
