@@ -1,12 +1,75 @@
 --[[
 
 SugaBlaz's Executor UI Library
-Made with passion by SugaBlaz
+Made with passion by SugaDev
 
-SugaBlaz      | Programming + Design
-AzkaWarrior   | Design
+SugaDev      | Programming + Design
+AzkaDev      | Design
 
 Version 1.91
+
+Update Log:
+	Verison 1:
+		- Main UI Framework completed
+
+	Version 1.1:
+		- Added Slider
+		- Added Toggle
+		- Added Sections
+		- Added Buttons
+		- Added Default Themes
+		- Added Labels
+
+	Version 1.2:
+		- Added Key System
+		- Added Fake Loading Frame
+		- Added Notification Function
+
+	Version 1.3:
+		- Revamped overall code
+
+	Version 1.4:
+		- Revamped Key System due to bugs
+		- Added Sections
+
+	Version 1.5:
+		- Added Dropdown Frame
+		- Added UI Library Intro
+
+	Version 1.6:
+		- Added Utility Module
+		- Made Key System able to "read" links or strings
+			2 Supported link types:
+				CloudFlare Worker API
+				Static Links: rawgithubusercontent, Pastebin.raw
+		- Added Tabs
+
+	Version 1.7:
+		- Added Multi Dropdown Frame
+		- Added Get, Set functions to Toggles and Sliders
+		- Added User Configuration saving!!!
+
+	Version 1.8:
+		- Added More Themes
+		- Added ChangeTheme Function
+		- Added Color Picker
+
+	Version 1.9:
+		- Added Textboxes to sliders
+		- Added Textboxes to Color Picker
+		- Revamped Notfication Function
+		- Added Tab Search Bar
+
+	Version 1.91:
+		- Added a few more themes
+
+	Version 2:
+		- Added a Website to teach how to use this confusing ui library
+			
+
+Future Improvments:
+	- Add a Setting button near the close and minimize frame
+	- Add a UI Layout button near the setting button (maybe)
 
 ]]
 
@@ -20,6 +83,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 UILibrary.DefaultThemes = {
+	- Default, What did you expect?
 	Default = {
 		TitleColor = Color3.fromRGB(255, 255, 255),
 		CollapseBtnColor = Color3.fromRGB(25, 25, 25),
@@ -1023,8 +1087,8 @@ UILibrary.Main = {
 		end)
 	end,
 
-	-- im gonna kill myself sdgyiawuedAWUDSIAGDHUASDGASU
-	CreateKeyUI = function(self)
+
+	CreateKeyUI = function(self) -- yo azka design this key system you monkey
 		self.KeyFrame = Instance.new("Frame")
 		self.KeyFrame.Name = "KeyFrame"
 		self.KeyFrame.Size = UDim2.new(0, 340, 0, 180)
@@ -1163,8 +1227,7 @@ UILibrary.Main = {
 		end)
 	end,
 
-	-- wow not that hard
-	CreateFakeLoading = function(self, config)
+	CreateFakeLoading = function(self, config) -- design this monkey
 		self.LoadFrame = Instance.new("Frame")
 		self.LoadFrame.Name = "LoadFrame"
 		self.LoadFrame.Size = config.Size
@@ -1321,7 +1384,7 @@ UILibrary.Main = {
 		self.TitleText.Text = newTitle
 	end,
 	
-	SetTheme = function(self, newTheme)
+	SetTheme = function(self, newTheme) -- doesnt work rn
 		for colorName, Color in pairs(UILibrary.DefaultThemes[newTheme]) do
 			self.Colors[colorName] = Color
 		end
