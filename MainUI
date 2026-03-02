@@ -2622,7 +2622,6 @@ UILibrary.Main = {
 	    end
 	
 	    function slider:Set(value) updateSlider(value) end
-	    function slider:Get() return currentValue end
 	
 	    table.insert(self.Elements, sliderFrame)
 	    return slider
