@@ -2298,6 +2298,7 @@ UILibrary.Main = {
 	end,
 
 	AddKeybind = function(self, config)
+		local keybind = {}
 		local UIS = game:GetService("UserInputService")
 		local currentKey = config.Default or Enum.KeyCode.F
 		local binding = false
@@ -2384,8 +2385,19 @@ UILibrary.Main = {
 			end
 		end)
 
+		function keybind:Set(key)
+			currentkey = key
+			if config.SavingEnabled then
+						self.UserConfig[flag] = currentKey
+					end
+
+					if config.ChangedCallback then
+						config.ChangedCallback(currentKey)
+					end
+		end
+
 		table.insert(self.Elements, keybindFrame)
-		return keybindFrame
+		return keybind
 	end,
 
 	AddTextBox = function(self, config)
