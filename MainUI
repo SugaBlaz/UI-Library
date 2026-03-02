@@ -67,8 +67,8 @@ Update Log:
 		- Added a Website to teach how to use this confusing ui library
 			
 	Version 2.1:
-		- Added Set function to MultiDropdowns and Dropdowns, and added saving, set function for textboxes.
-		- Updated website
+		- Added Set function to MultiDropdowns and Dropdowns, added saving and set function for textboxes.
+		- Updated Website
 
 Future Improvments:
 	- Add a Setting button near the close and minimize frame
@@ -1667,10 +1667,6 @@ UILibrary.Main = {
 			update(bool)
 		end
 
-		function toggle:Get()
-			return state
-		end
-
 		toggleButton.MouseEnter:Connect(function()
 			toggleButton.BackgroundColor3 = Color3.new(
 				self.Colors.ToggleColor.R * 1.1,
@@ -1856,8 +1852,24 @@ UILibrary.Main = {
 		
 		update(config.Options, true)
 		
-		function dropdown:Update(config)
-			update(config.Options, true)
+		function dropdown:Update(options)
+			update(options, true)
+		end
+
+		function dropdown:Set(option)
+		    selectedLabel.Text = tostring(option)
+		    
+		    if config.SavingEnabled and config.Flag then
+		        lib.UserConfig[config.Flag] = option
+		    end
+		
+		    if config.Callback then
+		        task.spawn(config.Callback, option)
+		    end
+		    
+		    if isOpen then
+		        toggle()
+		    end
 		end
 
 		headerBtn.MouseButton1Click:Connect(toggle)
@@ -2050,8 +2062,6 @@ UILibrary.Main = {
 						lib.UserConfig[flag] = selectedItems
 					end
 
-					
-
 					if config.Callback then
 						config.Callback(selectedItems)
 					end
@@ -2065,8 +2075,29 @@ UILibrary.Main = {
 			update(config.Options, true)
 		end
 
-		function dropdown:GetOptions()
-			return selectedItems
+		function dropdown:Set(newList)
+		    selectedItems = type(newList) == "table" and newList or {newList}
+		
+		    updateHeaderText()
+		
+		    if config.SavingEnabled and config.Flag then
+		        lib.UserConfig[config.Flag] = selectedItems
+		    end
+		
+		    for _, btn in pairs(optionHolder:GetChildren()) do
+		        if btn:IsA("TextButton") then
+		            local isSelected = table.find(selectedItems, btn.Name)
+		
+		            TS:Create(btn, TweenInfo.new(0.2), {
+		                BackgroundColor3 = isSelected and self.Colors.AccentColor or lib.Colors.CollapseBtnColor,
+		                TextColor3 = isSelected and Color3.new(1,1,1) or lib.Colors.LabelColor
+		            }):Play()
+		        end
+		    end
+		
+		    if config.Callback then
+		        task.spawn(config.Callback, selectedItems)
+		    end
 		end
 
 		headerBtn.MouseButton1Click:Connect(toggle)
