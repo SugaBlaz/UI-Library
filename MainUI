@@ -42,7 +42,7 @@ Update Log:
 			2 Supported link types:
 				CloudFlare Worker API
 				Static Links: rawgithubusercontent, Pastebin.raw
-		- Added Tabs
+		- Added Tabs (automatiicaly creates when you make a section)
 
 	Version 1.7:
 		- Added Multi Dropdown Frame
@@ -66,6 +66,9 @@ Update Log:
 	Version 2:
 		- Added a Website to teach how to use this confusing ui library
 			
+	Version 2.1:
+		- Added Set function to MultiDropdowns and Dropdowns, and added saving, set function for textboxes.
+		- Updated website
 
 Future Improvments:
 	- Add a Setting button near the close and minimize frame
@@ -2074,6 +2077,7 @@ UILibrary.Main = {
 	
 	AddColorPicker = function(self, config)
 		local TweenService = TS
+		local colorpicker = {}
 		local lib = self
 		local flag = config.Flag
 		local saved = self.UserConfig[flag]
@@ -2204,6 +2208,10 @@ UILibrary.Main = {
 	
 				updateEverything()
 			end
+
+			function colorpicker:Set(color)
+				r, g, b = color.R, color.G, color.B
+			end
 	
 			sliderInput.FocusLost:Connect(function()
 				local val = tonumber(sliderInput.Text)
@@ -2255,7 +2263,7 @@ UILibrary.Main = {
 		end)
 	
 		table.insert(self.Elements, pickerFrame)
-		return pickerFrame
+		return colorpicker
 	end,
 
 	AddKeybind = function(self, config)
@@ -2350,6 +2358,9 @@ UILibrary.Main = {
 	end,
 
 	AddTextBox = function(self, config)
+		local flag = config.Flag
+		local lib = self
+		local textBox = {}
 		local textBoxFrame = Instance.new("Frame")
 		textBoxFrame.Name = "TextBox_" .. config.Text
 		textBoxFrame.Size = UDim2.new(1, -24, 0, 50)
@@ -2395,6 +2406,20 @@ UILibrary.Main = {
 			textBoxStroke.Parent = textBox
 		end
 
+		function textBox:Set(s)
+			textBox.Text = tostring(s) or "Type can not be converted into a string"
+
+			if config.Callback then
+				config.Callback(textBox.Text)
+			end
+		end
+
+		if config.SavingEnabled then
+			if self.UserConfig[flag] ~= nil then
+		        textBox:Set(tostring(self.UserConfig[flag]))
+		    end
+		end
+
 		if config.Callback then
 			textBox.FocusLost:Connect(function(enterPressed)
 				if not enterPressed and config.RequireEnter then return end
@@ -2403,7 +2428,7 @@ UILibrary.Main = {
 		end
 
 		table.insert(self.Elements, textBoxFrame)
-		return textBoxFrame
+		return textBox
 	end,
 
 	AddSeparator = function(self)
@@ -2686,7 +2711,7 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 1.91"
+		return "SBEUILib 2.1"
 	end,
 
 	PromptDestroy = function(self)
