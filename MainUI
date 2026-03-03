@@ -1220,7 +1220,7 @@ UILibrary.Main = {
 
 		self.SettingsBtn.MouseButton1Click:Connect(function()
 			self.SettingsVisible = not self.SettingsVisible
-			local targetSize = self.SettingsVisible and UDim2.new(1, 0, 1, 0) or UDim2.new(0, 0, 1, 0)
+			local targetSize = self.SettingsVisible and self.Config.SettingSize or UDim2.new(0, 0, 1, 0)
 
 			if self.SettingsVisible then
 				self.SettingsFrame.Visible = true
@@ -1238,6 +1238,17 @@ UILibrary.Main = {
 				end
 			end)
 		end)
+
+		self.SettingScrollingFrame = Instance.new("ScrollingFrame")
+		self.SettingScrollingFrame.Name = "ContentFrame"
+		self.SettingScrollingFrame.Size = UDim2.new(1, 0, 1, -40)
+		self.SettingScrollingFrame.Position = UDim2.new(0, 0, 0, 40)
+		self.SettingScrollingFrame.BackgroundTransparency = 1
+		self.SettingScrollingFrame.BorderSizePixel = 0
+		self.SettingScrollingFrame.ScrollBarThickness = 4
+		self.SettingScrollingFrame.ScrollBarImageColor3 = self.Colors.AccentColor
+		self.SettingScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+		self.SettingScrollingFrame.Parent = self.SettingsFrame
 
 		self.OriginalSize = self.MainFrame.Size
 		self.OriginalPosition = self.MainFrame.Position
