@@ -7,7 +7,7 @@ Made with passion by SugaDev
 SugaDev      | Programming + Design
 AzkaDev      | Design
 
-Version 1.91
+Version 2.2
 
 Update Log:
 	Verison 1:
@@ -3888,7 +3888,7 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 2.1"
+		return "SBEUILib 2.2"
 	end,
 
 	PromptDestroy = function(self)
