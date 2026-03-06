@@ -4026,7 +4026,7 @@ UILibrary.Main = {
 
 	LoadConfigurations = function(self)
 		local filename = self.UserConfigFile
-		local filename2 = self.UserSettingsFile
+		local filename2 = self.UserSettingFile
 
 		if isfile(filename) then
 			local data = utils:ReadFile({Path = filename, IsJSON = true})
