@@ -1627,7 +1627,7 @@ UILibrary.Main = {
 
 	ToggleFrameVisibility = function(self)
 		self.FVisible = not self.FVisible
-		self.MainFrame.Visible = self.FVisible
+		self.UIWrapper.Visible = self.FVisible
 	end,
 
 	ToggleGuiVisibility = function(self)
