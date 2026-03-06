@@ -3461,7 +3461,7 @@ UILibrary.Main = {
 	AddTextBox = function(self, config)
 		local flag = config.Flag
 		local lib = self
-		local textBox = {}
+		local textBoxT = {}
 		local textBoxFrame = Instance.new("Frame")
 		textBoxFrame.Name = "TextBox_" .. config.Text
 		textBoxFrame.Size = UDim2.new(1, -24, 0, 50)
@@ -3507,7 +3507,7 @@ UILibrary.Main = {
 			textBoxStroke.Parent = textBox
 		end
 
-		function textBox:Set(s)
+		function textBoxT:Set(s)
 			textBox.Text = tostring(s) or "Type can not be converted into a string"
 
 			if config.Callback then
@@ -3517,7 +3517,7 @@ UILibrary.Main = {
 
 		if config.SavingEnabled then
 			if self.UserConfig[flag] ~= nil then
-				textBox:Set(tostring(self.UserConfig[flag]))
+				textBoxT:Set(tostring(self.UserConfig[flag]))
 			end
 		end
 
@@ -3529,7 +3529,7 @@ UILibrary.Main = {
 		end
 
 		table.insert(self.Elements, textBoxFrame)
-		return textBox
+		return textBoxT
 	end,
 	
 	AddSettingTextBox = function(self, config)
