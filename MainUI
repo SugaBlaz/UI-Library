@@ -4018,7 +4018,7 @@ UILibrary.Main = {
 
 	SaveConfigurations = function(self)
 		local path = self.UserConfigFile
-		local path2 = self.UserSettingsFile
+		local path2 = self.UserSettingFile
 		
 		utils:WriteFile({Path = path, Data = self.UserConfig, IsJSON = true})
 		utils:WriteFile({Path = path2, Data = self.UserSettings, IsJSON = true})
