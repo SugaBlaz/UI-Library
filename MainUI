@@ -82,6 +82,11 @@ Update Log:
 		- Added a few more things to config
 		- Added AddSettingTextox, AddSettingSlider, etc.
 		- Updated Website
+
+	Version 2.21:
+		- Added Keybind (setting)
+		- Added Default settings: Toggle GUI Keybind, Toggle Frame Keybind
+		- Updated Website
 		
 Future Improvments:
 	- Add a UI Layout button near the setting button (maybe)
@@ -1249,6 +1254,23 @@ UILibrary.Main = {
 		self.SettingScrollingFrame.ScrollBarImageColor3 = self.Colors.AccentColor
 		self.SettingScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
 		self.SettingScrollingFrame.Parent = self.SettingsFrame
+
+		self:AddSettingKeybind({
+		    Text = "Toggle SBEUI GUI",
+		    Default = Enum.KeyCode.F2,
+		    Callback = function()
+		        self:ToggleGuiVisibility()
+		    end
+		})
+
+		self:AddSettingKeybind({
+		    Text = "Toggle SBEUI Frame",
+		    Default = Enum.KeyCode.F3,
+		    Callback = function()
+		        self:ToggleFrameVisibility()
+		    end
+		})
+	
 
 		self.OriginalSize = self.MainFrame.Size
 		self.OriginalPosition = self.MainFrame.Position
@@ -3369,6 +3391,109 @@ UILibrary.Main = {
 		keybindFrame.BorderSizePixel = 0
 		keybindFrame.LayoutOrder = #self.Elements + 1
 		keybindFrame.Parent = self.ScrollingFrame
+
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 4)
+		corner.Parent = keybindFrame
+
+		local title = Instance.new("TextLabel")
+		title.Name = "Title"
+		title.Size = UDim2.new(1, -12, 1, 0)
+		title.Position = UDim2.new(0, 12, 0, 0)
+		title.BackgroundTransparency = 1
+		title.Text = config.Text
+		title.TextColor3 = self.Colors.TitleColor
+		title.Font = self.Config.Font
+		title.TextSize = self.Config.TextSize
+		title.TextXAlignment = Enum.TextXAlignment.Left
+		title.Parent = keybindFrame
+
+		local bindButton = Instance.new("TextButton")
+		bindButton.Name = "BindDisplay"
+		bindButton.Size = UDim2.new(0, 30, 0, 20)
+		bindButton.Position = UDim2.new(1, -10, 0.5, 0)
+		bindButton.AnchorPoint = Vector2.new(1, 0.5)
+		bindButton.BackgroundColor3 = self.Colors.CollapseBtnColor
+		bindButton.Text = currentKey.Name
+		bindButton.TextColor3 = self.Colors.AccentColor
+		bindButton.Font = Enum.Font.GothamBold
+		bindButton.TextSize = 12
+		bindButton.AutoButtonColor = false
+		bindButton.Parent = keybindFrame
+
+		local bindCorner = Instance.new("UICorner")
+		bindCorner.CornerRadius = UDim.new(0, 4)
+		bindCorner.Parent = bindButton
+
+		if self.UserConfig[flag] ~= nil then
+			currentKey = self.UserConfig[flag]
+		end
+
+		bindButton.MouseButton1Click:Connect(function()
+			if binding then return end
+
+			binding = true
+			bindButton.Text = "..."
+			TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.AccentColor, TextColor3 = Color3.new(1,1,1)}):Play()
+		end)
+
+		UIS.InputBegan:Connect(function(input, gpe)
+			if gpe then return end
+
+			if binding then
+				if input.UserInputType == Enum.UserInputType.Keyboard then
+					currentKey = input.KeyCode
+					bindButton.Text = currentKey.Name
+					binding = false
+
+					TS:Create(bindButton, TweenInfo.new(0.2), {BackgroundColor3 = self.Colors.CollapseBtnColor, TextColor3 = self.Colors.AccentColor}):Play()
+
+					if config.SavingEnabled then
+						self.UserConfig[flag] = currentKey
+					end
+
+					if config.ChangedCallback then
+						config.ChangedCallback(currentKey)
+					end
+				end
+			else
+				if input.KeyCode == currentKey then
+					if config.Callback then
+						config.Callback()
+					end
+				end
+			end
+		end)
+
+		function keybind:Set(key)
+			currentkey = key
+			if config.SavingEnabled then
+				self.UserConfig[flag] = currentKey
+			end
+
+			if config.ChangedCallback then
+				config.ChangedCallback(currentKey)
+			end
+		end
+
+		table.insert(self.Elements, keybindFrame)
+		return keybind
+	end,
+
+	AddSettingKeybind = function(self, config)
+		local keybind = {}
+		local UIS = game:GetService("UserInputService")
+		local currentKey = config.Default or Enum.KeyCode.F2
+		local binding = false
+		local flag = config.Flag
+
+		local keybindFrame = Instance.new("Frame")
+		keybindFrame.Name = "Keybind_" .. config.Text
+		keybindFrame.Size = UDim2.new(1, -5, 0, 30)
+		keybindFrame.BackgroundColor3 = self.Colors.ButtonColor
+		keybindFrame.BorderSizePixel = 0
+		keybindFrame.LayoutOrder = #self.Elements + 1
+		keybindFrame.Parent = self.SettingScrollingFrame
 
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius = UDim.new(0, 4)
