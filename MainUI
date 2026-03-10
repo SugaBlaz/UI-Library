@@ -3466,7 +3466,7 @@ UILibrary.Main = {
 		end)
 
 		function keybind:Set(key)
-			currentkey = key
+			currentKey = key
 			if config.SavingEnabled then
 				self.UserConfig[flag] = currentKey
 			end
@@ -3569,7 +3569,7 @@ UILibrary.Main = {
 		end)
 
 		function keybind:Set(key)
-			currentkey = key
+			currentKey = key
 			if config.SavingEnabled then
 				self.UserConfig[flag] = currentKey
 			end
@@ -4024,7 +4024,7 @@ UILibrary.Main = {
 	end,
 
 	GetVersion = function()
-		return "SBEUILib 2.2"
+		return "SBEUILib 2.21"
 	end,
 
 	PromptDestroy = function(self)
