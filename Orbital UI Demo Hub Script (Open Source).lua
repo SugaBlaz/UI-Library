@@ -1,3 +1,5 @@
+-- Demo.lua
+
 function safeloadstring(url)
 	local code = game:HttpGet(url)
 	local func, errorMessage = loadstring(code)
@@ -11,7 +13,7 @@ function safeloadstring(url)
 	end
 end
 
-local UILibrary = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/Orbital%20UI")
+local UILibrary = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/Orbital%20UI.lua")
 
 local ui = UILibrary.Main.new({
 	TitleText = "Demo Hub",
