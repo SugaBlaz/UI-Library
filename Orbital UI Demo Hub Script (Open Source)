@@ -11,11 +11,12 @@ function safeloadstring(url)
 	end
 end
 
-local UILibrary = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/MainUI")
+local UILibrary = safeloadstring("https://raw.githubusercontent.com/SugaBlaz/UI-Library/refs/heads/main/Orbital%20UI")
 
 local ui = UILibrary.Main.new({
-	TitleText = "Universal Hub",
+	TitleText = "Demo Hub",
 	Size = UDim2.new(0, 175, 0, 225),
+	SettingSize = UDim2.new(0, 175, 0, 225),
 	Position = UDim2.new(0.5, -140, 0.5, -190),
 	TitleHeight = 30,
 	CornerRadius = 6,
