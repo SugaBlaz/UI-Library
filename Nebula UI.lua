@@ -259,36 +259,59 @@ function Library:CreateWindow(options)
     Library:RegisterTheme(MinIcon, "BackgroundColor3", "Main")
     Library:RegisterTheme(MinIcon, "TextColor3", "Accent")
 
-    MinBtn.MouseButton1Click:Connect(function()
-        MainFrame.Visible = false
-        MinIcon.Visible = true
+   MinBtn.MouseButton1Click:Connect(function()
+        local tw = Utility:Tween(MainFrame, {Size = UDim2.new(0, 0, 0, 0)}, 0.3)
+        tw.Completed:Connect(function()
+            MainFrame.Visible = false
+            MinIcon.Size = UDim2.new(0, 0, 0, 0)
+            MinIcon.Visible = true
+            Utility:Tween(MinIcon, {Size = UDim2.new(0, 40, 0, 40)}, 0.2)
+        end)
     end)
 
     MinIcon.MouseButton1Click:Connect(function()
-        MainFrame.Visible = true
-        MinIcon.Visible = false
+        local tw = Utility:Tween(MinIcon, {Size = UDim2.new(0, 0, 0, 0)}, 0.2)
+        tw.Completed:Connect(function()
+            MinIcon.Visible = false
+            MainFrame.Visible = true
+            Utility:Tween(MainFrame, {Size = uiSize}, 0.3)
+        end)
     end)
 
-    local PromptOverlay = Utility:Create("Frame", { Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Parent = MainFrame, Visible = false, ZIndex = 50 })
-    local PromptBox = Utility:Create("Frame", { Size = UDim2.new(0, 250, 0, 120), Position = UDim2.new(0.5, -125, 0.5, -60), BackgroundColor3 = self.Themes[self.CurrentTheme].Main, Parent = PromptOverlay, ZIndex = 51 })
+    local PromptOverlay = Utility:Create("Frame", { Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 1, Parent = MainFrame, Visible = false, ZIndex = 50 })
+    local PromptBox = Utility:Create("Frame", { Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(0.5, 0, 0.5, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = self.Themes[self.CurrentTheme].Main, ClipsDescendants = true, Parent = PromptOverlay, ZIndex = 51 })
     Utility:Create("UICorner", { CornerRadius = UDim.new(0, 8), Parent = PromptBox })
     Library:RegisterTheme(PromptBox, "BackgroundColor3", "Main")
 
-    local PromptLbl = Utility:Create("TextLabel", { Size = UDim2.new(1, 0, 0, 60), BackgroundTransparency = 1, Text = "Close Nebula UI?", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamSemibold, TextSize = 14, Parent = PromptBox, ZIndex = 52 })
+    local PromptLbl = Utility:Create("TextLabel", { Size = UDim2.new(0, 250, 0, 60), Position = UDim2.new(0.5, -125, 0, 0), BackgroundTransparency = 1, Text = "Close Nebula UI?", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamSemibold, TextSize = 14, Parent = PromptBox, ZIndex = 52 })
     Library:RegisterTheme(PromptLbl, "TextColor3", "Text")
 
-    local PromptYes = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(0, 15, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Accent, Text = "Yes", TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
+    local PromptYes = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(0.5, -110, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Accent, Text = "Yes", TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
     Utility:Create("UICorner", { CornerRadius = UDim.new(0, 4), Parent = PromptYes })
     Library:RegisterTheme(PromptYes, "BackgroundColor3", "Accent")
 
-    local PromptNo = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(1, -115, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Element, Text = "No", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
+    local PromptNo = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(0.5, 10, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Element, Text = "No", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
     Utility:Create("UICorner", { CornerRadius = UDim.new(0, 4), Parent = PromptNo })
     Library:RegisterTheme(PromptNo, "BackgroundColor3", "Element")
     Library:RegisterTheme(PromptNo, "TextColor3", "Text")
 
-    CloseBtn.MouseButton1Click:Connect(function() PromptOverlay.Visible = true end)
-    PromptNo.MouseButton1Click:Connect(function() PromptOverlay.Visible = false end)
-    PromptYes.MouseButton1Click:Connect(function() NebulaGui:Destroy() end)
+    CloseBtn.MouseButton1Click:Connect(function()
+        PromptOverlay.Visible = true
+        Utility:Tween(PromptOverlay, {BackgroundTransparency = 0.5}, 0.2)
+        Utility:Tween(PromptBox, {Size = UDim2.new(0, 250, 0, 120)}, 0.2)
+    end)
+
+    PromptNo.MouseButton1Click:Connect(function()
+        Utility:Tween(PromptOverlay, {BackgroundTransparency = 1}, 0.2)
+        local tw = Utility:Tween(PromptBox, {Size = UDim2.new(0, 0, 0, 0)}, 0.2)
+        tw.Completed:Connect(function() PromptOverlay.Visible = false end)
+    end)
+
+    PromptYes.MouseButton1Click:Connect(function()
+        Utility:Tween(PromptOverlay, {BackgroundTransparency = 1}, 0.2)
+        local tw = Utility:Tween(PromptBox, {Size = UDim2.new(0, 0, 0, 0)}, 0.2)
+        tw.Completed:Connect(function() NebulaGui:Destroy() end)
+    end)
 
     local Window = { Tabs = {}, CurrentTab = nil }
 
