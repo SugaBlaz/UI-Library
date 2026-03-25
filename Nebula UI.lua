@@ -28,6 +28,10 @@ Update Log:
   Version 1.3:
     - Made Size configurable
     - Made Position configurable
+
+  Version 1.4:
+	- Added Close, Minimize buttons
+	- Added Close Cofirmation Popup
 		
 Future Improvments:
     - None for the moment
@@ -161,7 +165,7 @@ end
 function Library:Save()
     local success, json = pcall(function() return HttpService:JSONEncode(self.Flags) end)
     if success then
-        if isStudio then print("[Nebula UI] Saved Data to Memory")
+        if isStudio then
         elseif isExploit and writefile then writefile(self.SaveFileName, json) end
     end
 end
@@ -242,6 +246,49 @@ function Library:CreateWindow(options)
 
     local ContentContainer = Utility:Create("Frame", { Size = UDim2.new(1, -140, 1, 0), Position = UDim2.new(0, 140, 0, 0), BackgroundTransparency = 1, Parent = MainFrame })
     Utility:MakeDraggable(TitleLabel, MainFrame)
+
+    local WindowControls = Utility:Create("Frame", { Size = UDim2.new(0, 60, 0, 30), Position = UDim2.new(1, -65, 0, 5), BackgroundTransparency = 1, Parent = MainFrame, ZIndex = 10 })
+    local MinBtn = Utility:Create("TextButton", { Size = UDim2.new(0, 30, 0, 30), Position = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1, Text = "-", TextColor3 = self.Themes[self.CurrentTheme].TextDark, Font = Enum.Font.GothamBold, TextSize = 18, Parent = WindowControls, ZIndex = 10 })
+    local CloseBtn = Utility:Create("TextButton", { Size = UDim2.new(0, 30, 0, 30), Position = UDim2.new(0, 30, 0, 0), BackgroundTransparency = 1, Text = "X", TextColor3 = self.Themes[self.CurrentTheme].TextDark, Font = Enum.Font.GothamBold, TextSize = 14, Parent = WindowControls, ZIndex = 10 })
+    Library:RegisterTheme(MinBtn, "TextColor3", "TextDark")
+    Library:RegisterTheme(CloseBtn, "TextColor3", "TextDark")
+
+    local MinIcon = Utility:Create("TextButton", { Size = UDim2.new(0, 40, 0, 40), Position = UDim2.new(0, 20, 0, 20), BackgroundColor3 = self.Themes[self.CurrentTheme].Main, Text = "N", TextColor3 = self.Themes[self.CurrentTheme].Accent, Font = Enum.Font.GothamBold, TextSize = 18, Parent = NebulaGui, Visible = false })
+    Utility:Create("UICorner", { CornerRadius = UDim.new(1, 0), Parent = MinIcon })
+    Utility:MakeDraggable(MinIcon, MinIcon)
+    Library:RegisterTheme(MinIcon, "BackgroundColor3", "Main")
+    Library:RegisterTheme(MinIcon, "TextColor3", "Accent")
+
+    MinBtn.MouseButton1Click:Connect(function()
+        MainFrame.Visible = false
+        MinIcon.Visible = true
+    end)
+
+    MinIcon.MouseButton1Click:Connect(function()
+        MainFrame.Visible = true
+        MinIcon.Visible = false
+    end)
+
+    local PromptOverlay = Utility:Create("Frame", { Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.5, Parent = MainFrame, Visible = false, ZIndex = 50 })
+    local PromptBox = Utility:Create("Frame", { Size = UDim2.new(0, 250, 0, 120), Position = UDim2.new(0.5, -125, 0.5, -60), BackgroundColor3 = self.Themes[self.CurrentTheme].Main, Parent = PromptOverlay, ZIndex = 51 })
+    Utility:Create("UICorner", { CornerRadius = UDim.new(0, 8), Parent = PromptBox })
+    Library:RegisterTheme(PromptBox, "BackgroundColor3", "Main")
+
+    local PromptLbl = Utility:Create("TextLabel", { Size = UDim2.new(1, 0, 0, 60), BackgroundTransparency = 1, Text = "Close Nebula UI?", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamSemibold, TextSize = 14, Parent = PromptBox, ZIndex = 52 })
+    Library:RegisterTheme(PromptLbl, "TextColor3", "Text")
+
+    local PromptYes = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(0, 15, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Accent, Text = "Yes", TextColor3 = Color3.fromRGB(255, 255, 255), Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
+    Utility:Create("UICorner", { CornerRadius = UDim.new(0, 4), Parent = PromptYes })
+    Library:RegisterTheme(PromptYes, "BackgroundColor3", "Accent")
+
+    local PromptNo = Utility:Create("TextButton", { Size = UDim2.new(0, 100, 0, 30), Position = UDim2.new(1, -115, 0, 70), BackgroundColor3 = self.Themes[self.CurrentTheme].Element, Text = "No", TextColor3 = self.Themes[self.CurrentTheme].Text, Font = Enum.Font.GothamBold, TextSize = 13, Parent = PromptBox, ZIndex = 52 })
+    Utility:Create("UICorner", { CornerRadius = UDim.new(0, 4), Parent = PromptNo })
+    Library:RegisterTheme(PromptNo, "BackgroundColor3", "Element")
+    Library:RegisterTheme(PromptNo, "TextColor3", "Text")
+
+    CloseBtn.MouseButton1Click:Connect(function() PromptOverlay.Visible = true end)
+    PromptNo.MouseButton1Click:Connect(function() PromptOverlay.Visible = false end)
+    PromptYes.MouseButton1Click:Connect(function() NebulaGui:Destroy() end)
 
     local Window = { Tabs = {}, CurrentTab = nil }
 
