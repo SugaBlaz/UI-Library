@@ -147,6 +147,10 @@ function SBEUILite:CreateWindow(options)
 
 	local Window = setmetatable({}, WindowClass)
 
+	SBEUILite:Intro()
+
+	task.wait(1)
+
 	local MainFrame = Instance.new("Frame")
 	MainFrame.Name = Name
 	MainFrame.Size = Size
