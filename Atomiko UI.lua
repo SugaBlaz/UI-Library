@@ -122,7 +122,7 @@ function SBEUILite:Intro()
 	self.Image.Image = utils:GetImage({Name = "SBEUILib", Url = "https://i.ibb.co/xK20Pwph/SBEUILib.png"})
 	self.Image.BackgroundTransparency = 1
 	self.Image.ImageTransparency = 0
-	self.Image.Parent = self.ScreenGui
+	self.Image.Parent = ScreenGui
 	self.Image.ZIndex = 999
 
 	task.wait(2)
